@@ -1,0 +1,35 @@
+# /images
+
+Theme-owned graphics. Everything here is generated for the theme — photography
+belongs in the WordPress media library, not in this folder.
+
+| File | Used for |
+| --- | --- |
+| `favicon.svg` | Browser tab icon (used when no Site Icon is set in the Customizer) |
+| `apple-touch-icon.png` | iOS home-screen icon, 180×180 |
+| `icon-192.png`, `icon-512.png` | Web app manifest icons |
+| `social-default.png` | Fallback Open Graph / Twitter card image, 1200×630 |
+
+## Replacing them
+
+Set a **Site Icon** under *Customize → Site Identity* and WordPress will
+generate every favicon size for you; the files above are only the fallback.
+
+For sharing images, set *Customize → Treats Tea Room → SEO & Sharing → Default
+sharing image* to a real photograph — a 1200×630 crop of the tea room or the
+cake counter will always outperform a generated card.
+
+## Photography guidance
+
+The layout is built for warm, bright, natural-light photography with plenty of
+negative space:
+
+- **Hero:** landscape, at least 2400px wide, with quiet space on the left third
+  where the headline sits.
+- **Menu category cards:** portrait or square, 900×1200 or 900×900.
+- **Menu items:** square, 800×800, shot from above on a light surface.
+- **Gallery:** any ratio; the grid crops to squares and one wide tile per row.
+
+Upload at full resolution and let WordPress generate the sizes — the theme
+registers `treats-hero`, `treats-card`, `treats-card-tall`, `treats-square` and
+`treats-thumb` crops and serves them responsively.

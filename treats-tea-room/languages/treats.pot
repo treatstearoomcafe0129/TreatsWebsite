@@ -1,0 +1,2657 @@
+# Copyright (C) 2026 Treats Tea Room Café
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Treats Tea Room 1.0.0\n"
+"Report-Msgid-Bugs-To: https://treatstearoom.co.uk\n"
+"POT-Creation-Date: 2026-08-05T20:17:26+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: treats\n"
+
+
+#: 404.php:15 template-parts/content/none.php:21 template-parts/home/menus.php:44
+msgid "Our menus"
+msgstr ""
+
+#: 404.php:16
+msgid "Breakfast, lunch, afternoon tea and the cake counter."
+msgstr ""
+
+#: 404.php:21 header.php:68 page-templates/template-about.php:181 page-templates/template-menu.php:30
+#: page-templates/template-menu.php:82 template-parts/components/cta-banner.php:30 template-parts/content/none.php:24 template-parts/home/hero.php:73
+#: template-parts/home/visit.php:92
+msgid "Book a table"
+msgstr ""
+
+#: 404.php:22
+msgid "Tell us when you would like to come and we will confirm."
+msgstr ""
+
+#: 404.php:27 footer.php:69 page-templates/template-contact.php:31 inc/activation.php:113
+msgid "Find us"
+msgstr ""
+
+#: 404.php:28
+msgid "Silver Street, Durham — a minute from the Market Place."
+msgstr ""
+
+#: 404.php:37
+msgid "Error 404"
+msgstr ""
+
+#: 404.php:38
+msgid "We could not find that page"
+msgstr ""
+
+#: 404.php:40
+msgid "It may have moved, or the link may have a typo in it. Here is where most people are heading."
+msgstr ""
+
+#: 404.php:44
+msgid "Back to the home page"
+msgstr ""
+
+#: archive.php:16 template-parts/content/search-result.php:22 inc/post-types.php:31
+msgid "Menu"
+msgstr ""
+
+#: archive.php:16
+msgid "Archive"
+msgstr ""
+
+#: archive.php:64 comments.php:44 index.php:47 search.php:58
+#: single.php:81
+msgid "Previous"
+msgstr ""
+
+#: archive.php:65 comments.php:45 index.php:48 search.php:59
+#: single.php:82
+msgid "Next"
+msgstr ""
+
+#: comments.php:22
+msgid "%s comment"
+msgid_plural "%s comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:52
+msgid "Comments are closed."
+msgstr ""
+
+#: comments.php:58
+msgid "Leave a comment"
+msgstr ""
+
+#: comments.php:65
+msgid "Comment"
+msgstr ""
+
+#: footer.php:32
+msgid "A family tea room on Silver Street, serving Durham good food at good prices since 1991."
+msgstr ""
+
+#: footer.php:52
+msgid "Explore"
+msgstr ""
+
+#: footer.php:89 page-templates/template-contact.php:211 template-parts/home/visit.php:89
+msgid "Get directions"
+msgstr ""
+
+#: footer.php:96 inc/customizer.php:137
+msgid "Newsletter"
+msgstr ""
+
+#: footer.php:106
+msgid "© %1$s %2$s. All rights reserved."
+msgstr ""
+
+#: footer.php:130
+msgid "Back to top"
+msgstr ""
+
+#: header.php:43
+msgid "Skip to content"
+msgstr ""
+
+#: header.php:49 inc/activation.php:236
+msgid "Primary"
+msgstr ""
+
+#: header.php:55
+msgid "Switch colour scheme"
+msgstr ""
+
+#: header.php:62
+msgid "Call us on %s"
+msgstr ""
+
+#: header.php:71 inc/enqueue.php:98
+msgid "Open menu"
+msgstr ""
+
+#: header.php:83
+msgid "Mobile"
+msgstr ""
+
+#: header.php:102
+msgid "Open now"
+msgstr ""
+
+#: header.php:102
+msgid "Closed right now"
+msgstr ""
+
+#: index.php:17 template-parts/content/search-result.php:24 inc/activation.php:129
+msgid "Journal"
+msgstr ""
+
+#: index.php:18
+msgid "From the tea room"
+msgstr ""
+
+#: index.php:19
+msgid "Seasonal menus, new bakes and news from Silver Street."
+msgstr ""
+
+#: page.php:34 single.php:55 template-parts/content/search-result.php:23
+msgid "Page"
+msgstr ""
+
+#: search.php:16 searchform.php:30
+msgid "Search"
+msgstr ""
+
+#: search.php:19
+msgid "Results for “%s”"
+msgstr ""
+
+#: search.php:24
+msgid "%s result found."
+msgid_plural "%s results found."
+msgstr[0] ""
+msgstr[1] ""
+
+#: searchform.php:15
+msgid "Search the site"
+msgstr ""
+
+#: searchform.php:24
+msgid "Search menus, pages…"
+msgstr ""
+
+#: single.php:72
+msgid "All journal entries"
+msgstr ""
+
+#: page-templates/template-about.php:20
+msgid "We bake it here"
+msgstr ""
+
+#: page-templates/template-about.php:21
+msgid "Every cake, scone and traybake on the counter is made in our own kitchen, most of it before the doors open."
+msgstr ""
+
+#: page-templates/template-about.php:25
+msgid "Everyone gets a proper menu"
+msgstr ""
+
+#: page-templates/template-about.php:26
+msgid "Vegan and gluten-free dishes are cooked with the same care as everything else — never an afterthought on the side."
+msgstr ""
+
+#: page-templates/template-about.php:30
+msgid "Good food at good prices"
+msgstr ""
+
+#: page-templates/template-about.php:31
+msgid "Students, families, regulars and visitors all get the same welcome and the same honest pricing."
+msgstr ""
+
+#: page-templates/template-about.php:35
+msgid "No rush"
+msgstr ""
+
+#: page-templates/template-about.php:36
+msgid "Your table is yours. The pot gets refilled, and nobody is going to hurry you along."
+msgstr ""
+
+#: page-templates/template-about.php:45 template-parts/home/story.php:41 inc/activation.php:107
+msgid "Our story"
+msgstr ""
+
+#: page-templates/template-about.php:66
+msgid "Treats has sat at the foot of Silver Street for %d years. In that time Durham has changed a great deal around us — but what happens inside has not."
+msgstr ""
+
+#: page-templates/template-about.php:73
+msgid "We open early, bake through the morning and cook everything to order. The cake counter is filled before the first customer arrives, the soup is made that day, and the tea comes in a pot you can pour from twice. It is not complicated — it is just done properly, every day."
+msgstr ""
+
+#: page-templates/template-about.php:77
+msgid "Over the years we have fed three generations of the same families, most of the university, and a good share of everyone who has ever walked down to Framwellgate Bridge. We would very much like to feed you too."
+msgstr ""
+
+#: page-templates/template-about.php:90
+msgid "What we care about"
+msgstr ""
+
+#: page-templates/template-about.php:91
+msgid "Four things we will not compromise on"
+msgstr ""
+
+#: page-templates/template-about.php:115 template-parts/home/story.php:54
+msgid "Years on Silver Street"
+msgstr ""
+
+#: page-templates/template-about.php:119
+msgid "Reviews and counting"
+msgstr ""
+
+#: page-templates/template-about.php:123
+msgid "Cakes baked each morning"
+msgstr ""
+
+#: page-templates/template-about.php:127
+msgid "Days a week"
+msgstr ""
+
+#: page-templates/template-about.php:139
+msgid "Inside Treats"
+msgstr ""
+
+#: page-templates/template-about.php:140
+msgid "Have a look around"
+msgstr ""
+
+#: page-templates/template-about.php:176
+msgid "Come and see us"
+msgstr ""
+
+#: page-templates/template-about.php:177
+msgid "The kettle is already on"
+msgstr ""
+
+#: page-templates/template-about.php:178
+msgid "Walk in whenever you like, or book ahead if you have your heart set on afternoon tea."
+msgstr ""
+
+#: page-templates/template-about.php:186
+msgid "See our menus"
+msgstr ""
+
+#: page-templates/template-booking.php:19
+msgid "No special occasion"
+msgstr ""
+
+#: page-templates/template-booking.php:20
+msgid "Birthday"
+msgstr ""
+
+#: page-templates/template-booking.php:21
+msgid "Anniversary"
+msgstr ""
+
+#: page-templates/template-booking.php:22
+msgid "Afternoon tea"
+msgstr ""
+
+#: page-templates/template-booking.php:23
+msgid "Graduation"
+msgstr ""
+
+#: page-templates/template-booking.php:24
+msgid "Business"
+msgstr ""
+
+#: page-templates/template-booking.php:32 inc/activation.php:95
+msgid "Reservations"
+msgstr ""
+
+#: page-templates/template-booking.php:34 inc/activation.php:96
+msgid "Tell us when you would like to come and we will confirm your table by email or phone."
+msgstr ""
+
+#: page-templates/template-booking.php:51
+msgid "Request a table"
+msgstr ""
+
+#: page-templates/template-booking.php:53
+msgid "Every field marked with an asterisk is needed so we can confirm your booking."
+msgstr ""
+
+#: page-templates/template-booking.php:64 page-templates/template-contact.php:58 page-templates/template-vouchers.php:130
+msgid "Your name"
+msgstr ""
+
+#: page-templates/template-booking.php:70 page-templates/template-contact.php:70 page-templates/template-vouchers.php:142 template-parts/components/collect-drawer.php:48
+#: inc/forms.php:167 inc/post-types.php:476
+msgid "Phone"
+msgstr ""
+
+#: page-templates/template-booking.php:76 page-templates/template-contact.php:64 page-templates/template-contact.php:143 template-parts/components/collect-drawer.php:54
+#: template-parts/home/visit.php:51 inc/forms.php:162 inc/post-types.php:475
+msgid "Email"
+msgstr ""
+
+#: page-templates/template-booking.php:83
+msgid "How many of you?"
+msgstr ""
+
+#: page-templates/template-booking.php:96
+msgid "For parties larger than %1$d, please call us on %2$s."
+msgstr ""
+
+#: page-templates/template-booking.php:105 inc/forms.php:183 inc/post-types.php:477
+msgid "Date"
+msgstr ""
+
+#: page-templates/template-booking.php:112 inc/forms.php:188 inc/post-types.php:478
+msgid "Time"
+msgstr ""
+
+#: page-templates/template-booking.php:125 inc/forms.php:200 inc/post-types.php:480
+msgid "Occasion"
+msgstr ""
+
+#: page-templates/template-booking.php:135 template-parts/components/collect-drawer.php:77
+msgid "Anything we should know?"
+msgstr ""
+
+#: page-templates/template-booking.php:136
+msgid "Allergies, a pushchair, a table by the window…"
+msgstr ""
+
+#: page-templates/template-booking.php:141
+msgid "Email me occasionally about seasonal menus and events. No spam, unsubscribe any time."
+msgstr ""
+
+#: page-templates/template-booking.php:147
+msgid "Request this table"
+msgstr ""
+
+#: page-templates/template-booking.php:148
+msgid "This is a request, not an instant confirmation — we will come back to you to confirm."
+msgstr ""
+
+#: page-templates/template-booking.php:169 page-templates/template-faq.php:30 inc/activation.php:119
+msgid "Good to know"
+msgstr ""
+
+#: page-templates/template-booking.php:171
+msgid "Requests are confirmed by email or phone, usually within a couple of hours during opening times."
+msgstr ""
+
+#: page-templates/template-booking.php:176 page-templates/template-contact.php:152 template-parts/home/visit.php:58
+msgid "Opening hours"
+msgstr ""
+
+#: page-templates/template-booking.php:185 page-templates/template-contact.php:161 template-parts/home/visit.php:68
+msgid "Closed"
+msgstr ""
+
+#: page-templates/template-booking.php:196
+msgid "Prefer to call?"
+msgstr ""
+
+#: page-templates/template-contact.php:17
+msgid "General enquiry"
+msgstr ""
+
+#: page-templates/template-contact.php:18
+msgid "Booking a large group"
+msgstr ""
+
+#: page-templates/template-contact.php:19
+msgid "Celebration cakes"
+msgstr ""
+
+#: page-templates/template-contact.php:20
+msgid "Allergies and dietary needs"
+msgstr ""
+
+#: page-templates/template-contact.php:21 page-templates/template-menu.php:87 template-parts/components/cta-banner.php:20
+msgid "Gift vouchers"
+msgstr ""
+
+#: page-templates/template-contact.php:22
+msgid "Feedback"
+msgstr ""
+
+#: page-templates/template-contact.php:23
+msgid "Something else"
+msgstr ""
+
+#: page-templates/template-contact.php:45
+msgid "Send us a message"
+msgstr ""
+
+#: page-templates/template-contact.php:47
+msgid "We read everything and usually reply within a day. For a table today, please call — it is quicker."
+msgstr ""
+
+#: page-templates/template-contact.php:76
+msgid "What is it about?"
+msgstr ""
+
+#: page-templates/template-contact.php:86 inc/forms.php:230 inc/post-types.php:482
+msgid "Message"
+msgstr ""
+
+#: page-templates/template-contact.php:93
+msgid "Email me occasionally about seasonal menus and events."
+msgstr ""
+
+#: page-templates/template-contact.php:99
+msgid "Send message"
+msgstr ""
+
+#: page-templates/template-contact.php:105
+msgid "We use your details only to reply. See our %s."
+msgstr ""
+
+#: page-templates/template-contact.php:106 template-parts/components/newsletter.php:58
+msgid "privacy policy"
+msgstr ""
+
+#: page-templates/template-contact.php:118 page-templates/template-gallery.php:21 template-parts/home/gallery.php:25 inc/activation.php:125
+#: inc/activation.php:877
+msgid "The tea room"
+msgstr ""
+
+#: page-templates/template-contact.php:123 template-parts/home/visit.php:30
+msgid "Address"
+msgstr ""
+
+#: page-templates/template-contact.php:133 template-parts/home/visit.php:41 inc/customizer.php:237
+msgid "Telephone"
+msgstr ""
+
+#: page-templates/template-contact.php:173
+msgid "Follow us"
+msgstr ""
+
+#: page-templates/template-faq.php:55
+msgid "All questions"
+msgstr ""
+
+#: page-templates/template-faq.php:92
+msgid "We are writing these up. In the meantime, please call or email us — we are happy to help."
+msgstr ""
+
+#: page-templates/template-faq.php:96
+msgid "Still not answered?"
+msgstr ""
+
+#: page-templates/template-faq.php:98
+msgid "Give us a ring or send a message — a real person will get back to you."
+msgstr ""
+
+#: page-templates/template-faq.php:108
+msgid "Contact us"
+msgstr ""
+
+#: page-templates/template-gallery.php:69
+msgid "Photographs are on their way. In the meantime, come and see the real thing."
+msgstr ""
+
+#: page-templates/template-menu.php:64
+msgid "Download this menu as a PDF"
+msgstr ""
+
+#: page-templates/template-menu.php:77
+msgid "Hungry now?"
+msgstr ""
+
+#: page-templates/template-menu.php:78
+msgid "Book a table, or order for collection"
+msgstr ""
+
+#: page-templates/template-menu.php:79
+msgid "Walk-ins are always welcome. Booking is worth it for afternoon tea and at weekends."
+msgstr ""
+
+#: page-templates/template-vouchers.php:25
+msgid "Afternoon Tea for Two"
+msgstr ""
+
+#: page-templates/template-vouchers.php:27
+msgid "Our full three-tier afternoon tea for two, with a pot of loose leaf tea each."
+msgstr ""
+
+#: page-templates/template-vouchers.php:31
+msgid "Sparkling Afternoon Tea for Two"
+msgstr ""
+
+#: page-templates/template-vouchers.php:33
+msgid "The same, with a glass of English sparkling wine to start."
+msgstr ""
+
+#: page-templates/template-vouchers.php:37
+msgid "Breakfast for Two"
+msgstr ""
+
+#: page-templates/template-vouchers.php:39
+msgid "Two full breakfasts and two hot drinks, any morning of the week."
+msgstr ""
+
+#: page-templates/template-vouchers.php:49 inc/activation.php:101
+msgid "Gifts"
+msgstr ""
+
+#: page-templates/template-vouchers.php:62
+msgid "Experiences"
+msgstr ""
+
+#: page-templates/template-vouchers.php:63
+msgid "Give an afternoon, not just an amount"
+msgstr ""
+
+#: page-templates/template-vouchers.php:64
+msgid "Each voucher arrives as a printed card in a sage envelope, or as a printable PDF if you are in a hurry."
+msgstr ""
+
+#: page-templates/template-vouchers.php:73
+msgid "Most gifted"
+msgstr ""
+
+#: page-templates/template-vouchers.php:81
+msgid "Choose this"
+msgstr ""
+
+#: page-templates/template-vouchers.php:95
+msgid "Order a gift voucher"
+msgstr ""
+
+#: page-templates/template-vouchers.php:97
+msgid "Tell us what you would like and we will email you to arrange payment and delivery — usually the same day."
+msgstr ""
+
+#: page-templates/template-vouchers.php:107
+msgid "Voucher amount"
+msgstr ""
+
+#: page-templates/template-vouchers.php:118
+msgid "Other"
+msgstr ""
+
+#: page-templates/template-vouchers.php:124
+msgid "Amount you would like"
+msgstr ""
+
+#: page-templates/template-vouchers.php:136
+msgid "Your email"
+msgstr ""
+
+#: page-templates/template-vouchers.php:147
+msgid "Who is it for?"
+msgstr ""
+
+#: page-templates/template-vouchers.php:153
+msgid "How should it reach you?"
+msgstr ""
+
+#: page-templates/template-vouchers.php:156 page-templates/template-vouchers.php:157
+msgid "Posted card"
+msgstr ""
+
+#: page-templates/template-vouchers.php:160 page-templates/template-vouchers.php:161
+msgid "Emailed PDF"
+msgstr ""
+
+#: page-templates/template-vouchers.php:164 page-templates/template-vouchers.php:165
+msgid "Collect in person"
+msgstr ""
+
+#: page-templates/template-vouchers.php:171
+msgid "Message on the card"
+msgstr ""
+
+#: page-templates/template-vouchers.php:172
+msgid "Happy birthday, Mam — enjoy a proper afternoon."
+msgstr ""
+
+#: page-templates/template-vouchers.php:177
+msgid "Order this voucher"
+msgstr ""
+
+#: page-templates/template-vouchers.php:184
+msgid "How it works"
+msgstr ""
+
+#: page-templates/template-vouchers.php:186
+msgid "Tell us the amount and who it is for."
+msgstr ""
+
+#: page-templates/template-vouchers.php:187
+msgid "We email you a payment link, or take payment over the phone."
+msgstr ""
+
+#: page-templates/template-vouchers.php:188
+msgid "Your voucher is posted or emailed, usually the same day."
+msgstr ""
+
+#: page-templates/template-vouchers.php:193
+msgid "Terms"
+msgstr ""
+
+#: page-templates/template-vouchers.php:195
+msgid "Vouchers are valid for 12 months from the date of purchase and can be used against anything on our menus."
+msgstr ""
+
+#: page-templates/template-vouchers.php:200
+msgid "Questions?"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:14
+msgid "Your order"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:23 inc/customizer.php:134
+msgid "Click & Collect"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:24
+msgid "Close"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:32
+msgid "Your collection order is empty. Add anything you like from our menus."
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:42 inc/forms.php:156 inc/forms.php:318 inc/post-types.php:474
+msgid "Name"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:60 inc/forms.php:251
+msgid "Collection date"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:66 inc/forms.php:256
+msgid "Collection time"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:68
+msgid "Choose a time"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:88
+msgid "Estimated total"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:93
+msgid "Collection orders need 2 hours notice. We will call to confirm your time and take payment on collection."
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:96
+msgid "Send collection request"
+msgstr ""
+
+#: template-parts/components/collect-drawer.php:98
+msgid "Clear order"
+msgstr ""
+
+#: template-parts/components/cta-banner.php:21
+msgid "Send someone a proper afternoon in Durham"
+msgstr ""
+
+#: template-parts/components/cta-banner.php:22
+msgid "Any amount, or one of our afternoon tea experiences. Posted to you or emailed the same day."
+msgstr ""
+
+#: template-parts/components/cta-banner.php:25
+msgid "Buy a gift voucher"
+msgstr ""
+
+#: template-parts/components/map.php:25
+msgid "Map showing %s"
+msgstr ""
+
+#: template-parts/components/map.php:27
+msgid "Load the interactive map"
+msgstr ""
+
+#: template-parts/components/map.php:31
+msgid "Load the map"
+msgstr ""
+
+#: template-parts/components/map.php:32
+msgid "We load Google Maps only when you ask, so the page stays fast and no third-party cookies are set before then."
+msgstr ""
+
+#: template-parts/components/newsletter.php:18
+msgid "One short email a month: new bakes, seasonal afternoon teas and the odd offer."
+msgstr ""
+
+#: template-parts/components/newsletter.php:33
+msgid "Email address"
+msgstr ""
+
+#: template-parts/components/newsletter.php:39
+msgid "your@email.co.uk"
+msgstr ""
+
+#: template-parts/components/newsletter.php:43
+msgid "Subscribe"
+msgstr ""
+
+#: template-parts/components/newsletter.php:57
+msgid "We only email about the tea room. Unsubscribe any time — see our %s."
+msgstr ""
+
+#: template-parts/components/newsletter.php:61
+msgid "We only email about the tea room. Unsubscribe any time."
+msgstr ""
+
+#: template-parts/content/card.php:41
+msgid "Read more"
+msgstr ""
+
+#: template-parts/content/none.php:12
+msgid "Nothing found for that search"
+msgstr ""
+
+#: template-parts/content/none.php:14
+msgid "Try a different word, or take a look at our menus — most people are after the cakes."
+msgstr ""
+
+#: template-parts/content/none.php:28
+msgid "Nothing here just yet"
+msgstr ""
+
+#: template-parts/content/none.php:29
+msgid "Check back soon — we will be writing about what is coming out of the kitchen."
+msgstr ""
+
+#: template-parts/menu/menu-item.php:116 template-parts/menu/menu-item.php:118
+msgid "Add to order"
+msgstr ""
+
+#: template-parts/menu/menu-list.php:31
+msgid "Our menu is being updated. Please call us and we will happily talk you through what is on today."
+msgstr ""
+
+#: template-parts/menu/menu-list.php:56
+msgid "Filter the menu"
+msgstr ""
+
+#: template-parts/menu/menu-list.php:58
+msgid "Everything"
+msgstr ""
+
+#: template-parts/menu/menu-list.php:84
+msgid "Search the menu"
+msgstr ""
+
+#: template-parts/menu/menu-list.php:85
+msgid "Search the menu…"
+msgstr ""
+
+#: template-parts/menu/menu-list.php:86
+msgid "Clear search"
+msgstr ""
+
+#: template-parts/menu/menu-list.php:103
+msgid "dishes"
+msgstr ""
+
+#: template-parts/menu/menu-list.php:131
+msgid "Nothing matches that just yet."
+msgstr ""
+
+#: template-parts/menu/menu-list.php:132
+msgid "Try a different word, or clear the filters to see the whole menu."
+msgstr ""
+
+#: template-parts/menu/menu-list.php:137
+msgid "Key:"
+msgstr ""
+
+#: template-parts/menu/menu-list.php:149
+msgid "dishes shown. Allergen information is available for every dish — please ask a member of the team."
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:14
+msgid "A tier of finger sandwiches, cut fresh to order"
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:15
+msgid "Warm fruit scones, Yorkshire jam and clotted cream"
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:16
+msgid "A tier of cakes from our own counter"
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:17
+msgid "A pot of loose leaf tea, refilled as often as you like"
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:24 inc/activation.php:564
+msgid "The Treats Afternoon Tea"
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:26
+msgid "The Durham afternoon, done properly"
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:29
+msgid "Three tiers, a proper pot of tea and no rush. Served every day from midday — booking recommended, especially at weekends."
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:42
+msgid "Book afternoon tea"
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:44
+msgid "See what is included"
+msgstr ""
+
+#: template-parts/home/afternoon-tea.php:61
+msgid "A three-tier afternoon tea at Treats"
+msgstr ""
+
+#: template-parts/home/feature-strip.php:13 inc/activation.php:82
+msgid "Baked every morning"
+msgstr ""
+
+#: template-parts/home/feature-strip.php:14
+msgid "Cakes, scones and traybakes made in our own kitchen."
+msgstr ""
+
+#: template-parts/home/feature-strip.php:18
+msgid "Vegan & gluten free"
+msgstr ""
+
+#: template-parts/home/feature-strip.php:19
+msgid "A full plant-based menu, not an afterthought."
+msgstr ""
+
+#: template-parts/home/feature-strip.php:23
+msgid "A minute from the Market Place"
+msgstr ""
+
+#: template-parts/home/feature-strip.php:24
+msgid "At the foot of Silver Street, right in the middle of it all."
+msgstr ""
+
+#: template-parts/home/feature-strip.php:28
+msgid "Step-free ground floor"
+msgstr ""
+
+#: template-parts/home/feature-strip.php:29
+msgid "Accessible seating and facilities. Assistance dogs welcome."
+msgstr ""
+
+#: template-parts/home/gallery.php:25
+msgid "From our Instagram"
+msgstr ""
+
+#: template-parts/home/gallery.php:26
+msgid "What came out of the kitchen today"
+msgstr ""
+
+#: template-parts/home/gallery.php:26
+msgid "A look inside Treats"
+msgstr ""
+
+#: template-parts/home/gallery.php:67
+msgid "Follow us on Instagram"
+msgstr ""
+
+#: template-parts/home/hero.php:57
+msgid "Durham · Since 1991"
+msgstr ""
+
+#: template-parts/home/hero.php:64
+msgid "A proper tea room in the heart of Durham"
+msgstr ""
+
+#: template-parts/home/hero.php:68
+msgid "Freshly baked cakes, generous breakfasts and traditional afternoon tea, served on Silver Street since 1991."
+msgstr ""
+
+#: template-parts/home/hero.php:77
+msgid "View our menus"
+msgstr ""
+
+#: template-parts/home/hero.php:88
+msgid "Open now — until %s today"
+msgstr ""
+
+#: template-parts/home/hero.php:96
+msgid "Closed now — today we are open %1$s to %2$s"
+msgstr ""
+
+#: template-parts/home/hero.php:102
+msgid "Closed today — see our opening hours"
+msgstr ""
+
+#: template-parts/home/hero.php:109
+msgid "Scroll"
+msgstr ""
+
+#: template-parts/home/menus.php:14
+msgid "Cooked to order from the moment we open, all day long."
+msgstr ""
+
+#: template-parts/home/menus.php:15
+msgid "Sandwiches, warm scones and a tier of our own cakes."
+msgstr ""
+
+#: template-parts/home/menus.php:16
+msgid "Homemade pies, quiches, soups and proper sandwiches."
+msgstr ""
+
+#: template-parts/home/menus.php:17
+msgid "The counter Durham knows us for."
+msgstr ""
+
+#: template-parts/home/menus.php:18
+msgid "Loose leaf tea, speciality coffee and real hot chocolate."
+msgstr ""
+
+#: template-parts/home/menus.php:45
+msgid "Everything is made here, every day"
+msgstr ""
+
+#: template-parts/home/menus.php:46
+msgid "Five menus, one kitchen. Whatever time you arrive, there is something worth stopping for."
+msgstr ""
+
+#: template-parts/home/menus.php:75
+msgid "See the menu"
+msgstr ""
+
+#: template-parts/home/reviews.php:24
+msgid "Kind words"
+msgstr ""
+
+#: template-parts/home/reviews.php:25
+msgid "What our regulars say"
+msgstr ""
+
+#: template-parts/home/reviews.php:38
+msgid "%1$s out of 5 · %2$s reviews"
+msgstr ""
+
+#: template-parts/home/reviews.php:74
+msgid "Previous review"
+msgstr ""
+
+#: template-parts/home/reviews.php:77
+msgid "Next review"
+msgstr ""
+
+#: template-parts/home/reviews.php:86
+msgid "Read all our reviews"
+msgstr ""
+
+#: template-parts/home/signatures.php:38
+msgid "What people order"
+msgstr ""
+
+#: template-parts/home/signatures.php:39
+msgid "A few of our regulars"
+msgstr ""
+
+#: template-parts/home/signatures.php:40
+msgid "The dishes that come back to the pass most often."
+msgstr ""
+
+#: template-parts/home/story.php:29
+msgid "Inside Treats Tea Room, Durham"
+msgstr ""
+
+#: template-parts/home/story.php:44
+msgid "Thirty years of good food at good prices"
+msgstr ""
+
+#: template-parts/home/story.php:48
+msgid "Treats has been part of Durham life for three decades. We bake every morning, cook everything to order and keep prices honest — the same welcome for students, families and visitors alike."
+msgstr ""
+
+#: template-parts/home/story.php:58
+msgid "Tripadvisor reviews"
+msgstr ""
+
+#: template-parts/home/story.php:62
+msgid "Average rating"
+msgstr ""
+
+#: template-parts/home/story.php:67
+msgid "More about us"
+msgstr ""
+
+#: template-parts/home/visit.php:19
+msgid "Visit us"
+msgstr ""
+
+#: template-parts/home/visit.php:20
+msgid "At the foot of Silver Street"
+msgstr ""
+
+#: template-parts/home/visit.php:23
+msgid "A two-minute walk from Durham Market Place, beside Framwellgate Bridge."
+msgstr ""
+
+#: template-parts/home/visit.php:61
+msgid "Opening hours by day"
+msgstr ""
+
+#: inc/activation.php:53 inc/template-tags.php:553
+msgid "Home"
+msgstr ""
+
+#: inc/activation.php:58 inc/activation.php:351
+msgid "Breakfast & Brunch"
+msgstr ""
+
+#: inc/activation.php:61
+msgid "Served from opening"
+msgstr ""
+
+#: inc/activation.php:62
+msgid "Proper breakfasts cooked to order, from a full English to eggs on sourdough — served all day, every day."
+msgstr ""
+
+#: inc/activation.php:65 inc/activation.php:352
+msgid "Lunch"
+msgstr ""
+
+#: inc/activation.php:68
+msgid "From 11.30am"
+msgstr ""
+
+#: inc/activation.php:69
+msgid "Homemade pies, quiches, soups, salads and sandwiches, made fresh in our kitchen each morning."
+msgstr ""
+
+#: inc/activation.php:72 inc/activation.php:353
+msgid "Afternoon Tea"
+msgstr ""
+
+#: inc/activation.php:75
+msgid "Booking recommended"
+msgstr ""
+
+#: inc/activation.php:76
+msgid "Finger sandwiches, warm scones with jam and clotted cream, and a tier of our own cakes. The Durham afternoon, done properly."
+msgstr ""
+
+#: inc/activation.php:79 inc/activation.php:354
+msgid "Cakes & Desserts"
+msgstr ""
+
+#: inc/activation.php:83
+msgid "The counter that Durham knows us for. Traybakes, layer cakes, scones and puddings, all made in-house."
+msgstr ""
+
+#: inc/activation.php:86 inc/activation.php:355
+msgid "Drinks"
+msgstr ""
+
+#: inc/activation.php:89
+msgid "Loose leaf & speciality coffee"
+msgstr ""
+
+#: inc/activation.php:90
+msgid "Loose leaf teas by the pot, speciality coffee, hot chocolate worth the walk, and cold drinks for the summer."
+msgstr ""
+
+#: inc/activation.php:93
+msgid "Book a Table"
+msgstr ""
+
+#: inc/activation.php:99 inc/customizer.php:135
+msgid "Gift Vouchers"
+msgstr ""
+
+#: inc/activation.php:102
+msgid "A Treats voucher is the easiest way to send someone a proper afternoon in Durham."
+msgstr ""
+
+#: inc/activation.php:105
+msgid "About Us"
+msgstr ""
+
+#: inc/activation.php:108
+msgid "A family tea room on Silver Street, serving Durham since 1991."
+msgstr ""
+
+#: inc/activation.php:111 inc/post-types.php:405
+msgid "Contact"
+msgstr ""
+
+#: inc/activation.php:114
+msgid "At the foot of Silver Street, a minute from Durham Market Place."
+msgstr ""
+
+#: inc/activation.php:117 inc/post-types.php:73
+msgid "FAQ"
+msgstr ""
+
+#: inc/activation.php:120
+msgid "Everything visitors usually ask us before they arrive."
+msgstr ""
+
+#: inc/activation.php:123
+msgid "Gallery"
+msgstr ""
+
+#: inc/activation.php:126
+msgid "A look inside Treats, and what comes out of our kitchen."
+msgstr ""
+
+#: inc/activation.php:134
+msgid "Privacy Policy"
+msgstr ""
+
+#: inc/activation.php:139
+msgid "Accessibility"
+msgstr ""
+
+#: inc/activation.php:243
+msgid "Menus"
+msgstr ""
+
+#: inc/activation.php:291
+msgid "Footer"
+msgstr ""
+
+#: inc/activation.php:317
+msgid "Legal"
+msgstr ""
+
+#: inc/activation.php:378
+msgid "The Full Works"
+msgstr ""
+
+#: inc/activation.php:379
+msgid "Lighter Mornings"
+msgstr ""
+
+#: inc/activation.php:380
+msgid "On Toast"
+msgstr ""
+
+#: inc/activation.php:383
+msgid "From the Kitchen"
+msgstr ""
+
+#: inc/activation.php:384
+msgid "Sandwiches & Toasties"
+msgstr ""
+
+#: inc/activation.php:385
+msgid "Salads & Soups"
+msgstr ""
+
+#: inc/activation.php:388
+msgid "Afternoon Teas"
+msgstr ""
+
+#: inc/activation.php:389
+msgid "Cream Teas & Scones"
+msgstr ""
+
+#: inc/activation.php:392
+msgid "The Cake Counter"
+msgstr ""
+
+#: inc/activation.php:393
+msgid "Traybakes & Slices"
+msgstr ""
+
+#: inc/activation.php:394
+msgid "Warm Puddings"
+msgstr ""
+
+#: inc/activation.php:397
+msgid "Loose Leaf Tea"
+msgstr ""
+
+#: inc/activation.php:398
+msgid "Coffee"
+msgstr ""
+
+#: inc/activation.php:399
+msgid "Cold Drinks"
+msgstr ""
+
+#: inc/activation.php:479
+msgid "The Full Treats Breakfast"
+msgstr ""
+
+#: inc/activation.php:480
+msgid "Two rashers of dry-cured bacon, Cumberland sausage, free-range egg, black pudding, grilled tomato, mushrooms, baked beans and toast."
+msgstr ""
+
+#: inc/activation.php:483
+msgid "Signature"
+msgstr ""
+
+#: inc/activation.php:487
+msgid "The Vegan Full Works"
+msgstr ""
+
+#: inc/activation.php:488
+msgid "Plant-based sausages, smoked tofu, sautéed mushrooms, grilled tomato, avocado, baked beans and sourdough toast."
+msgstr ""
+
+#: inc/activation.php:495
+msgid "Eggs Royale"
+msgstr ""
+
+#: inc/activation.php:496
+msgid "Scottish smoked salmon, poached free-range eggs and hollandaise on a toasted muffin."
+msgstr ""
+
+#: inc/activation.php:501
+msgid "Smashed Avocado & Poached Eggs"
+msgstr ""
+
+#: inc/activation.php:502
+msgid "On toasted sourdough with chilli, lemon and toasted seeds."
+msgstr ""
+
+#: inc/activation.php:508
+msgid "Buttermilk Pancakes"
+msgstr ""
+
+#: inc/activation.php:509
+msgid "A tall stack with maple syrup, seasonal berries and crème fraîche. Add streaky bacon for £2."
+msgstr ""
+
+#: inc/activation.php:515
+msgid "Warm Cinnamon Toast"
+msgstr ""
+
+#: inc/activation.php:516
+msgid "Thick-cut white bloomer, cinnamon butter, a pot of tea alongside."
+msgstr ""
+
+#: inc/activation.php:522
+msgid "Homemade Steak & Ale Pie"
+msgstr ""
+
+#: inc/activation.php:523
+msgid "Slow-cooked in a local ale gravy, shortcrust pastry, buttered mash and garden peas."
+msgstr ""
+
+#: inc/activation.php:526
+msgid "House favourite"
+msgstr ""
+
+#: inc/activation.php:530
+msgid "Quiche of the Day"
+msgstr ""
+
+#: inc/activation.php:531
+msgid "Baked each morning, served warm with dressed leaves and our house slaw."
+msgstr ""
+
+#: inc/activation.php:537
+msgid "Croque Monsieur"
+msgstr ""
+
+#: inc/activation.php:538
+msgid "Wiltshire ham, mature cheddar and béchamel on toasted sourdough. Add a fried egg to make it a Madame."
+msgstr ""
+
+#: inc/activation.php:543
+msgid "Coronation Chickpea Sandwich"
+msgstr ""
+
+#: inc/activation.php:544
+msgid "Lightly spiced, with sultanas, coriander and little gem on granary bread."
+msgstr ""
+
+#: inc/activation.php:550
+msgid "Soup of the Day"
+msgstr ""
+
+#: inc/activation.php:551
+msgid "Made in our kitchen every morning, with warm bread and butter."
+msgstr ""
+
+#: inc/activation.php:557
+msgid "Roast Beetroot & Whipped Feta Salad"
+msgstr ""
+
+#: inc/activation.php:558
+msgid "With candied walnuts, orange and a honey dressing."
+msgstr ""
+
+#: inc/activation.php:565
+msgid "Finger sandwiches, a warm fruit scone with Yorkshire jam and clotted cream, a tier of our own cakes, and a pot of loose leaf tea."
+msgstr ""
+
+#: inc/activation.php:567 inc/activation.php:576 inc/activation.php:583
+msgid "per person"
+msgstr ""
+
+#: inc/activation.php:569
+msgid "Most booked"
+msgstr ""
+
+#: inc/activation.php:573
+msgid "Sparkling Afternoon Tea"
+msgstr ""
+
+#: inc/activation.php:574
+msgid "Our full afternoon tea with a glass of English sparkling wine."
+msgstr ""
+
+#: inc/activation.php:580
+msgid "Vegan Afternoon Tea"
+msgstr ""
+
+#: inc/activation.php:581
+msgid "Every tier made plant-based, including our vegan scones and coconut cream. Please order 24 hours ahead."
+msgstr ""
+
+#: inc/activation.php:588
+msgid "Traditional Cream Tea"
+msgstr ""
+
+#: inc/activation.php:589
+msgid "Two warm scones, strawberry jam, clotted cream and a pot of tea."
+msgstr ""
+
+#: inc/activation.php:595
+msgid "Victoria Sponge"
+msgstr ""
+
+#: inc/activation.php:596
+msgid "The one we are known for. Raspberry jam, vanilla buttercream, a dusting of icing sugar."
+msgstr ""
+
+#: inc/activation.php:603
+msgid "Salted Caramel Chocolate Cake"
+msgstr ""
+
+#: inc/activation.php:604
+msgid "Four layers, dark chocolate ganache, sea salt caramel."
+msgstr ""
+
+#: inc/activation.php:610
+msgid "Lemon & Elderflower Drizzle"
+msgstr ""
+
+#: inc/activation.php:611
+msgid "Soaked while still warm, finished with a crunchy sugar crust."
+msgstr ""
+
+#: inc/activation.php:617
+msgid "Millionaire’s Shortbread"
+msgstr ""
+
+#: inc/activation.php:618
+msgid "Proper caramel, thick chocolate, buttery shortbread base."
+msgstr ""
+
+#: inc/activation.php:624
+msgid "Vegan Chocolate & Orange Brownie"
+msgstr ""
+
+#: inc/activation.php:625
+msgid "Fudgy in the middle, with candied orange."
+msgstr ""
+
+#: inc/activation.php:631
+msgid "Sticky Toffee Pudding"
+msgstr ""
+
+#: inc/activation.php:632
+msgid "Warm, with toffee sauce and a jug of cream or a scoop of vanilla ice cream."
+msgstr ""
+
+#: inc/activation.php:638
+msgid "Treats House Blend"
+msgstr ""
+
+#: inc/activation.php:639
+msgid "Our own malty breakfast blend, served by the pot."
+msgstr ""
+
+#: inc/activation.php:645
+msgid "Earl Grey Blue Flower"
+msgstr ""
+
+#: inc/activation.php:646
+msgid "Bergamot and cornflower, delicate and floral."
+msgstr ""
+
+#: inc/activation.php:652
+msgid "Flat White"
+msgstr ""
+
+#: inc/activation.php:653
+msgid "Double ristretto, silky milk. Oat, soya and almond available at no extra charge."
+msgstr ""
+
+#: inc/activation.php:659
+msgid "Real Hot Chocolate"
+msgstr ""
+
+#: inc/activation.php:660
+msgid "Melted Belgian chocolate, steamed milk, cream and marshmallows if you like."
+msgstr ""
+
+#: inc/activation.php:667
+msgid "Homemade Lemonade"
+msgstr ""
+
+#: inc/activation.php:668
+msgid "Pressed in-house, over ice with mint."
+msgstr ""
+
+#: inc/activation.php:688
+msgid "Worth the queue"
+msgstr ""
+
+#: inc/activation.php:689
+msgid "The cake counter is a sight in itself and the afternoon tea was beautifully presented. Staff could not have been more welcoming on a busy Saturday."
+msgstr ""
+
+#: inc/activation.php:690
+msgid "Helen M."
+msgstr ""
+
+#: inc/activation.php:695
+msgid "Best breakfast in Durham"
+msgstr ""
+
+#: inc/activation.php:696
+msgid "Generous portions, everything cooked properly and a genuinely good vegan option. We come back every time we visit our daughter at the university."
+msgstr ""
+
+#: inc/activation.php:697
+msgid "Andrew P."
+msgstr ""
+
+#: inc/activation.php:702
+msgid "A proper tea room"
+msgstr ""
+
+#: inc/activation.php:703
+msgid "Bright, spotless and full of locals — always a good sign. The scones were still warm and the loose leaf tea came in a proper pot."
+msgstr ""
+
+#: inc/activation.php:704
+msgid "Rachel D."
+msgstr ""
+
+#: inc/activation.php:709
+msgid "Kind to coeliacs"
+msgstr ""
+
+#: inc/activation.php:710
+msgid "They took my gluten intolerance seriously and talked me through the whole menu. So rare, and so appreciated."
+msgstr ""
+
+#: inc/activation.php:711
+msgid "Sofia L."
+msgstr ""
+
+#: inc/activation.php:716
+msgid "Our family tradition"
+msgstr ""
+
+#: inc/activation.php:717
+msgid "Three generations of us have had birthday afternoon teas here. Prices are honest and the welcome never changes."
+msgstr ""
+
+#: inc/activation.php:718
+msgid "John & Margaret W."
+msgstr ""
+
+#: inc/activation.php:758
+msgid "Visiting"
+msgstr ""
+
+#: inc/activation.php:759
+msgid "Food & Dietary"
+msgstr ""
+
+#: inc/activation.php:760
+msgid "Bookings & Groups"
+msgstr ""
+
+#: inc/activation.php:771
+msgid "Do I need to book a table?"
+msgstr ""
+
+#: inc/activation.php:772
+msgid "Walk-ins are always welcome and most of the time you will not wait long. We do recommend booking for afternoon tea, for groups of six or more, and for weekend brunch."
+msgstr ""
+
+#: inc/activation.php:776
+msgid "Where exactly are you, and where can I park?"
+msgstr ""
+
+#: inc/activation.php:777
+msgid "We are at 10–11 Silver Street, at the foot of the hill between Durham Market Place and Framwellgate Bridge. Silver Street is pedestrianised, so the nearest car parks are Prince Bishops and Walkergate, both around a five-minute walk."
+msgstr ""
+
+#: inc/activation.php:781
+msgid "Is the tea room accessible?"
+msgstr ""
+
+#: inc/activation.php:782
+msgid "The ground floor is step-free from Silver Street with accessible seating and an accessible toilet. Assistance dogs are welcome throughout. If you would like us to hold a particular table, please call ahead and we will do our best."
+msgstr ""
+
+#: inc/activation.php:786
+msgid "Do you cater for vegans, vegetarians and gluten-free diets?"
+msgstr ""
+
+#: inc/activation.php:787
+msgid "Yes — there is a full vegan menu, plenty of vegetarian dishes and gluten-free options across breakfast, lunch and the cake counter. Our vegan afternoon tea needs 24 hours notice so we can bake for you."
+msgstr ""
+
+#: inc/activation.php:791
+msgid "Can you handle allergies?"
+msgstr ""
+
+#: inc/activation.php:792
+msgid "Please tell us when you order and we will talk you through the options. We prepare food in a busy kitchen that handles all fourteen major allergens, so we cannot guarantee a dish is entirely free from traces."
+msgstr ""
+
+#: inc/activation.php:796
+msgid "Is breakfast served all day?"
+msgstr ""
+
+#: inc/activation.php:797
+msgid "It is. The full breakfast menu runs from the moment we open until last orders."
+msgstr ""
+
+#: inc/activation.php:801
+msgid "Can I take cakes away, or order a whole one?"
+msgstr ""
+
+#: inc/activation.php:802
+msgid "Everything on the counter is available to take away, and we bake whole celebration cakes to order with about a week’s notice. Use Click & Collect on any menu page, or give us a ring."
+msgstr ""
+
+#: inc/activation.php:806
+msgid "Do you take large groups?"
+msgstr ""
+
+#: inc/activation.php:807
+msgid "We can usually seat groups of up to twelve online. For anything larger, including private hire of the upstairs room, please call us and we will arrange it properly."
+msgstr ""
+
+#: inc/activation.php:811
+msgid "Are dogs allowed?"
+msgstr ""
+
+#: inc/activation.php:812
+msgid "Assistance dogs are welcome everywhere in the tea room. Well-behaved dogs are welcome at our outside tables."
+msgstr ""
+
+#: inc/activation.php:816
+msgid "Do you sell gift vouchers?"
+msgstr ""
+
+#: inc/activation.php:817
+msgid "Yes. Choose any amount or one of our afternoon tea experiences, and we will post a card to you or email a printable voucher the same day."
+msgstr ""
+
+#: inc/activation.php:852
+msgid "This page explains what we do with the information you give us through this website. It is a starting point written for a small café — please have it reviewed before launch so it reflects exactly how you operate."
+msgstr ""
+
+#: inc/activation.php:853
+msgid "What we collect"
+msgstr ""
+
+#: inc/activation.php:854
+msgid "When you book a table, place a Click & Collect order, buy a gift voucher, contact us or join our newsletter, we collect the details you type into that form — typically your name, email address and phone number, plus the details of your request."
+msgstr ""
+
+#: inc/activation.php:855
+msgid "Why we hold it"
+msgstr ""
+
+#: inc/activation.php:856
+msgid "We use it to answer you, to hold your table or order, and — only if you have ticked the box — to send you occasional news about the tea room. We never sell your details."
+msgstr ""
+
+#: inc/activation.php:857
+msgid "How long we keep it"
+msgstr ""
+
+#: inc/activation.php:858
+msgid "Booking and order records are kept for up to 24 months so we can look back on a reservation. Newsletter subscriptions are kept until you unsubscribe, which you can do from any email we send."
+msgstr ""
+
+#: inc/activation.php:859
+msgid "Your rights"
+msgstr ""
+
+#: inc/activation.php:860
+msgid "You can ask us for a copy of what we hold about you, ask us to correct it, or ask us to delete it. Write to us at the tea room or email us and we will respond within one month."
+msgstr ""
+
+#: inc/activation.php:874
+msgid "We want everyone to be able to use this website and to enjoy the tea room itself."
+msgstr ""
+
+#: inc/activation.php:875
+msgid "This website"
+msgstr ""
+
+#: inc/activation.php:876
+msgid "The site is built to meet WCAG 2.2 AA: it can be used with a keyboard alone, works with screen readers, respects your device’s reduced-motion and dark-mode settings, and keeps text contrast well above the minimum. If you find something that does not work for you, please tell us and we will fix it."
+msgstr ""
+
+#: inc/activation.php:878
+msgid "Our ground floor is step-free from Silver Street, with accessible seating and an accessible toilet. Assistance dogs are welcome. Large-print menus are available — just ask. Call us before you visit and we will hold a table that suits you."
+msgstr ""
+
+#: inc/activation.php:907
+msgid "Treats Tea Room is ready."
+msgstr ""
+
+#: inc/activation.php:909
+msgid "Your pages, menus and starter content have been created. Next: add your opening hours, phone number and social links, then replace the starter menu items and photography with your own."
+msgstr ""
+
+#: inc/activation.php:912
+msgid "Open the Customizer"
+msgstr ""
+
+#: inc/activation.php:913
+msgid "Edit the menu"
+msgstr ""
+
+#: inc/activation.php:914
+msgid "Dismiss"
+msgstr ""
+
+#: inc/customizer.php:122
+msgid "Treats Tea Room"
+msgstr ""
+
+#: inc/customizer.php:128
+msgid "Brand & Appearance"
+msgstr ""
+
+#: inc/customizer.php:129
+msgid "Contact & Location"
+msgstr ""
+
+#: inc/customizer.php:130
+msgid "Opening Hours"
+msgstr ""
+
+#: inc/customizer.php:131
+msgid "Social Profiles"
+msgstr ""
+
+#: inc/customizer.php:132
+msgid "Home Page"
+msgstr ""
+
+#: inc/customizer.php:133
+msgid "Table Booking"
+msgstr ""
+
+#: inc/customizer.php:136
+msgid "Instagram Feed"
+msgstr ""
+
+#: inc/customizer.php:138
+msgid "SEO & Sharing"
+msgstr ""
+
+#: inc/customizer.php:162
+msgid "Business name"
+msgstr ""
+
+#: inc/customizer.php:172
+msgid "Wordmark tagline"
+msgstr ""
+
+#: inc/customizer.php:181
+msgid "Default colour scheme"
+msgstr ""
+
+#: inc/customizer.php:182
+msgid "Visitors can always override this with the toggle in the header."
+msgstr ""
+
+#: inc/customizer.php:186
+msgid "Follow the visitor’s device"
+msgstr ""
+
+#: inc/customizer.php:187
+msgid "Always light"
+msgstr ""
+
+#: inc/customizer.php:188
+msgid "Always dark"
+msgstr ""
+
+#: inc/customizer.php:198
+msgid "Show the dark mode toggle"
+msgstr ""
+
+#: inc/customizer.php:209
+msgid "Accent colour"
+msgstr ""
+
+#: inc/customizer.php:221
+msgid "Enable scroll animations"
+msgstr ""
+
+#: inc/customizer.php:222
+msgid "Always disabled automatically for visitors who prefer reduced motion."
+msgstr ""
+
+#: inc/customizer.php:232
+msgid "Street address"
+msgstr ""
+
+#: inc/customizer.php:233
+msgid "Town / city"
+msgstr ""
+
+#: inc/customizer.php:234
+msgid "County"
+msgstr ""
+
+#: inc/customizer.php:235
+msgid "Postcode"
+msgstr ""
+
+#: inc/customizer.php:236
+msgid "Country"
+msgstr ""
+
+#: inc/customizer.php:256
+msgid "Public email address"
+msgstr ""
+
+#: inc/customizer.php:268
+msgid "Send form notifications to"
+msgstr ""
+
+#: inc/customizer.php:269
+msgid "Where bookings, enquiries and orders are emailed. Defaults to the public address."
+msgstr ""
+
+#: inc/customizer.php:280
+msgid "Google Maps embed URL"
+msgstr ""
+
+#: inc/customizer.php:281
+msgid "Optional. Leave blank to generate one from the address above."
+msgstr ""
+
+#: inc/customizer.php:292
+msgid "Getting here note"
+msgstr ""
+
+#: inc/customizer.php:318
+msgid "%s — closed all day"
+msgstr ""
+
+#: inc/customizer.php:331
+msgid "%s — opens"
+msgstr ""
+
+#: inc/customizer.php:344
+msgid "%s — closes"
+msgstr ""
+
+#: inc/customizer.php:357
+msgid "Opening hours note"
+msgstr ""
+
+#: inc/customizer.php:368
+msgid "Facebook URL"
+msgstr ""
+
+#: inc/customizer.php:369
+msgid "Instagram URL"
+msgstr ""
+
+#: inc/customizer.php:370
+msgid "Tripadvisor URL"
+msgstr ""
+
+#: inc/customizer.php:371
+msgid "X (Twitter) URL"
+msgstr ""
+
+#: inc/customizer.php:390 inc/meta-boxes.php:80
+msgid "Hero eyebrow"
+msgstr ""
+
+#: inc/customizer.php:391
+msgid "Hero heading"
+msgstr ""
+
+#: inc/customizer.php:392
+msgid "Hero paragraph"
+msgstr ""
+
+#: inc/customizer.php:393
+msgid "Hero button label"
+msgstr ""
+
+#: inc/customizer.php:394
+msgid "Hero button URL"
+msgstr ""
+
+#: inc/customizer.php:395
+msgid "Hero secondary button label"
+msgstr ""
+
+#: inc/customizer.php:396
+msgid "Hero secondary button URL"
+msgstr ""
+
+#: inc/customizer.php:417
+msgid "Hero image"
+msgstr ""
+
+#: inc/customizer.php:418
+msgid "Landscape, at least 2400px wide. A sage gradient is used when empty."
+msgstr ""
+
+#: inc/customizer.php:429
+msgid "Story section heading"
+msgstr ""
+
+#: inc/customizer.php:441
+msgid "Story section text"
+msgstr ""
+
+#: inc/customizer.php:453
+msgid "Story image"
+msgstr ""
+
+#: inc/customizer.php:466
+msgid "External booking system URL"
+msgstr ""
+
+#: inc/customizer.php:467
+msgid "Optional. If set, booking buttons point here instead of the built-in form."
+msgstr ""
+
+#: inc/customizer.php:478
+msgid "Booking widget embed code"
+msgstr ""
+
+#: inc/customizer.php:479
+msgid "Optional. Paste an iframe from OpenTable, ResDiary or similar to replace the built-in form."
+msgstr ""
+
+#: inc/customizer.php:490
+msgid "Largest party bookable online"
+msgstr ""
+
+#: inc/customizer.php:506
+msgid "Minimum notice (hours)"
+msgstr ""
+
+#: inc/customizer.php:519
+msgid "How far ahead bookings are accepted (days)"
+msgstr ""
+
+#: inc/customizer.php:532
+msgid "Bookable times"
+msgstr ""
+
+#: inc/customizer.php:533
+msgid "One per line, 24-hour format. Leave blank to generate them from opening hours."
+msgstr ""
+
+#: inc/customizer.php:544
+msgid "Booking form note"
+msgstr ""
+
+#: inc/customizer.php:558
+msgid "Enable Click & Collect"
+msgstr ""
+
+#: inc/customizer.php:570
+msgid "Collection notice"
+msgstr ""
+
+#: inc/customizer.php:584
+msgid "Voucher page intro"
+msgstr ""
+
+#: inc/customizer.php:596
+msgid "Voucher amounts"
+msgstr ""
+
+#: inc/customizer.php:597
+msgid "Comma separated, numbers only."
+msgstr ""
+
+#: inc/customizer.php:608
+msgid "Voucher terms"
+msgstr ""
+
+#: inc/customizer.php:620
+msgid "Payment link"
+msgstr ""
+
+#: inc/customizer.php:621
+msgid "Optional. A Stripe, SumUp or Square payment link. When set, buyers are sent here after submitting their details."
+msgstr ""
+
+#: inc/customizer.php:634
+msgid "Instagram handle"
+msgstr ""
+
+#: inc/customizer.php:645
+msgid "Instagram Basic Display access token"
+msgstr ""
+
+#: inc/customizer.php:646
+msgid "Optional. With a token the feed pulls live posts; without one, the curated gallery below is shown instead."
+msgstr ""
+
+#: inc/customizer.php:656
+msgid "Number of posts"
+msgstr ""
+
+#: inc/customizer.php:674
+msgid "Newsletter heading"
+msgstr ""
+
+#: inc/customizer.php:685
+msgid "Newsletter text"
+msgstr ""
+
+#: inc/customizer.php:697
+msgid "External list URL"
+msgstr ""
+
+#: inc/customizer.php:698
+msgid "Optional Mailchimp/Brevo form action. Without one, subscribers are stored in WordPress."
+msgstr ""
+
+#: inc/customizer.php:711
+msgid "Default meta description"
+msgstr ""
+
+#: inc/customizer.php:712
+msgid "Used on the home page and anywhere without its own excerpt. Aim for 150–160 characters."
+msgstr ""
+
+#: inc/customizer.php:724
+msgid "Default sharing image"
+msgstr ""
+
+#: inc/customizer.php:735
+msgid "Price range"
+msgstr ""
+
+#: inc/customizer.php:746
+msgid "Year established"
+msgstr ""
+
+#: inc/enqueue.php:99
+msgid "Close menu"
+msgstr ""
+
+#: inc/enqueue.php:100
+msgid "Switch to light mode"
+msgstr ""
+
+#: inc/enqueue.php:101
+msgid "Switch to dark mode"
+msgstr ""
+
+#: inc/enqueue.php:102
+msgid "Added to your order"
+msgstr ""
+
+#: inc/enqueue.php:103
+msgid "Your collection order is empty."
+msgstr ""
+
+#: inc/enqueue.php:104
+msgid "Sending…"
+msgstr ""
+
+#: inc/enqueue.php:105
+msgid "Something went wrong. Please try again or call us on %s."
+msgstr ""
+
+#: inc/enqueue.php:106
+msgid "Please complete this field."
+msgstr ""
+
+#: inc/enqueue.php:107
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: inc/enqueue.php:121
+msgid "Collection orders need 2 hours notice. We will call to confirm."
+msgstr ""
+
+#: inc/forms.php:62
+msgid "Unknown request."
+msgstr ""
+
+#: inc/forms.php:69
+msgid "Your session expired. Please refresh the page and try again."
+msgstr ""
+
+#: inc/forms.php:82
+msgid "That was a little too quick — please try again."
+msgstr ""
+
+#: inc/forms.php:87
+msgid "Too many submissions from this connection. Please call us instead."
+msgstr ""
+
+#: inc/forms.php:100
+msgid "this field is required."
+msgstr ""
+
+#: inc/forms.php:105
+msgid "please check this value."
+msgstr ""
+
+#: inc/forms.php:120
+msgid "We could not save your request. Please call us."
+msgstr ""
+
+#: inc/forms.php:176
+msgid "New table booking request"
+msgstr ""
+
+#: inc/forms.php:177
+msgid "Thank you — your request is with us. We will confirm by email or phone shortly."
+msgstr ""
+
+#: inc/forms.php:193 inc/post-types.php:479
+msgid "Party size"
+msgstr ""
+
+#: inc/forms.php:205 inc/forms.php:272 inc/post-types.php:481
+msgid "Notes"
+msgstr ""
+
+#: inc/forms.php:210 inc/forms.php:236 inc/post-types.php:489
+msgid "Marketing opt-in"
+msgstr ""
+
+#: inc/forms.php:218
+msgid "New website enquiry"
+msgstr ""
+
+#: inc/forms.php:219
+msgid "Thank you for getting in touch — we will reply as soon as we can."
+msgstr ""
+
+#: inc/forms.php:225 inc/post-types.php:483
+msgid "Subject"
+msgstr ""
+
+#: inc/forms.php:244
+msgid "New Click & Collect order"
+msgstr ""
+
+#: inc/forms.php:245
+msgid "Order received. We will call to confirm your collection time."
+msgstr ""
+
+#: inc/forms.php:261 inc/post-types.php:484
+msgid "Items"
+msgstr ""
+
+#: inc/forms.php:267 inc/post-types.php:485
+msgid "Total"
+msgstr ""
+
+#: inc/forms.php:281
+msgid "New gift voucher order"
+msgstr ""
+
+#: inc/forms.php:282
+msgid "Thank you — we will email you to arrange payment and delivery of the voucher."
+msgstr ""
+
+#: inc/forms.php:288 inc/post-types.php:486
+msgid "Amount"
+msgstr ""
+
+#: inc/forms.php:294
+msgid "Recipient name"
+msgstr ""
+
+#: inc/forms.php:299 inc/post-types.php:488
+msgid "Delivery"
+msgstr ""
+
+#: inc/forms.php:304
+msgid "Gift message"
+msgstr ""
+
+#: inc/forms.php:313
+msgid "New newsletter subscriber"
+msgstr ""
+
+#: inc/forms.php:314
+msgid "You are on the list — thank you."
+msgstr ""
+
+#: inc/forms.php:488
+msgid "Reference: %s"
+msgstr ""
+
+#: inc/forms.php:497
+msgid "Yes"
+msgstr ""
+
+#: inc/forms.php:505
+msgid "Manage this submission: %s"
+msgstr ""
+
+#: inc/forms.php:528
+msgid "Hello %s,"
+msgstr ""
+
+#: inc/forms.php:532
+msgid "Your reference is %s."
+msgstr ""
+
+#: inc/forms.php:542
+msgid "%1$s — we have your request (%2$s)"
+msgstr ""
+
+#: inc/forms.php:603
+msgid "Leave this field empty"
+msgstr ""
+
+#: inc/meta-boxes.php:22
+msgid "Price"
+msgstr ""
+
+#: inc/meta-boxes.php:24
+msgid "Numbers only for automatic currency formatting (e.g. 8.95), or free text such as “from 12.00”."
+msgstr ""
+
+#: inc/meta-boxes.php:27
+msgid "Price note"
+msgstr ""
+
+#: inc/meta-boxes.php:29
+msgid "Optional, e.g. “per person” or “serves two”."
+msgstr ""
+
+#: inc/meta-boxes.php:32
+msgid "Badge"
+msgstr ""
+
+#: inc/meta-boxes.php:34
+msgid "Optional highlight, e.g. “Signature” or “New”."
+msgstr ""
+
+#: inc/meta-boxes.php:37
+msgid "Allergen note"
+msgstr ""
+
+#: inc/meta-boxes.php:41
+msgid "Feature on the home page"
+msgstr ""
+
+#: inc/meta-boxes.php:45
+msgid "Available for Click & Collect"
+msgstr ""
+
+#: inc/meta-boxes.php:51
+msgid "Reviewer name"
+msgstr ""
+
+#: inc/meta-boxes.php:55
+msgid "Rating"
+msgstr ""
+
+#: inc/meta-boxes.php:65
+msgid "Source"
+msgstr ""
+
+#: inc/meta-boxes.php:67
+msgid "e.g. Tripadvisor, Google."
+msgstr ""
+
+#: inc/meta-boxes.php:70
+msgid "Source URL"
+msgstr ""
+
+#: inc/meta-boxes.php:74
+msgid "Review date"
+msgstr ""
+
+#: inc/meta-boxes.php:82
+msgid "Small label above the page title."
+msgstr ""
+
+#: inc/meta-boxes.php:85
+msgid "Hero intro"
+msgstr ""
+
+#: inc/meta-boxes.php:87
+msgid "One or two sentences below the page title."
+msgstr ""
+
+#: inc/meta-boxes.php:90
+msgid "Menu category"
+msgstr ""
+
+#: inc/meta-boxes.php:93
+msgid "Used by the Menu page template to decide which items to show."
+msgstr ""
+
+#: inc/meta-boxes.php:96
+msgid "Downloadable menu (PDF URL)"
+msgstr ""
+
+#: inc/meta-boxes.php:100
+msgid "Hide the page hero"
+msgstr ""
+
+#: inc/meta-boxes.php:116
+msgid "Treats details"
+msgstr ""
+
+#: inc/meta-boxes.php:179
+msgid "— Select —"
+msgstr ""
+
+#: inc/nav-walker.php:120
+msgid "Show submenu for %s"
+msgstr ""
+
+#: inc/post-types.php:24
+msgid "Menu Items"
+msgstr ""
+
+#: inc/post-types.php:25
+msgid "Menu Item"
+msgstr ""
+
+#: inc/post-types.php:26
+msgid "Add New Menu Item"
+msgstr ""
+
+#: inc/post-types.php:27
+msgid "Edit Menu Item"
+msgstr ""
+
+#: inc/post-types.php:28
+msgid "Search Menu Items"
+msgstr ""
+
+#: inc/post-types.php:29
+msgid "No menu items yet."
+msgstr ""
+
+#: inc/post-types.php:30
+msgid "All Menu Items"
+msgstr ""
+
+#: inc/post-types.php:53 inc/post-types.php:57
+msgid "Reviews"
+msgstr ""
+
+#: inc/post-types.php:54
+msgid "Review"
+msgstr ""
+
+#: inc/post-types.php:55
+msgid "Add New Review"
+msgstr ""
+
+#: inc/post-types.php:56
+msgid "Edit Review"
+msgstr ""
+
+#: inc/post-types.php:72 inc/post-types.php:76
+msgid "FAQs"
+msgstr ""
+
+#: inc/post-types.php:74
+msgid "Add New FAQ"
+msgstr ""
+
+#: inc/post-types.php:75
+msgid "Edit FAQ"
+msgstr ""
+
+#: inc/post-types.php:90
+msgid "Bookings"
+msgstr ""
+
+#: inc/post-types.php:90
+msgid "Booking"
+msgstr ""
+
+#: inc/post-types.php:91
+msgid "Enquiries"
+msgstr ""
+
+#: inc/post-types.php:91
+msgid "Enquiry"
+msgstr ""
+
+#: inc/post-types.php:92
+msgid "Collection Orders"
+msgstr ""
+
+#: inc/post-types.php:92
+msgid "Collection Order"
+msgstr ""
+
+#: inc/post-types.php:93
+msgid "Voucher Orders"
+msgstr ""
+
+#: inc/post-types.php:93
+msgid "Voucher Order"
+msgstr ""
+
+#: inc/post-types.php:94
+msgid "Subscribers"
+msgstr ""
+
+#: inc/post-types.php:94
+msgid "Subscriber"
+msgstr ""
+
+#: inc/post-types.php:107
+msgid "View %s"
+msgstr ""
+
+#: inc/post-types.php:108
+msgid "Nothing here yet."
+msgstr ""
+
+#: inc/post-types.php:141
+msgid "Menu Categories"
+msgstr ""
+
+#: inc/post-types.php:142
+msgid "Menu Category"
+msgstr ""
+
+#: inc/post-types.php:143
+msgid "Add New Menu Category"
+msgstr ""
+
+#: inc/post-types.php:144
+msgid "Categories"
+msgstr ""
+
+#: inc/post-types.php:162
+msgid "Dietary Labels"
+msgstr ""
+
+#: inc/post-types.php:163
+msgid "Dietary Label"
+msgstr ""
+
+#: inc/post-types.php:164
+msgid "Add New Dietary Label"
+msgstr ""
+
+#: inc/post-types.php:165
+msgid "Dietary"
+msgstr ""
+
+#: inc/post-types.php:180
+msgid "FAQ Topics"
+msgstr ""
+
+#: inc/post-types.php:181
+msgid "FAQ Topic"
+msgstr ""
+
+#: inc/post-types.php:182
+msgid "Topics"
+msgstr ""
+
+#: inc/post-types.php:205
+msgid "Vegetarian"
+msgstr ""
+
+#: inc/post-types.php:206
+msgid "Vegan"
+msgstr ""
+
+#: inc/post-types.php:207
+msgid "Gluten Free"
+msgstr ""
+
+#: inc/post-types.php:208
+msgid "Gluten Free Available"
+msgstr ""
+
+#: inc/post-types.php:209
+msgid "Dairy Free"
+msgstr ""
+
+#: inc/post-types.php:210
+msgid "Contains Nuts"
+msgstr ""
+
+#: inc/post-types.php:402
+msgid "Reference"
+msgstr ""
+
+#: inc/post-types.php:403
+msgid "Date & time"
+msgstr ""
+
+#: inc/post-types.php:404
+msgid "Party"
+msgstr ""
+
+#: inc/post-types.php:406
+msgid "Received"
+msgstr ""
+
+#: inc/post-types.php:455
+msgid "Submission details"
+msgstr ""
+
+#: inc/post-types.php:487
+msgid "Recipient"
+msgstr ""
+
+#: inc/post-types.php:490
+msgid "Source page"
+msgstr ""
+
+#: inc/post-types.php:491
+msgid "IP (hashed)"
+msgstr ""
+
+#: inc/security.php:52
+msgid "Those details were not recognised."
+msgstr ""
+
+#: inc/security.php:108
+msgid "Not available."
+msgstr ""
+
+#: inc/seo.php:202
+msgid "Tea Room & Café in Durham"
+msgstr ""
+
+#: inc/setup.php:56
+msgid "Primary Navigation"
+msgstr ""
+
+#: inc/setup.php:57
+msgid "Menus Dropdown"
+msgstr ""
+
+#: inc/setup.php:58
+msgid "Footer Navigation"
+msgstr ""
+
+#: inc/setup.php:59
+msgid "Legal Links"
+msgstr ""
+
+#: inc/setup.php:60
+msgid "Social Links"
+msgstr ""
+
+#: inc/setup.php:91
+msgid "Sage"
+msgstr ""
+
+#: inc/setup.php:96
+msgid "Sage Deep"
+msgstr ""
+
+#: inc/setup.php:101
+msgid "Sage Mist"
+msgstr ""
+
+#: inc/setup.php:106
+msgid "Cream"
+msgstr ""
+
+#: inc/setup.php:111
+msgid "Brass"
+msgstr ""
+
+#: inc/setup.php:116
+msgid "Ink"
+msgstr ""
+
+#: inc/setup.php:121
+msgid "White"
+msgstr ""
+
+#: inc/setup.php:136
+msgid "Small"
+msgstr ""
+
+#: inc/setup.php:141
+msgid "Normal"
+msgstr ""
+
+#: inc/setup.php:146
+msgid "Medium"
+msgstr ""
+
+#: inc/setup.php:151
+msgid "Large"
+msgstr ""
+
+#: inc/setup.php:156
+msgid "Display"
+msgstr ""
+
+#: inc/setup.php:171
+msgid "Sidebar"
+msgstr ""
+
+#: inc/setup.php:173
+msgid "Shown beside blog posts and archives."
+msgstr ""
+
+#: inc/setup.php:183
+msgid "Footer Extras"
+msgstr ""
+
+#: inc/setup.php:185
+msgid "Optional widgets in the footer, above the legal bar."
+msgstr ""
+
+#: inc/template-tags.php:161
+msgid "Monday"
+msgstr ""
+
+#: inc/template-tags.php:162
+msgid "Tuesday"
+msgstr ""
+
+#: inc/template-tags.php:163
+msgid "Wednesday"
+msgstr ""
+
+#: inc/template-tags.php:164
+msgid "Thursday"
+msgstr ""
+
+#: inc/template-tags.php:165
+msgid "Friday"
+msgstr ""
+
+#: inc/template-tags.php:166
+msgid "Saturday"
+msgstr ""
+
+#: inc/template-tags.php:167
+msgid "Sunday"
+msgstr ""
+
+#: inc/template-tags.php:261
+msgid "Facebook"
+msgstr ""
+
+#: inc/template-tags.php:262
+msgid "Instagram"
+msgstr ""
+
+#: inc/template-tags.php:263
+msgid "Tripadvisor"
+msgstr ""
+
+#: inc/template-tags.php:264
+msgid "X"
+msgstr ""
+
+#: inc/template-tags.php:486
+msgid "%s — home"
+msgstr ""
+
+#: inc/template-tags.php:504
+msgid "Tea Room & Café · Durham"
+msgstr ""
+
+#: inc/template-tags.php:528
+msgid "Breadcrumb"
+msgstr ""
+
+#: inc/template-tags.php:601
+msgid "Search: %s"
+msgstr ""
+
+#: inc/template-tags.php:606
+msgid "Page not found"
+msgstr ""
+
+#: inc/template-tags.php:718
+msgid "Rated %s out of 5"
+msgstr ""
+
+#: inc/template-tags.php:842
+msgid "%s min read"
+msgid_plural "%s min read"
+msgstr[0] ""
+msgstr[1] ""

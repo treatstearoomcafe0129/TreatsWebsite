@@ -1,0 +1,125 @@
+/**
+ * Print styles — chiefly so guests can print a menu cleanly.
+ */
+
+@page {
+	margin: 18mm 16mm;
+}
+
+body {
+	background: #fff !important;
+	color: #000 !important;
+	font-size: 11pt;
+	line-height: 1.5;
+}
+
+.site-header,
+.mobile-nav,
+.nav-toggle,
+.header-actions,
+.hero__scroll,
+.to-top,
+.collect-fab,
+.collect-drawer,
+.menu-controls,
+.site-footer__grid,
+.social-links,
+.newsletter,
+.map,
+.instagram-grid,
+.gallery-grid,
+.reviews__controls,
+.form,
+.breadcrumbs,
+.skip-link,
+.cta-banner,
+.comments-area,
+.pagination,
+.post-navigation {
+	display: none !important;
+}
+
+.hero,
+.page-hero {
+	padding-top: 0 !important;
+	padding-bottom: 1rem !important;
+	min-height: 0 !important;
+	background: none !important;
+	color: #000 !important;
+}
+
+.hero__bg,
+.hero__scrim,
+.page-hero__bg {
+	display: none !important;
+}
+
+.hero__title,
+.page-hero__title,
+h1,
+h2,
+h3 {
+	color: #000 !important;
+}
+
+.section {
+	padding-block: 0.5rem !important;
+	background: none !important;
+}
+
+.menu-section {
+	break-inside: avoid;
+	page-break-inside: avoid;
+}
+
+.menu-items {
+	grid-template-columns: repeat(2, 1fr) !important;
+	gap: 0.5rem 2rem !important;
+}
+
+.menu-item {
+	break-inside: avoid;
+	page-break-inside: avoid;
+	border-bottom: 0.5pt solid #ccc !important;
+	padding-bottom: 0.4rem !important;
+}
+
+.menu-item__media,
+.menu-item__add,
+.card__badge {
+	display: none !important;
+}
+
+.menu-item__price,
+.link-arrow,
+a {
+	color: #000 !important;
+}
+
+a[href^="http"]::after {
+	content: " (" attr(href) ")";
+	font-size: 8pt;
+	color: #555;
+}
+
+.menu-item a::after,
+.nav__link::after {
+	content: "" !important;
+}
+
+.site-footer {
+	background: none !important;
+	color: #000 !important;
+	border-top: 1pt solid #000;
+	padding-top: 0.75rem;
+}
+
+.site-footer__bar {
+	border: 0 !important;
+	color: #000 !important;
+}
+
+.reveal {
+	opacity: 1 !important;
+	transform: none !important;
+}

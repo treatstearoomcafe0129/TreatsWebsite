@@ -841,3 +841,140 @@ function treats_reading_time() {
 	/* translators: %s: number of minutes. */
 	return sprintf( _n( '%s min read', '%s min read', $minutes, 'treats' ), number_format_i18n( $minutes ) );
 }
+
+/**
+ * Images for the gallery and the Instagram fallback.
+ *
+ * Prefers media attached to the Gallery page; falls back to menu item
+ * photography so the section is never empty on a fresh install.
+ *
+ * @param int $limit Maximum images.
+ * @return int[] Attachment IDs.
+ */
+function treats_get_gallery_images( $limit = 12 ) {
+	$cache_key = 'treats_gallery_' . (int) $limit;
+	$cached    = wp_cache_get( $cache_key, 'treats' );
+
+	if ( is_array( $cached ) ) {
+		return $cached;
+	}
+
+	$ids  = array();
+	$page = get_posts(
+		array(
+			'post_type'      => 'page',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'meta_key'       => '_wp_page_template', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'meta_value'     => 'page-templates/template-gallery.php', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+		)
+	);
+
+	if ( $page ) {
+		$ids = get_posts(
+			array(
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image',
+				'post_status'    => 'inherit',
+				'post_parent'    => $page[0],
+				'posts_per_page' => (int) $limit,
+				'orderby'        => 'menu_order',
+				'order'          => 'ASC',
+				'fields'         => 'ids',
+				'no_found_rows'  => true,
+			)
+		);
+	}
+
+	if ( count( $ids ) < 4 ) {
+		$items = get_posts(
+			array(
+				'post_type'      => 'treats_menu_item',
+				'post_status'    => 'publish',
+				'posts_per_page' => (int) $limit,
+				'fields'         => 'ids',
+				'no_found_rows'  => true,
+				'meta_key'       => '_thumbnail_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			)
+		);
+
+		foreach ( $items as $item_id ) {
+			$thumb = (int) get_post_thumbnail_id( $item_id );
+
+			if ( $thumb && ! in_array( $thumb, $ids, true ) ) {
+				$ids[] = $thumb;
+			}
+		}
+	}
+
+	$ids = array_slice( array_map( 'intval', $ids ), 0, (int) $limit );
+
+	wp_cache_set( $cache_key, $ids, 'treats', 10 * MINUTE_IN_SECONDS );
+
+	return $ids;
+}
+
+/**
+ * URL of the page that presents a given menu category.
+ *
+ * Falls back to the taxonomy archive, then the home page, so links from the
+ * home page never dead-end while the site is being set up.
+ *
+ * @param string $slug Menu category slug.
+ * @return string
+ */
+function treats_menu_page_url( $slug ) {
+	$cache_key = 'treats_menu_page_' . $slug;
+	$cached    = wp_cache_get( $cache_key, 'treats' );
+
+	if ( false !== $cached ) {
+		return (string) $cached;
+	}
+
+	$pages = get_posts(
+		array(
+			'post_type'      => 'page',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'relation' => 'AND',
+				array(
+					'key'   => '_wp_page_template',
+					'value' => 'page-templates/template-menu.php',
+				),
+				array(
+					'key'   => '_treats_menu_category',
+					'value' => $slug,
+				),
+			),
+		)
+	);
+
+	$url = '';
+
+	if ( $pages ) {
+		$url = (string) get_permalink( $pages[0] );
+	} else {
+		$term = get_term_by( 'slug', $slug, 'treats_menu_category' );
+
+		if ( $term instanceof WP_Term ) {
+			$link = get_term_link( $term );
+
+			if ( ! is_wp_error( $link ) ) {
+				$url = (string) $link;
+			}
+		}
+	}
+
+	if ( '' === $url ) {
+		$url = home_url( '/' );
+	}
+
+	wp_cache_set( $cache_key, $url, 'treats', HOUR_IN_SECONDS );
+
+	return $url;
+}

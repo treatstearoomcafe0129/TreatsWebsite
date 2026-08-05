@@ -1,0 +1,199 @@
+# Treats Tea Room — WordPress theme
+
+A bespoke, production-ready theme for **Treats Tea Room Café**, 10–11 Silver
+Street, Durham. Built from scratch: no page builder, no framework, no parent
+theme, and no dependency on the previous Enfold installation.
+
+- Light sage & white palette, elegant serif display type, generous white space
+- Mobile-first, dark-mode aware, WCAG 2.2 AA oriented
+- Self-hosted variable fonts, conditional CSS/JS, no jQuery on the front end
+- Online booking, Click & Collect, gift voucher orders, contact and newsletter
+  forms — all built in, all working without JavaScript
+- JSON-LD structured data for the business, menus, FAQs, reviews and breadcrumbs
+
+---
+
+## Installing
+
+1. Copy the `treats-tea-room` folder into `wp-content/themes/`.
+2. In the dashboard, go to **Appearance → Themes** and activate **Treats Tea
+   Room**.
+3. On activation the theme builds the whole site once:
+   - every page in the structure below, with its template already assigned;
+   - the primary, footer and legal navigation menus;
+   - menu categories, a starter menu, FAQs and reviews;
+   - Reading settings pointed at the new Home and Journal pages;
+   - pretty permalinks, if they were not already on.
+
+   None of this runs twice, and everything it creates is ordinary content you
+   can edit or delete.
+4. Open **Appearance → Customize → Treats Tea Room** and fill in the real phone
+   number, opening hours, social links and photography.
+
+To zip it for a host that only accepts uploads:
+
+```bash
+cd wp-content/themes
+zip -r treats-tea-room.zip treats-tea-room -x "*.DS_Store"
+```
+
+## Pages the theme creates
+
+| Page | Template |
+| --- | --- |
+| Home | `front-page.php` |
+| Breakfast & Brunch | Menu |
+| Lunch | Menu |
+| Afternoon Tea | Menu |
+| Cakes & Desserts | Menu |
+| Drinks | Menu |
+| Book a Table | Book a Table |
+| Gift Vouchers | Gift Vouchers |
+| About Us | About |
+| Contact | Contact |
+| FAQ | FAQ |
+| Gallery | Gallery |
+| Journal | default (blog index) |
+| Privacy Policy, Accessibility | default |
+
+Each **Menu** page is bound to a menu category in the *Treats details* panel on
+its edit screen. Change that dropdown and the page shows a different menu — no
+code involved.
+
+## Where the content lives
+
+| What | Where in the dashboard |
+| --- | --- |
+| Dishes, prices, dietary labels | **Menu** (custom post type) |
+| Menu sections and sub-sections | **Menu → Categories** |
+| Vegan / GF / nut labels | **Menu → Dietary** |
+| Customer reviews | **Reviews** |
+| FAQ questions and topics | **FAQs** |
+| Bookings received | **Bookings** |
+| Click & Collect orders | **Collection Orders** |
+| Gift voucher orders | **Voucher Orders** |
+| Contact form messages | **Enquiries** |
+| Newsletter sign-ups | **Subscribers** |
+
+Booking, order, voucher, enquiry and subscriber records are private: they never
+appear on the front end, are excluded from search, and cannot be created from
+the dashboard — only the front-end forms write to them.
+
+## Customizer settings
+
+Everything business-specific is under **Customize → Treats Tea Room**:
+
+- **Brand & Appearance** — business name, wordmark tagline, accent colour,
+  default colour scheme, dark-mode toggle, scroll animations
+- **Contact & Location** — address, phone, public email, notification email,
+  Google Maps embed, travel note
+- **Opening Hours** — per-day open/close/closed, plus a note
+- **Social Profiles** — Facebook, Instagram, Tripadvisor, X
+- **Home Page** — hero copy, hero image, buttons, story section
+- **Table Booking** — external booking URL or embed, party size, lead time,
+  how far ahead, bookable times, form note
+- **Click & Collect** — on/off and the collection notice
+- **Gift Vouchers** — intro, amounts, terms, optional payment link
+- **Instagram Feed** — handle, access token, post count
+- **Newsletter** — heading, text, optional Mailchimp/Brevo form action
+- **SEO & Sharing** — meta description, sharing image, price range, year
+  established
+
+## Integrations
+
+| Feature | Default behaviour | Optional upgrade |
+| --- | --- | --- |
+| Booking | Built-in request form → stored + emailed | Set an external URL or paste an OpenTable/ResDiary embed |
+| Gift vouchers | Order form → stored + emailed | Add a Stripe/SumUp/Square payment link; buyers are redirected after submitting |
+| Newsletter | Subscribers stored in WordPress | Point the form at a Mailchimp or Brevo action URL |
+| Instagram | Curated gallery images | Add a Basic Display access token for the live feed (cached hourly) |
+| Maps | Click-to-load Google embed | Paste your own embed URL |
+
+## Performance
+
+- Fonts are self-hosted (`Inter` + `Cormorant Garamond`, variable, latin +
+  latin-ext subsets only) and preloaded; `@font-face` is inlined.
+- Critical CSS for the first paint is inlined; the rest loads normally.
+- `css/menu.css` and `css/forms.css` load only where they are needed.
+- All scripts are deferred; there is no jQuery on the front end.
+- Core block CSS, emoji scripts, oEmbed discovery and jQuery Migrate are
+  removed (each is filterable if a plugin needs them).
+- The Google Maps iframe is not requested until the visitor clicks the map.
+- The Instagram API response is cached for an hour; failures are cached for ten
+  minutes so a bad token can never slow the site.
+
+## Accessibility
+
+- Skip link, landmark regions, and a visible focus ring on every interactive
+  element.
+- The mobile drawer traps focus, closes on <kbd>Esc</kbd>, and is `inert` when
+  shut. So is the lightbox.
+- Submenus are real `aria-expanded` disclosure buttons, so they work by
+  keyboard, not just hover.
+- `prefers-reduced-motion` disables every animation, the hero pan and smooth
+  scrolling.
+- `prefers-color-scheme` is respected, and the visitor's explicit choice always
+  wins. The scheme is applied before first paint, so there is no flash.
+- Form errors are announced, tied to their field, and never colour-only.
+
+## Security
+
+- Every form: nonce → honeypot → time trap → per-IP rate limit → typed
+  validation → sanitised storage.
+- IP addresses are stored only as a salted one-way hash.
+- Security headers (`X-Content-Type-Options`, `X-Frame-Options`,
+  `Referrer-Policy`, `Permissions-Policy`, HSTS on TLS) — disable with the
+  `treats_send_security_headers` filter if your server sets them already.
+- XML-RPC off, author enumeration blocked, REST user endpoint closed to
+  anonymous requests, login errors made generic, dashboard file editing off.
+
+## Filters
+
+| Filter | Purpose |
+| --- | --- |
+| `treats_home_sections` | Reorder or remove home page sections |
+| `treats_schema_graph` | Modify the JSON-LD graph before output |
+| `treats_send_security_headers` | Turn off theme-sent security headers |
+| `treats_remove_core_block_css` | Keep core block styles |
+| `treats_ip_headers` | Trust a proxy header behind a load balancer |
+| `treats_force_reduced_motion` | Disable animations site-wide |
+
+## File map
+
+```
+treats-tea-room/
+├── style.css              Theme header (styles live in /css)
+├── functions.php          Bootstrap — loads /inc modules
+├── header.php footer.php
+├── front-page.php index.php page.php single.php
+├── archive.php search.php 404.php searchform.php comments.php
+├── screenshot.png
+├── css/     main · menu · forms · print · editor
+├── js/      main · menu · forms · customizer
+├── fonts/   Inter + Cormorant Garamond (woff2, variable)
+├── images/  favicon, app icons, social card
+├── inc/     setup, enqueue, template-tags, post-types, meta-boxes,
+│            customizer, nav-walker, seo, schema, performance,
+│            security, forms, activation
+├── page-templates/  menu, booking, vouchers, about, contact, faq,
+│                    gallery, full-width
+├── template-parts/  components/ content/ home/ menu/
+└── languages/       treats.pot
+```
+
+## Before launch
+
+1. Replace the starter menu items with real dishes and prices.
+2. Confirm the opening hours in the Customizer — the defaults are placeholders.
+3. Upload photography (see `images/README.md` for the crops the layout wants).
+4. Set the notification email so bookings reach a monitored inbox, and send a
+   test booking to confirm `wp_mail()` is delivering. On most hosts you want an
+   SMTP plugin here.
+5. Have the Privacy and Accessibility pages reviewed — both ship as drafts of
+   sensible copy, not legal advice.
+6. Set up 301 redirects from the old Enfold URLs to the new ones.
+
+## Licence
+
+GPL-2.0-or-later, matching WordPress. Inter and Cormorant Garamond are both
+licensed under the SIL Open Font License 1.1.

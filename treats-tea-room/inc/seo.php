@@ -86,7 +86,7 @@ function treats_get_share_image() {
 
 	$hero = (string) get_theme_mod( 'treats_hero_image', '' );
 
-	return '' !== $hero ? $hero : TREATS_URI . 'images/social-default.svg';
+	return '' !== $hero ? $hero : TREATS_URI . 'images/social-default.png';
 }
 
 /**
@@ -230,6 +230,7 @@ function treats_favicons() {
 	}
 
 	printf( '<link rel="icon" href="%s" type="image/svg+xml">' . "\n", esc_url( TREATS_URI . 'images/favicon.svg' ) );
+	printf( '<link rel="icon" href="%s" sizes="192x192">' . "\n", esc_url( TREATS_URI . 'images/icon-192.png' ) );
 	printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( TREATS_URI . 'images/apple-touch-icon.png' ) );
 	printf( '<link rel="mask-icon" href="%s" color="#6f9375">' . "\n", esc_url( TREATS_URI . 'images/favicon.svg' ) );
 }
