@@ -2826,6 +2826,11 @@ pre {
 		height: 100%;
 		min-height: 420px;
 	}
+
+	/* A full-width map wants a letterbox, not a 16:10 slab of empty space. */
+	.map--wide {
+		aspect-ratio: 21 / 9;
+	}
 }
 
 /* =========================================================================

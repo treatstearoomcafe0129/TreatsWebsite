@@ -155,8 +155,28 @@ Everything business-specific is under **Customize → Treats Tea Room**:
 | `treats_schema_graph` | Modify the JSON-LD graph before output |
 | `treats_send_security_headers` | Turn off theme-sent security headers |
 | `treats_remove_core_block_css` | Keep core block styles |
+| `treats_needs_form_assets` | Skip form CSS/JS on views without a form |
 | `treats_ip_headers` | Trust a proxy header behind a load balancer |
 | `treats_force_reduced_motion` | Disable animations site-wide |
+| `treats_form_submitted` | Action fired after a submission is stored and emailed |
+
+## How it was tested
+
+The theme was built against a real WordPress 6.7 install and driven with a
+headless browser rather than eyeballed:
+
+- **42 interaction tests** — mobile drawer (open, focus trap, <kbd>Esc</kbd>,
+  submenus), colour-scheme toggle and persistence, sticky/hiding header,
+  scroll reveals under slow, fast and jump-to-bottom scrolling, menu search
+  and filters, Click & Collect basket including persistence across reloads,
+  FAQ accordion and topic filter, click-to-load map, gallery lightbox.
+- **15 form tests** — client validation, honeypot, time trap, rate limiting,
+  every form's success path, and the no-JavaScript fallback with JS disabled.
+- **axe-core** on nine pages × light/dark × desktop/mobile: no violations.
+- **Layout** — no horizontal overflow at 390px on any page.
+- **Admin** — every custom post type screen, the Customizer and the menu
+  editor load without a warning; submission records show their stored fields.
+- **Performance** — 10–12 requests, ~230–290KB uncompressed, CLS 0.
 
 ## File map
 

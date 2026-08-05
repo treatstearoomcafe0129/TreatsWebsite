@@ -730,6 +730,13 @@ function treats_seed_reviews() {
 			'source' => 'Facebook',
 			'rating' => '5',
 		),
+		array(
+			'title'  => __( 'Somewhere to sit and think', 'treats' ),
+			'body'   => __( 'I revised for finals in the corner by the window for a fortnight. Nobody rushed me, the pot kept being refilled, and the cake got me through it.', 'treats' ),
+			'author' => __( 'Priya S.', 'treats' ),
+			'source' => 'Google',
+			'rating' => '5',
+		),
 	);
 
 	foreach ( $reviews as $order => $review ) {

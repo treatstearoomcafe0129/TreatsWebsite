@@ -202,7 +202,7 @@ while ( have_posts() ) :
 	<section class="section section--sm" style="padding-top:0">
 		<div class="container container--wide">
 			<div<?php treats_reveal( 0, 'scale' ); ?>>
-				<?php get_template_part( 'template-parts/components/map' ); ?>
+				<?php get_template_part( 'template-parts/components/map', null, array( 'wide' => true ) ); ?>
 			</div>
 
 			<div class="actions actions--center" style="margin-top:1.5rem">

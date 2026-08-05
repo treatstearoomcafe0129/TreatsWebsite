@@ -9,7 +9,8 @@
  * @package Treats
  *
  * @var array $args {
- *     @type bool $tall
+ *     @type bool $tall Fill the height of a split column.
+ *     @type bool $wide Letterbox ratio for a full-width map.
  * }
  */
 
@@ -17,10 +18,23 @@ defined( 'ABSPATH' ) || exit;
 
 $config = wp_parse_args(
 	$args ?? array(),
-	array( 'tall' => false )
+	array(
+		'tall' => false,
+		'wide' => false,
+	)
 );
+
+$classes = 'map';
+
+if ( $config['tall'] ) {
+	$classes .= ' map--tall';
+}
+
+if ( $config['wide'] ) {
+	$classes .= ' map--wide';
+}
 ?>
-<div class="map<?php echo $config['tall'] ? ' map--tall' : ''; ?>"
+<div class="<?php echo esc_attr( $classes ); ?>"
 	data-map-src="<?php echo esc_url( treats_map_embed_url() ); ?>"
 	data-map-title="<?php echo esc_attr( sprintf( /* translators: %s: business name. */ __( 'Map showing %s', 'treats' ), treats_get_business_name() ) ); ?>">
 

@@ -42,23 +42,19 @@ function treats_needs_menu_assets() {
 /**
  * Does the current view need the form bundle?
  *
+ * The newsletter sign-up is in the footer of every page, so in practice this
+ * is always true. It stays a function so a child theme can drop the footer
+ * form and reclaim the bytes.
+ *
  * @return bool
  */
 function treats_needs_form_assets() {
-	$templates = array(
-		'page-templates/template-booking.php',
-		'page-templates/template-contact.php',
-		'page-templates/template-vouchers.php',
-	);
-
-	foreach ( $templates as $template ) {
-		if ( is_page_template( $template ) ) {
-			return true;
-		}
-	}
-
-	// The newsletter block sits in the footer on every page.
-	return true;
+	/**
+	 * Filter whether form styles and scripts are loaded on this view.
+	 *
+	 * @param bool $needed Default true.
+	 */
+	return (bool) apply_filters( 'treats_needs_form_assets', true );
 }
 
 /**

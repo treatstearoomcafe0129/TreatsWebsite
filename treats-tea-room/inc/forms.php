@@ -113,6 +113,26 @@ function treats_handle_form() {
 		treats_form_respond( false, implode( ' ', $errors ), $is_ajax, 422, array( 'errors' => $errors ) );
 	}
 
+	// Choosing "Other" on the voucher form moves the real figure into the
+	// free-text box, so fold it back into the amount before storing.
+	if ( 'voucher' === $raw_action && 'other' === ( $data['treats_amount'] ?? '' ) ) {
+		$custom = trim( (string) ( $data['treats_amount_custom'] ?? '' ) );
+
+		if ( '' === $custom ) {
+			treats_form_respond(
+				false,
+				__( 'Please tell us the voucher amount you would like.', 'treats' ),
+				$is_ajax,
+				422,
+				array( 'errors' => array( 'treats_amount_custom' => __( 'Please enter an amount.', 'treats' ) ) )
+			);
+		}
+
+		$data['treats_amount'] = is_numeric( $custom ) ? treats_format_price( $custom ) : $custom;
+	}
+
+	unset( $data['treats_amount_custom'] );
+
 	// 6. Store.
 	$post_id = treats_store_submission( $raw_action, $config, $data );
 
@@ -289,6 +309,11 @@ function treats_form_config( $action ) {
 					'type'     => 'text',
 					'required' => true,
 					'max'      => 20,
+				),
+				'treats_amount_custom' => array(
+					'label' => __( 'Custom amount', 'treats' ),
+					'type'  => 'text',
+					'max'   => 20,
 				),
 				'treats_recipient' => array(
 					'label' => __( 'Recipient name', 'treats' ),
