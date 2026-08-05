@@ -27,6 +27,21 @@
 		}
 	}
 
+	/**
+	 * "3 dishes" / "1 dish", using the strings WordPress localised for us.
+	 *
+	 * @param {number}  n      Count.
+	 * @param {boolean} shown  Use the "… shown." wording.
+	 * @return {string}
+	 */
+	function dishLabel(n, shown) {
+		var forms = menuData.i18n || {};
+		var key = shown ? (n === 1 ? 'dishShownOne' : 'dishShownMany') : (n === 1 ? 'dishOne' : 'dishMany');
+		var template = forms[key] || (shown ? '%s dishes shown.' : '%s dishes');
+
+		return template.replace('%s', n);
+	}
+
 	function normalise(value) {
 		return (value || '')
 			.toString()
@@ -52,7 +67,7 @@
 		var clear = $('[data-menu-search-clear]');
 		var empty = $('[data-menu-empty]');
 		var counter = $('[data-menu-count]');
-		var items = $$('.menu-item', root);
+		var items = $$('.menu-entry', root);
 		var sections = $$('.menu-section', root);
 		var activeFilter = '';
 		var query = '';
@@ -79,7 +94,7 @@
 
 			// Hide a section heading when every item beneath it is filtered out.
 			sections.forEach(function (section) {
-				var shown = $$('.menu-item', section).filter(function (item) {
+				var shown = $$('.menu-entry', section).filter(function (item) {
 					return !item.hidden;
 				});
 
@@ -88,7 +103,7 @@
 				var count = $('[data-section-count]', section);
 
 				if (count) {
-					count.textContent = shown.length;
+					count.textContent = dishLabel(shown.length);
 				}
 			});
 
@@ -97,7 +112,7 @@
 			}
 
 			if (counter) {
-				counter.textContent = visible;
+				counter.textContent = dishLabel(visible, true);
 			}
 		}
 
@@ -109,7 +124,7 @@
 					var isActive = other === button;
 
 					other.classList.toggle('is-active', isActive);
-					other.setAttribute('aria-selected', isActive ? 'true' : 'false');
+					other.setAttribute('aria-pressed', isActive ? 'true' : 'false');
 				});
 
 				apply();

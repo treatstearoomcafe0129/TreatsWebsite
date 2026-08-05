@@ -60,6 +60,13 @@ class Treats_Nav_Walker extends Walker_Nav_Menu {
 		$classes[] = 'nav__item';
 		$classes[] = 'nav__item--depth-' . $depth;
 
+		/**
+		 * Run core's menu class filter, as Walker_Nav_Menu does. Without this
+		 * the theme's own `is-cta` promotion — and any plugin filter — would be
+		 * silently ignored.
+		 */
+		$classes = (array) apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth );
+
 		$has_children = in_array( 'menu-item-has-children', $classes, true );
 
 		if ( $has_children ) {

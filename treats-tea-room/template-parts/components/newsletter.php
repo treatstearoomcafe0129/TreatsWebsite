@@ -21,13 +21,14 @@ $uid      = wp_unique_id( 'newsletter-' );
 	<form
 		class="newsletter__form"
 		method="post"
-		action="<?php echo esc_url( '' !== $external ? $external : admin_url( 'admin-ajax.php' ) ); ?>"
+		action="<?php echo esc_url( '' !== $external ? $external : treats_form_action() ); ?>"
 		<?php if ( '' === $external ) : ?>
 			data-treats-form="subscribe"
 		<?php endif; ?>
 		<?php echo '' !== $external ? 'target="_blank" rel="noopener"' : ''; ?>
 	>
 		<div data-form-response hidden></div>
+		<?php treats_form_notice(); ?>
 
 		<div class="newsletter__row">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'Email address', 'treats' ); ?></label>

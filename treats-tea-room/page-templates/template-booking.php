@@ -56,7 +56,7 @@ while ( have_posts() ) :
 
 							<?php treats_form_notice(); ?>
 
-							<form class="form" method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" data-treats-form="booking">
+							<form class="form" method="post" action="<?php echo esc_url( treats_form_action() ); ?>" data-treats-form="booking">
 								<div data-form-response hidden></div>
 
 								<div class="form__grid form__grid--2">

@@ -440,9 +440,12 @@ function treats_store_submission( $action, $config, $data ) {
 		return $post_id;
 	}
 
+	// Field names arrive as `treats_name`; store them as protected meta
+	// (`_treats_name`) so personal data stays out of the custom fields UI and
+	// the REST API, and matches what the admin screens read back.
 	foreach ( $data as $key => $value ) {
 		if ( '' !== $value ) {
-			update_post_meta( $post_id, $key, $value );
+			update_post_meta( $post_id, '_' . $key, $value );
 		}
 	}
 
@@ -587,6 +590,19 @@ function treats_form_respond( $success, $message, $is_ajax, $status = 200, $extr
 }
 
 /**
+ * Where a form posts when JavaScript is unavailable.
+ *
+ * Forms post back to the page they live on so the `template_redirect` handler
+ * can process them and redirect with a readable message. The JavaScript layer
+ * ignores this and posts to admin-ajax.php instead.
+ *
+ * @return string
+ */
+function treats_form_action() {
+	return treats_get_canonical();
+}
+
+/**
  * Render the shared hidden fields every form needs.
  *
  * @param string $action Action key.
@@ -609,15 +625,26 @@ function treats_form_fields( $action ) {
 /**
  * Show the result of a no-JavaScript submission.
  *
+ * Renders at most once per request, so pages carrying several forms do not
+ * repeat the same message.
+ *
  * @return void
  */
 function treats_form_notice() {
+	static $rendered = false;
+
+	if ( $rendered ) {
+		return;
+	}
+
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Display only.
 	$status = isset( $_GET['treats_status'] ) ? sanitize_key( wp_unslash( $_GET['treats_status'] ) ) : '';
 
 	if ( ! in_array( $status, array( 'success', 'error' ), true ) ) {
 		return;
 	}
+
+	$rendered = true;
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Display only.
 	$message = isset( $_GET['treats_message'] ) ? sanitize_text_field( wp_unslash( rawurldecode( $_GET['treats_message'] ) ) ) : '';

@@ -151,6 +151,13 @@
 				header.classList.remove('is-hidden');
 			}
 
+			// Sticky sub-bars (the menu filter row) follow the header, and rise
+			// to the top edge when it hides.
+			document.documentElement.style.setProperty(
+				'--t-sticky-top',
+				header.classList.contains('is-hidden') ? '0px' : header.offsetHeight + 'px'
+			);
+
 			lastY = y;
 			ticking = false;
 		}
@@ -192,6 +199,12 @@
 			toggle.setAttribute('aria-label', i18n.menuClose || 'Close menu');
 			document.body.classList.add('is-locked');
 
+			var header = $('.site-header');
+
+			if (header) {
+				header.classList.add('is-nav-open');
+			}
+
 			var firstLink = $('a, button', drawer);
 
 			if (firstLink) {
@@ -207,6 +220,12 @@
 			toggle.setAttribute('aria-expanded', 'false');
 			toggle.setAttribute('aria-label', i18n.menuOpen || 'Open menu');
 			document.body.classList.remove('is-locked');
+
+			var header = $('.site-header');
+
+			if (header) {
+				header.classList.remove('is-nav-open');
+			}
 
 			if (lastFocused && typeof lastFocused.focus === 'function') {
 				lastFocused.focus();
@@ -279,12 +298,27 @@
 				panel.id = button.getAttribute('aria-controls');
 			}
 
+			var inDrawer = !!button.closest('.mobile-nav');
+
 			on(button, 'click', function (event) {
 				event.preventDefault();
 
 				var isOpen = item.classList.toggle('is-open');
 				button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+				if (inDrawer && panel) {
+					panel.style.maxHeight = isOpen ? panel.scrollHeight + 'px' : '0px';
+				}
 			});
+
+			// Keep an open panel the right height if the viewport changes.
+			if (inDrawer && panel) {
+				on(window, 'resize', function () {
+					if (item.classList.contains('is-open')) {
+						panel.style.maxHeight = panel.scrollHeight + 'px';
+					}
+				});
+			}
 		});
 
 		// Close desktop dropdowns on Escape or an outside click.
@@ -324,26 +358,57 @@
 	 * ------------------------------------------------------------------ */
 
 	function initReveal() {
-		var items = $$('.reveal');
+		var items = $$('[data-reveal]');
 
 		if (!items.length) {
 			return;
 		}
 
-		if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
-			items.forEach(function (item) {
-				item.classList.add('is-visible');
-			});
+		function show(item) {
+			item.classList.add('is-visible');
+		}
 
+		if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
+			items.forEach(show);
+
+			return;
+		}
+
+		var pending = [];
+
+		items.forEach(function (item) {
+			// The stagger is carried as data so it cannot collide with an
+			// existing style attribute on the element.
+			var delay = item.getAttribute('data-reveal-delay');
+
+			if (delay) {
+				item.style.setProperty('--reveal-delay', delay + 'ms');
+			}
+
+			// Anything already in view on load appears without animating.
+			var rect = item.getBoundingClientRect();
+
+			if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
+				show(item);
+
+				return;
+			}
+
+			pending.push(item);
+		});
+
+		if (!pending.length) {
 			return;
 		}
 
 		var observer = new IntersectionObserver(
 			function (entries) {
 				entries.forEach(function (entry) {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('is-visible');
-						observer.unobserve(entry.target);
+					// `isIntersecting` alone misses anything the viewport jumped
+					// straight past — a flick scroll or an in-page anchor — which
+					// would otherwise leave that content invisible for good.
+					if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+						reveal(entry.target);
 					}
 				});
 			},
@@ -353,18 +418,51 @@
 			}
 		);
 
-		items.forEach(function (item) {
-			// Anything already in view on load should not animate in.
-			var rect = item.getBoundingClientRect();
+		function reveal(item) {
+			show(item);
+			observer.unobserve(item);
 
-			if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
-				item.classList.add('is-visible');
+			var index = pending.indexOf(item);
+
+			if (index !== -1) {
+				pending.splice(index, 1);
+			}
+		}
+
+		pending.forEach(function (item) {
+			observer.observe(item);
+		});
+
+		// Safety net: the observer only reports a *change* of state, so an
+		// element scrolled past between two deliveries can be missed entirely.
+		// This sweep costs nothing once everything has been revealed.
+		var ticking = false;
+
+		function sweep() {
+			ticking = false;
+
+			if (!pending.length) {
+				window.removeEventListener('scroll', onScroll);
 
 				return;
 			}
 
-			observer.observe(item);
-		});
+			pending.slice().forEach(function (item) {
+				if (item.getBoundingClientRect().top < window.innerHeight * 0.95) {
+					reveal(item);
+				}
+			});
+		}
+
+		function onScroll() {
+			if (!ticking) {
+				window.requestAnimationFrame(sweep);
+				ticking = true;
+			}
+		}
+
+		on(window, 'scroll', onScroll, { passive: true });
+		on(window, 'resize', onScroll, { passive: true });
 	}
 
 	/* ---------------------------------------------------------------------
@@ -420,7 +518,7 @@
 
 					$$('.tab', group).forEach(function (other) {
 						other.classList.toggle('is-active', other === tab);
-						other.setAttribute('aria-selected', other === tab ? 'true' : 'false');
+						other.setAttribute('aria-pressed', other === tab ? 'true' : 'false');
 					});
 
 					targets.forEach(function (target) {

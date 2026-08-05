@@ -7,7 +7,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$reviews = treats_get_reviews( 9 );
+// Six fills the three-column desktop grid evenly; the mobile carousel is
+// happy with any number.
+$reviews = treats_get_reviews( 6 );
 
 if ( ! $reviews ) {
 	return;
@@ -46,7 +48,7 @@ $tripadv = (string) get_theme_mod( 'treats_social_tripadvisor', '' );
 		<?php endif; ?>
 
 		<div class="reviews">
-			<div class="reviews__track">
+			<div class="reviews__track" tabindex="0" role="group" aria-label="<?php esc_attr_e( 'Customer reviews — scroll for more', 'treats' ); ?>">
 				<?php foreach ( $reviews as $index => $review ) : ?>
 					<?php
 					$author = treats_meta( 'author', $review->ID );

@@ -48,7 +48,7 @@ if ( is_wp_error( $dietary ) ) {
 $diet_slugs = wp_list_pluck( $dietary, 'slug' );
 $search_key = wp_strip_all_tags( $item->post_title . ' ' . $item->post_content . ' ' . implode( ' ', wp_list_pluck( $dietary, 'name' ) ) );
 ?>
-<li class="menu-item"
+<li class="menu-entry"
 	data-categories="<?php echo esc_attr( implode( ' ', $categories ) ); ?>"
 	data-diet="<?php echo esc_attr( implode( ' ', $diet_slugs ) ); ?>"
 	data-search="<?php echo esc_attr( $search_key ); ?>">
@@ -59,7 +59,7 @@ $search_key = wp_strip_all_tags( $item->post_title . ' ' . $item->post_content .
 			get_post_thumbnail_id( $item ),
 			'treats-thumb',
 			array(
-				'class' => 'menu-item__media',
+				'class' => 'menu-entry__media',
 				'ratio' => '1 / 1',
 				'sizes' => '92px',
 				'alt'   => get_the_title( $item ),
@@ -68,29 +68,29 @@ $search_key = wp_strip_all_tags( $item->post_title . ' ' . $item->post_content .
 		?>
 	<?php endif; ?>
 
-	<div class="menu-item__body">
-		<div class="menu-item__head">
-			<h3 class="menu-item__title"><?php echo esc_html( get_the_title( $item ) ); ?></h3>
-			<span class="menu-item__dots" aria-hidden="true"></span>
+	<div class="menu-entry__body">
+		<div class="menu-entry__head">
+			<h3 class="menu-entry__title"><?php echo esc_html( get_the_title( $item ) ); ?></h3>
+			<span class="menu-entry__dots" aria-hidden="true"></span>
 
 			<?php if ( '' !== $price ) : ?>
-				<span class="menu-item__price">
+				<span class="menu-entry__price">
 					<?php echo esc_html( treats_format_price( $price ) ); ?>
 					<?php if ( '' !== $price_note ) : ?>
-						<span class="menu-item__price-note"><?php echo esc_html( $price_note ); ?></span>
+						<span class="menu-entry__price-note"><?php echo esc_html( $price_note ); ?></span>
 					<?php endif; ?>
 				</span>
 			<?php endif; ?>
 		</div>
 
 		<?php if ( trim( (string) $item->post_content ) ) : ?>
-			<p class="menu-item__text"><?php echo esc_html( wp_strip_all_tags( $item->post_content ) ); ?></p>
+			<p class="menu-entry__text"><?php echo esc_html( wp_strip_all_tags( $item->post_content ) ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( $dietary || '' !== $badge || '' !== $allergens ) : ?>
-			<div class="menu-item__tags">
+			<div class="menu-entry__tags">
 				<?php if ( '' !== $badge ) : ?>
-					<span class="menu-item__badge"><?php echo esc_html( $badge ); ?></span>
+					<span class="menu-entry__badge"><?php echo esc_html( $badge ); ?></span>
 				<?php endif; ?>
 
 				<?php foreach ( $dietary as $term ) : ?>
@@ -101,14 +101,14 @@ $search_key = wp_strip_all_tags( $item->post_title . ' ' . $item->post_content .
 				<?php endforeach; ?>
 
 				<?php if ( '' !== $allergens ) : ?>
-					<span class="menu-item__text"><?php echo esc_html( $allergens ); ?></span>
+					<span class="menu-entry__text"><?php echo esc_html( $allergens ); ?></span>
 				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 
 		<?php if ( $collect_ok ) : ?>
 			<button
-				class="menu-item__add"
+				class="menu-entry__add"
 				type="button"
 				data-collect-add="<?php echo esc_attr( (string) $item->ID ); ?>"
 				data-title="<?php echo esc_attr( get_the_title( $item ) ); ?>"

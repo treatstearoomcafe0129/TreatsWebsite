@@ -182,7 +182,7 @@
 .choice input:checked + .choice__label {
 	background: var(--c-accent-strong);
 	border-color: transparent;
-	color: #fff;
+	color: var(--c-on-accent);
 	font-weight: 500;
 }
 
@@ -229,8 +229,8 @@
 	content: "";
 	width: 11px;
 	height: 6px;
-	border-left: 2px solid #fff;
-	border-bottom: 2px solid #fff;
+	border-left: 2px solid var(--c-on-accent);
+	border-bottom: 2px solid var(--c-on-accent);
 	transform: rotate(-45deg) scale(0);
 	transition: transform var(--dur-fast) var(--ease-out);
 	margin-top: -2px;
@@ -241,7 +241,7 @@
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;
-	background: #fff;
+	background: var(--c-on-accent);
 	transform: scale(0);
 	transition: transform var(--dur-fast) var(--ease-out);
 }
@@ -402,7 +402,7 @@
 }
 
 .site-footer .newsletter__small {
-	color: rgba(238, 242, 238, 0.5);
+	color: rgba(238, 242, 238, 0.72);
 }
 
 .site-footer .newsletter .btn--primary {

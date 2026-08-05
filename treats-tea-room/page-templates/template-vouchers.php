@@ -100,7 +100,7 @@ while ( have_posts() ) :
 
 						<?php treats_form_notice(); ?>
 
-						<form class="form" method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" data-treats-form="voucher">
+						<form class="form" method="post" action="<?php echo esc_url( treats_form_action() ); ?>" data-treats-form="voucher">
 							<div data-form-response hidden></div>
 
 							<div class="field">

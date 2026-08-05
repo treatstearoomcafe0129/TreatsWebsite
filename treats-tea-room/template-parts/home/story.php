@@ -48,7 +48,7 @@ $years    = max( 1, (int) gmdate( 'Y' ) - $founded );
 					<?php echo esc_html( get_theme_mod( 'treats_story_text', __( 'Treats has been part of Durham life for three decades. We bake every morning, cook everything to order and keep prices honest — the same welcome for students, families and visitors alike.', 'treats' ) ) ); ?>
 				</p>
 
-				<div class="stats" style="margin:2.5rem 0;text-align:left">
+				<div class="stats stats--inline" style="margin:2.5rem 0">
 					<div class="stat">
 						<div class="stat__value" data-count-to="<?php echo esc_attr( (string) $years ); ?>"><?php echo esc_html( (string) $years ); ?></div>
 						<div class="stat__label"><?php esc_html_e( 'Years on Silver Street', 'treats' ); ?></div>

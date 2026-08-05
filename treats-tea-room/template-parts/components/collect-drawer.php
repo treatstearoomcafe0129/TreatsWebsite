@@ -34,8 +34,9 @@ $slots = treats_booking_slots();
 
 			<ul class="collect-list" data-collect-list></ul>
 
-			<form class="form" style="margin-top:1.5rem" method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" data-treats-form="order">
+			<form class="form" style="margin-top:1.5rem" method="post" action="<?php echo esc_url( treats_form_action() ); ?>" data-treats-form="order">
 				<div data-form-response hidden></div>
+				<?php treats_form_notice(); ?>
 
 				<div class="form__grid form__grid--2">
 					<div class="field">

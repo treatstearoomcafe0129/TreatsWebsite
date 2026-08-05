@@ -155,9 +155,20 @@ function treats_create_pages() {
 	foreach ( treats_page_blueprint() as $key => $page ) {
 		$order += 10;
 
-		$existing = get_page_by_path( sanitize_title( $page['title'] ) );
+		$existing = get_page_by_path( sanitize_title( $page['title'] ), OBJECT, 'page' );
 
 		if ( $existing instanceof WP_Post ) {
+			// WordPress creates the Privacy Policy page as a draft during
+			// install; publish it so the footer link is not a dead end.
+			if ( 'publish' !== $existing->post_status ) {
+				wp_update_post(
+					array(
+						'ID'          => $existing->ID,
+						'post_status' => 'publish',
+					)
+				);
+			}
+
 			$created[ $key ] = (int) $existing->ID;
 			continue;
 		}

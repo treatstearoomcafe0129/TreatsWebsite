@@ -385,10 +385,13 @@ function treats_icon_paths() {
  * @return string
  */
 function treats_get_reveal( $delay = 0, $animation = 'up' ) {
-	$attr = ' class="reveal reveal--' . esc_attr( $animation ) . '"';
+	// Data attributes rather than class/style: these are printed onto elements
+	// that usually already carry both, and a duplicate attribute is silently
+	// discarded by the browser.
+	$attr = ' data-reveal="' . esc_attr( $animation ) . '"';
 
 	if ( $delay > 0 ) {
-		$attr .= ' style="--reveal-delay:' . (int) $delay . 'ms"';
+		$attr .= ' data-reveal-delay="' . (int) $delay . '"';
 	}
 
 	return $attr;
@@ -554,6 +557,11 @@ function treats_get_breadcrumb_items() {
 			'url'   => home_url( '/' ),
 		),
 	);
+
+	// The home page is the trail; anything more would repeat itself.
+	if ( is_front_page() ) {
+		return $items;
+	}
 
 	if ( is_singular() ) {
 		$post = get_queried_object();

@@ -77,20 +77,20 @@ h3 {
 	gap: 0.5rem 2rem !important;
 }
 
-.menu-item {
+.menu-entry {
 	break-inside: avoid;
 	page-break-inside: avoid;
 	border-bottom: 0.5pt solid #ccc !important;
 	padding-bottom: 0.4rem !important;
 }
 
-.menu-item__media,
-.menu-item__add,
+.menu-entry__media,
+.menu-entry__add,
 .card__badge {
 	display: none !important;
 }
 
-.menu-item__price,
+.menu-entry__price,
 .link-arrow,
 a {
 	color: #000 !important;
@@ -102,7 +102,7 @@ a[href^="http"]::after {
 	color: #555;
 }
 
-.menu-item a::after,
+.menu-entry a::after,
 .nav__link::after {
 	content: "" !important;
 }
@@ -119,7 +119,7 @@ a[href^="http"]::after {
 	color: #000 !important;
 }
 
-.reveal {
+[data-reveal] {
 	opacity: 1 !important;
 	transform: none !important;
 }

@@ -48,7 +48,8 @@ while ( have_posts() ) :
 	}
 	?>
 
-	<section class="section" style="padding-top:<?php echo '' !== $treats_intro_content ? '0' : 'var(--section-y-sm)'; ?>">
+	<?php // The sticky filter bar sits flush under the hero, so no top padding. ?>
+	<section class="section" style="padding-top:0">
 		<?php
 		get_template_part(
 			'template-parts/menu/menu-list',

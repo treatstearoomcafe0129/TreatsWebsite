@@ -120,6 +120,16 @@ function treats_enqueue_assets() {
 				'collectEnabled' => (bool) get_theme_mod( 'treats_collect_enabled', true ),
 				'collectNotice'  => get_theme_mod( 'treats_collect_notice', __( 'Collection orders need 2 hours notice. We will call to confirm.', 'treats' ) ),
 				'currency'       => treats_currency_symbol(),
+				'i18n'           => array(
+					/* translators: %s: number of dishes. */
+					'dishOne'       => __( '%s dish', 'treats' ),
+					/* translators: %s: number of dishes. */
+					'dishMany'      => __( '%s dishes', 'treats' ),
+					/* translators: %s: number of dishes. */
+					'dishShownOne'  => __( '%s dish shown.', 'treats' ),
+					/* translators: %s: number of dishes. */
+					'dishShownMany' => __( '%s dishes shown.', 'treats' ),
+				),
 			)
 		);
 	}
@@ -243,7 +253,7 @@ body{margin:0;background:var(--t-bg);color:var(--t-ink);font-family:"Inter",-app
 img{max-width:100%;height:auto;display:block}
 .site-header{position:fixed;inset:0 0 auto;z-index:100;height:var(--t-header-h)}
 .skip-link{position:absolute;left:-9999px;top:0}
-.no-js .reveal{opacity:1!important;transform:none!important}
+.no-js [data-reveal]{opacity:1!important;transform:none!important}
 </style>
 		<?php
 }

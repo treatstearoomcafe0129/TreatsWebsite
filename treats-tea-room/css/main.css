@@ -45,14 +45,14 @@
 	--c-surface-2: #f8f5f0;
 	--c-ink: #1a1d1a;
 	--c-ink-soft: #4a544c;
-	--c-ink-mute: #6e786f;
+	--c-ink-mute: #5d675e;
 	--c-line: rgba(26, 29, 26, 0.1);
 	--c-line-strong: rgba(26, 29, 26, 0.18);
 	--c-accent: #6f9375;
 	--c-accent-strong: #4e7256;
 	--c-accent-soft: #e8efe8;
 	--c-accent-ink: #2e4433;
-	--c-brass: #a9834b;
+	--c-brass: #7d5f30;
 	--c-on-accent: #ffffff;
 	--c-scrim: rgba(20, 26, 21, 0.46);
 	--c-header-bg: rgba(253, 252, 250, 0.82);
@@ -274,6 +274,12 @@ hr {
 	border: 0;
 	border-top: 1px solid var(--c-line);
 	margin: var(--sp-7) 0;
+}
+
+/* Components set `display` on themselves, which would otherwise beat the
+   user-agent rule for the `hidden` attribute. */
+[hidden] {
+	display: none !important;
 }
 
 ::selection {
@@ -660,7 +666,7 @@ pre {
    6. Motion
    ====================================================================== */
 
-.reveal {
+[data-reveal] {
 	opacity: 0;
 	transition:
 		opacity var(--dur-slow) var(--ease-out) var(--reveal-delay, 0ms),
@@ -668,26 +674,26 @@ pre {
 	will-change: opacity, transform;
 }
 
-.reveal--up {
+[data-reveal="up"] {
 	transform: translate3d(0, 28px, 0);
 }
 
-.reveal--scale {
+[data-reveal="scale"] {
 	transform: scale(0.965);
 }
 
-.reveal--fade {
+[data-reveal="fade"] {
 	transform: none;
 }
 
-.reveal.is-visible {
+[data-reveal].is-visible {
 	opacity: 1;
 	transform: none;
 	will-change: auto;
 }
 
-.no-js .reveal,
-.reveal.is-disabled {
+/* Without JavaScript nothing would ever reveal, so show everything. */
+.no-js [data-reveal] {
 	opacity: 1;
 	transform: none;
 }
@@ -706,7 +712,7 @@ pre {
 		scroll-behavior: auto !important;
 	}
 
-	.reveal {
+	[data-reveal] {
 		opacity: 1;
 		transform: none;
 	}
@@ -718,7 +724,7 @@ pre {
 
 .btn {
 	--btn-bg: var(--c-accent-strong);
-	--btn-ink: #fff;
+	--btn-ink: var(--c-on-accent);
 	--btn-border: transparent;
 
 	display: inline-flex;
@@ -762,14 +768,11 @@ pre {
 	pointer-events: none;
 }
 
+/* In dark mode the accent is a light sage, so the label must be dark ink —
+   white on light sage fails contrast badly. --c-on-accent flips for us. */
 .btn--primary {
 	--btn-bg: var(--c-accent-strong);
-	--btn-ink: #fff;
-}
-
-:root[data-theme="dark"] .btn--primary,
-.btn--primary {
-	color: var(--btn-ink);
+	--btn-ink: var(--c-on-accent);
 }
 
 .btn--secondary {
@@ -966,6 +969,30 @@ pre {
 	--btn-border: var(--c-line-strong);
 }
 
+/* While the mobile drawer is open the header sits on the drawer's light
+   background, so the transparent-over-hero treatment must be dropped. */
+.site-header.is-nav-open,
+.site-header.is-nav-open.site-header--over {
+	background: var(--c-bg);
+	color: var(--c-ink);
+	border-bottom-color: var(--c-line);
+}
+
+.site-header.is-nav-open .site-logo,
+.site-header.is-nav-open .nav__link,
+.site-header.is-nav-open .header-action,
+.site-header.is-nav-open .nav-toggle {
+	color: var(--c-ink);
+}
+
+.site-header.is-nav-open .site-logo__mark {
+	color: var(--c-accent);
+}
+
+.site-header.is-nav-open .site-logo__tag {
+	color: var(--c-ink-mute);
+}
+
 /* Hide on scroll down, reveal on scroll up */
 .site-header.is-hidden {
 	transform: translateY(-100%);
@@ -1038,6 +1065,12 @@ pre {
 	.primary-nav {
 		display: block;
 		margin-inline: auto;
+	}
+
+	/* The persistent CTA in the header covers this, so avoid two identical
+	   "Book a table" affordances side by side. */
+	.primary-nav .nav__item.is-cta {
+		display: none;
 	}
 }
 
@@ -1354,6 +1387,18 @@ pre {
 	padding: 0.95rem 1.75rem;
 }
 
+/* .nav__link is declared after .btn, so items promoted to buttons need the
+   button's own ink colour restated. */
+.nav__link.btn {
+	color: var(--btn-ink);
+}
+
+/* A promoted CTA is visually self-contained — no divider under it. */
+.mobile-nav .nav__item.is-cta,
+.mobile-nav .nav__item:last-child {
+	border-bottom: 0;
+}
+
 .mobile-nav .has-dropdown {
 	position: relative;
 }
@@ -1382,20 +1427,13 @@ pre {
 }
 
 .mobile-nav .sub-menu {
-	display: grid;
-	grid-template-rows: 0fr;
+	display: block;
 	margin: 0;
 	padding: 0;
 	list-style: none;
-	transition: grid-template-rows var(--dur) var(--ease-out);
-}
-
-.mobile-nav .sub-menu > * {
+	max-height: 0;
 	overflow: hidden;
-}
-
-.mobile-nav .has-dropdown.is-open > .sub-menu {
-	grid-template-rows: 1fr;
+	transition: max-height var(--dur) var(--ease-out);
 }
 
 .mobile-nav .sub-menu .nav__item {
@@ -1789,6 +1827,20 @@ pre {
 	text-align: center;
 }
 
+/* Three across in a narrow column, left aligned — used beside body copy. */
+.stats--inline {
+	grid-template-columns: repeat(3, auto);
+	justify-content: start;
+	gap: clamp(1.5rem, 4vw, 3rem);
+	text-align: left;
+}
+
+@media (max-width: 480px) {
+	.stats--inline {
+		grid-template-columns: repeat(2, auto);
+	}
+}
+
 .stat__value {
 	font-family: var(--font-display);
 	font-size: clamp(2.5rem, 4vw, 3.5rem);
@@ -1809,7 +1861,7 @@ pre {
 }
 
 .section--deep .stat__label {
-	color: rgba(238, 242, 238, 0.65);
+	color: rgba(238, 242, 238, 0.78);
 }
 
 /* CTA banner */
@@ -1993,11 +2045,11 @@ pre {
 	color: var(--c-ink);
 }
 
-.tab[aria-selected="true"],
+.tab[aria-pressed="true"],
 .tab.is-active {
 	background: var(--c-accent-strong);
 	border-color: transparent;
-	color: #fff;
+	color: var(--c-on-accent);
 }
 
 /* =========================================================================
@@ -2419,7 +2471,7 @@ pre {
 .reviews__btn:hover {
 	background: var(--c-accent-strong);
 	border-color: transparent;
-	color: #fff;
+	color: var(--c-on-accent);
 }
 
 .reviews__btn .icon--chevron-right {
@@ -2708,7 +2760,7 @@ pre {
 }
 
 .section--deep .contact-list__label {
-	color: rgba(238, 242, 238, 0.55);
+	color: rgba(238, 242, 238, 0.75);
 }
 
 .contact-list a {
@@ -3056,7 +3108,7 @@ pre {
 .pagination .page-numbers.current {
 	background: var(--c-accent-strong);
 	border-color: transparent;
-	color: #fff;
+	color: var(--c-on-accent);
 }
 
 .post-navigation {
@@ -3140,7 +3192,7 @@ pre {
 	font-weight: 600;
 	letter-spacing: var(--tracking-wide);
 	text-transform: uppercase;
-	color: rgba(238, 242, 238, 0.5);
+	color: rgba(238, 242, 238, 0.72);
 	margin-bottom: var(--sp-4);
 }
 
@@ -3154,7 +3206,7 @@ pre {
 }
 
 .site-footer .site-logo__tag {
-	color: rgba(238, 242, 238, 0.5);
+	color: rgba(238, 242, 238, 0.72);
 }
 
 .site-footer__blurb {
@@ -3205,7 +3257,7 @@ pre {
 	padding-block: var(--sp-5);
 	border-top: 1px solid rgba(238, 242, 238, 0.12);
 	font-size: var(--fs-xs);
-	color: rgba(238, 242, 238, 0.55);
+	color: rgba(238, 242, 238, 0.75);
 }
 
 .site-footer__legal {
@@ -3253,7 +3305,7 @@ pre {
 
 .to-top:hover {
 	background: var(--c-accent-strong);
-	color: #fff;
+	color: var(--c-on-accent);
 	border-color: transparent;
 }
 

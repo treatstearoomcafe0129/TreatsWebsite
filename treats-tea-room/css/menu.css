@@ -10,7 +10,8 @@
 
 .menu-controls {
 	position: sticky;
-	top: var(--t-header-h);
+	/* Follows the header, and rises to the top edge when it hides. */
+	top: var(--t-sticky-top, var(--t-header-h));
 	z-index: 40;
 	padding-block: var(--sp-4);
 	background: color-mix(in srgb, var(--c-bg) 88%, transparent);
@@ -108,10 +109,19 @@
 	display: inline-flex;
 }
 
+/* The live counter in the control bar — must never wrap. */
 .menu-count {
 	font-size: var(--fs-xs);
 	color: var(--c-ink-mute);
 	white-space: nowrap;
+}
+
+/* The allergen footnote below the menu — must wrap. */
+.menu-note {
+	margin-top: var(--sp-4);
+	font-size: var(--fs-xs);
+	color: var(--c-ink-mute);
+	max-width: 70ch;
 }
 
 /* -------------------------------------------------------------------------
@@ -162,7 +172,7 @@
    Menu item
    ---------------------------------------------------------------------- */
 
-.menu-item {
+.menu-entry {
 	display: flex;
 	gap: var(--sp-4);
 	padding-bottom: var(--sp-5);
@@ -170,23 +180,23 @@
 	transition: opacity var(--dur) var(--ease-out);
 }
 
-.menu-item[hidden] {
+.menu-entry[hidden] {
 	display: none;
 }
 
-.menu-item__media {
+.menu-entry__media {
 	width: 92px;
 	flex-shrink: 0;
 	border-radius: var(--r-md);
 }
 
 @media (max-width: 480px) {
-	.menu-item__media {
+	.menu-entry__media {
 		width: 72px;
 	}
 }
 
-.menu-item__body {
+.menu-entry__body {
 	flex: 1;
 	min-width: 0;
 	display: flex;
@@ -194,13 +204,13 @@
 	gap: 0.35rem;
 }
 
-.menu-item__head {
+.menu-entry__head {
 	display: flex;
 	align-items: baseline;
 	gap: var(--sp-3);
 }
 
-.menu-item__title {
+.menu-entry__title {
 	font-family: var(--font-display);
 	font-size: var(--fs-md);
 	line-height: 1.25;
@@ -208,7 +218,7 @@
 	font-weight: 500;
 }
 
-.menu-item__dots {
+.menu-entry__dots {
 	flex: 1;
 	height: 1px;
 	margin-bottom: 0.3em;
@@ -217,12 +227,12 @@
 }
 
 @media (max-width: 600px) {
-	.menu-item__dots {
+	.menu-entry__dots {
 		display: none;
 	}
 }
 
-.menu-item__price {
+.menu-entry__price {
 	font-size: var(--fs-sm);
 	font-weight: 550;
 	color: var(--c-accent-strong);
@@ -230,7 +240,7 @@
 	font-variant-numeric: tabular-nums;
 }
 
-.menu-item__price-note {
+.menu-entry__price-note {
 	display: block;
 	font-size: var(--fs-2xs);
 	font-weight: 400;
@@ -238,13 +248,13 @@
 	text-align: right;
 }
 
-.menu-item__text {
+.menu-entry__text {
 	font-size: var(--fs-sm);
 	color: var(--c-ink-mute);
 	line-height: 1.55;
 }
 
-.menu-item__tags {
+.menu-entry__tags {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -271,7 +281,7 @@
 	color: var(--c-brass);
 }
 
-.menu-item__badge {
+.menu-entry__badge {
 	font-size: 0.6875rem;
 	color: var(--c-brass);
 	letter-spacing: 0.08em;
@@ -279,7 +289,7 @@
 	font-weight: 600;
 }
 
-.menu-item__add {
+.menu-entry__add {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35rem;
@@ -298,13 +308,13 @@
 		color var(--dur-fast) var(--ease-out);
 }
 
-.menu-item__add:hover {
+.menu-entry__add:hover {
 	background: var(--c-accent-strong);
 	border-color: transparent;
-	color: #fff;
+	color: var(--c-on-accent);
 }
 
-.menu-item__add.is-added {
+.menu-entry__add.is-added {
 	background: var(--c-accent-soft);
 	border-color: transparent;
 	color: var(--c-accent-ink);
@@ -356,7 +366,7 @@
 	padding: 0.85rem 1.25rem;
 	border-radius: var(--r-pill);
 	background: var(--c-accent-strong);
-	color: #fff;
+	color: var(--c-on-accent);
 	font-size: var(--fs-sm);
 	font-weight: 500;
 	box-shadow: var(--shadow-lg);
@@ -383,7 +393,7 @@
 	height: 22px;
 	padding-inline: 0.35rem;
 	border-radius: var(--r-pill);
-	background: rgba(255, 255, 255, 0.22);
+	background: color-mix(in srgb, var(--c-on-accent) 20%, transparent);
 	font-size: var(--fs-2xs);
 	font-weight: 600;
 }
@@ -393,6 +403,10 @@
 	inset: 0;
 	z-index: 150;
 	visibility: hidden;
+	/* Clips the panel while it sits translated off-screen. Without this a
+	   fixed-position child escapes the body's overflow and adds a horizontal
+	   scrollbar to the whole page on mobile. */
+	overflow: hidden;
 	transition: visibility var(--dur);
 }
 

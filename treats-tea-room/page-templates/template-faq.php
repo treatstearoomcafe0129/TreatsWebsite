@@ -51,10 +51,10 @@ while ( have_posts() ) :
 
 			<?php if ( $faqs ) : ?>
 				<?php if ( count( $topics ) > 1 ) : ?>
-					<div class="tabs" data-filter-group data-filter-target=".accordion__item"<?php treats_reveal(); ?>>
-						<button class="tab is-active" type="button" data-filter="" aria-selected="true"><?php esc_html_e( 'All questions', 'treats' ); ?></button>
+					<div class="tabs" role="group" aria-label="<?php esc_attr_e( 'Filter questions by topic', 'treats' ); ?>" data-filter-group data-filter-target=".accordion__item"<?php treats_reveal(); ?>>
+						<button class="tab is-active" type="button" data-filter="" aria-pressed="true"><?php esc_html_e( 'All questions', 'treats' ); ?></button>
 						<?php foreach ( $topics as $topic ) : ?>
-							<button class="tab" type="button" data-filter="<?php echo esc_attr( $topic->slug ); ?>" aria-selected="false"><?php echo esc_html( $topic->name ); ?></button>
+							<button class="tab" type="button" data-filter="<?php echo esc_attr( $topic->slug ); ?>" aria-pressed="false"><?php echo esc_html( $topic->name ); ?></button>
 						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>

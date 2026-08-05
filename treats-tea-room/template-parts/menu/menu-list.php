@@ -53,8 +53,8 @@ if ( is_wp_error( $dietary_terms ) ) {
 		<div class="menu-controls">
 			<div class="container menu-controls__inner">
 				<?php if ( $config['show_filters'] ) : ?>
-					<div class="menu-filters" role="tablist" aria-label="<?php esc_attr_e( 'Filter the menu', 'treats' ); ?>">
-						<button class="tab is-active" type="button" role="tab" aria-selected="true" data-menu-filter="">
+					<div class="menu-filters" role="group" aria-label="<?php esc_attr_e( 'Filter the menu', 'treats' ); ?>">
+						<button class="tab is-active" type="button" aria-pressed="true" data-menu-filter="">
 							<?php esc_html_e( 'Everything', 'treats' ); ?>
 						</button>
 
@@ -62,7 +62,7 @@ if ( is_wp_error( $dietary_terms ) ) {
 							<?php if ( ! $group['term'] ) : ?>
 								<?php continue; ?>
 							<?php endif; ?>
-							<button class="tab" type="button" role="tab" aria-selected="false" data-menu-filter="<?php echo esc_attr( $group['term']->slug ); ?>">
+							<button class="tab" type="button" aria-pressed="false" data-menu-filter="<?php echo esc_attr( $group['term']->slug ); ?>">
 								<?php echo esc_html( $group['term']->name ); ?>
 							</button>
 						<?php endforeach; ?>
@@ -71,7 +71,7 @@ if ( is_wp_error( $dietary_terms ) ) {
 							<?php if ( ! in_array( $term->slug, array( 've', 'gf' ), true ) ) : ?>
 								<?php continue; ?>
 							<?php endif; ?>
-							<button class="tab" type="button" role="tab" aria-selected="false" data-menu-filter="<?php echo esc_attr( $term->slug ); ?>">
+							<button class="tab" type="button" aria-pressed="false" data-menu-filter="<?php echo esc_attr( $term->slug ); ?>">
 								<?php echo esc_html( $term->name ); ?>
 							</button>
 						<?php endforeach; ?>
@@ -98,9 +98,14 @@ if ( is_wp_error( $dietary_terms ) ) {
 				<?php if ( $group['term'] ) : ?>
 					<header class="menu-section__header">
 						<h2 class="menu-section__title"><?php echo esc_html( $group['term']->name ); ?></h2>
-						<span class="menu-section__count">
-							<span data-section-count><?php echo esc_html( (string) count( $group['items'] ) ); ?></span>
-							<?php esc_html_e( 'dishes', 'treats' ); ?>
+						<span class="menu-section__count" data-section-count="<?php echo esc_attr( (string) count( $group['items'] ) ); ?>">
+							<?php
+							printf(
+								/* translators: %s: number of dishes. */
+								esc_html( _n( '%s dish', '%s dishes', count( $group['items'] ), 'treats' ) ),
+								esc_html( number_format_i18n( count( $group['items'] ) ) )
+							);
+							?>
 						</span>
 					</header>
 
@@ -144,9 +149,17 @@ if ( is_wp_error( $dietary_terms ) ) {
 			</div>
 		<?php endif; ?>
 
-		<p class="menu-count" style="margin-top:1rem">
-			<span data-menu-count><?php echo esc_html( (string) count( $items ) ); ?></span>
-			<?php esc_html_e( 'dishes shown. Allergen information is available for every dish — please ask a member of the team.', 'treats' ); ?>
+		<p class="menu-note">
+			<span data-menu-count>
+				<?php
+				printf(
+					/* translators: %s: number of dishes. */
+					esc_html( _n( '%s dish shown.', '%s dishes shown.', count( $items ), 'treats' ) ),
+					esc_html( number_format_i18n( count( $items ) ) )
+				);
+				?>
+			</span>
+			<?php esc_html_e( 'Allergen information is available for every dish — please ask a member of the team.', 'treats' ); ?>
 		</p>
 	</div>
 </div>

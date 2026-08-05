@@ -24,7 +24,7 @@ if ( $treats_is_menu_tax ) {
 	$treats_term = get_queried_object();
 	$treats_slug = ( $treats_term instanceof WP_Term ) ? $treats_term->slug : '';
 	?>
-	<section class="section">
+	<section class="section" style="padding-top:0">
 		<?php
 		get_template_part(
 			'template-parts/menu/menu-list',
