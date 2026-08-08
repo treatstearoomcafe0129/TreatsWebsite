@@ -53,6 +53,7 @@ zip -r treats-tea-room.zip treats-tea-room -x "*.DS_Store"
 | Page | Template |
 | --- | --- |
 | Home | `front-page.php` |
+| Evening Venue Hire | Evening Venue Hire |
 | Breakfast & Brunch | Menu |
 | Lunch | Menu |
 | Afternoon Tea | Menu |
@@ -97,6 +98,7 @@ code involved.
 | Click & Collect orders | **Collection Orders** |
 | Gift voucher orders | **Voucher Orders** |
 | Contact form messages | **Enquiries** |
+| Venue hire enquiries | **Event Enquiries** |
 | Newsletter sign-ups | **Subscribers** |
 
 Booking, order, voucher, enquiry and subscriber records are private: they never
@@ -119,6 +121,8 @@ Everything business-specific is under **Customize → Treats Tea Room**:
   how far ahead, bookable times, form note
 - **Click & Collect** — on/off and the collection notice
 - **Gift Vouchers** — intro, amounts, terms, optional payment link
+- **Evening Venue Hire** — availability, hire price, both food packages and
+  what they include, photograph
 - **Instagram Feed** — handle, access token, post count
 - **Newsletter** — heading, text, optional Mailchimp/Brevo form action
 - **SEO & Sharing** — meta description, sharing image, price range, year
@@ -249,9 +253,10 @@ treats-tea-room/
 ├── images/  favicon, app icons, social card
 ├── inc/     setup, enqueue, template-tags, post-types, meta-boxes,
 │            customizer, nav-walker, seo, schema, performance,
-│            security, forms, activation, compat-enfold
-├── page-templates/  menu, booking, vouchers, about, contact, faq,
-│                    gallery, full-width
+│            security, forms, activation, compat-enfold,
+│            menu-data, menu-import
+├── page-templates/  menu, booking, vouchers, events, about, contact,
+│                    faq, gallery, full-width
 ├── template-parts/  components/ content/ home/ menu/
 └── languages/       treats.pot
 ```
@@ -277,6 +282,20 @@ Once the old content has been rewritten, retire the filter:
 ```php
 add_filter( 'treats_strip_builder_markup', '__return_false' );
 ```
+
+## Loading the printed menu
+
+The theme seeds a small starter menu on activation so the site is never empty.
+The real menu — 171 dishes across five pages — lives in `inc/menu-data.php`
+and is loaded from **Tools → Import Treats Menu**.
+
+That screen tells you what it is about to do, moves the existing items to the
+**trash** rather than deleting them, and can be run again safely. To change
+the menu later, edit `inc/menu-data.php`, bump `TREATS_MENU_EDITION`, and the
+dashboard will offer the import again.
+
+Everything it creates is ordinary content — edit any dish in **Menu** as
+normal afterwards.
 
 ## Before launch
 

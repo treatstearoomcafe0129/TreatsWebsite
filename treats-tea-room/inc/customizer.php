@@ -130,6 +130,7 @@ function treats_customize_register( $wp_customize ) {
 		'treats_hours'      => __( 'Opening Hours', 'treats' ),
 		'treats_social'     => __( 'Social Profiles', 'treats' ),
 		'treats_home'       => __( 'Home Page', 'treats' ),
+		'treats_events'     => __( 'Evening Venue Hire', 'treats' ),
 		'treats_booking'    => __( 'Table Booking', 'treats' ),
 		'treats_collect'    => __( 'Click & Collect', 'treats' ),
 		'treats_vouchers'   => __( 'Gift Vouchers', 'treats' ),
@@ -479,6 +480,45 @@ function treats_customize_register( $wp_customize ) {
 			'section'  => 'treats_home',
 			'type'     => 'image',
 			'sanitize' => 'esc_url_raw',
+		)
+	);
+
+	/* -------------------------------------------------- Evening venue hire */
+
+	$event_fields = array(
+		'treats_event_hours'       => array( __( 'Availability', 'treats' ), 'Available every day, 6.30pm – 10pm', 'text' ),
+		'treats_event_price'       => array( __( 'Full venue hire price', 'treats' ), '250', 'text' ),
+		'treats_event_price_note'  => array( __( 'What the hire includes', 'treats' ), 'Includes 2 staff', 'text' ),
+		'treats_event_intro'       => array( __( 'Intro', 'treats' ), 'Host your special occasion in our beautiful tea room setting. Exclusive use of the entire venue — perfect for birthdays, celebrations, meetings and special occasions.', 'textarea' ),
+		'treats_event_tea_price'   => array( __( 'Afternoon tea package, per person', 'treats' ), '16.50', 'text' ),
+		'treats_event_tea_items'   => array( __( 'Afternoon tea package includes', 'treats' ), 'Sandwich selection, Mini pies & quiche, Scone with preserve & clotted cream, Cake, Any hot drink', 'textarea' ),
+		'treats_event_finger_price' => array( __( 'Finger food package, per person', 'treats' ), '12.50', 'text' ),
+		'treats_event_finger_items' => array( __( 'Finger food package includes', 'treats' ), 'Selection of sandwiches, Mini pies & quiche, Crisps & dips', 'textarea' ),
+	);
+
+	foreach ( $event_fields as $id => $config ) {
+		treats_add_control(
+			$wp_customize,
+			$id,
+			array(
+				'label'    => $config[0],
+				'default'  => $config[1],
+				'section'  => 'treats_events',
+				'type'     => $config[2],
+				'sanitize' => 'textarea' === $config[2] ? 'sanitize_textarea_field' : 'sanitize_text_field',
+			)
+		);
+	}
+
+	treats_add_control(
+		$wp_customize,
+		'treats_event_image',
+		array(
+			'label'       => __( 'Photograph', 'treats' ),
+			'description' => __( 'The room set up for an event. Landscape, at least 1600px wide.', 'treats' ),
+			'section'     => 'treats_events',
+			'type'        => 'image',
+			'sanitize'    => 'esc_url_raw',
 		)
 	);
 

@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * @return void
  */
 function treats_register_form_handlers() {
-	$actions = array( 'booking', 'enquiry', 'order', 'voucher', 'subscribe' );
+	$actions = array( 'booking', 'enquiry', 'event', 'order', 'voucher', 'subscribe' );
 
 	foreach ( $actions as $action ) {
 		add_action( 'wp_ajax_treats_' . $action, 'treats_handle_form' );
@@ -255,6 +255,43 @@ function treats_form_config( $action ) {
 				'treats_marketing' => array(
 					'label' => __( 'Marketing opt-in', 'treats' ),
 					'type'  => 'bool',
+				),
+			),
+		),
+		'event'     => array(
+			'post_type' => 'treats_event',
+			'limit'     => 6,
+			'subject'   => __( 'New evening venue hire enquiry', 'treats' ),
+			'success'   => __( 'Thank you — your enquiry is with us. We will come back to you with availability and a quote.', 'treats' ),
+			'fields'    => array(
+				'treats_name'    => $name,
+				'treats_email'   => $email,
+				'treats_phone'   => array_merge( $phone, array( 'required' => true ) ),
+				'treats_date'    => array(
+					'label' => __( 'Preferred date', 'treats' ),
+					'type'  => 'date',
+				),
+				'treats_party'   => array(
+					'label' => __( 'Approximate guests', 'treats' ),
+					'type'  => 'int',
+					'min'   => 1,
+					'max'   => 200,
+				),
+				'treats_package' => array(
+					'label' => __( 'Food package', 'treats' ),
+					'type'  => 'text',
+					'max'   => 80,
+				),
+				'treats_occasion' => array(
+					'label' => __( 'Occasion', 'treats' ),
+					'type'  => 'text',
+					'max'   => 120,
+				),
+				'treats_message' => array(
+					'label'    => __( 'Anything else we should know', 'treats' ),
+					'type'     => 'textarea',
+					'required' => true,
+					'max'      => 2000,
 				),
 			),
 		),

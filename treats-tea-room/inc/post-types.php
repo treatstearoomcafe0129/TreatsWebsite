@@ -89,6 +89,7 @@ function treats_register_post_types() {
 	$record_types = array(
 		'treats_booking'  => array( __( 'Bookings', 'treats' ), __( 'Booking', 'treats' ), 'dashicons-calendar-alt', 24 ),
 		'treats_enquiry'  => array( __( 'Enquiries', 'treats' ), __( 'Enquiry', 'treats' ), 'dashicons-email-alt', 25 ),
+		'treats_event'    => array( __( 'Event Enquiries', 'treats' ), __( 'Event Enquiry', 'treats' ), 'dashicons-tickets-alt', 25 ),
 		'treats_order'    => array( __( 'Collection Orders', 'treats' ), __( 'Collection Order', 'treats' ), 'dashicons-cart', 26 ),
 		'treats_voucher'  => array( __( 'Voucher Orders', 'treats' ), __( 'Voucher Order', 'treats' ), 'dashicons-tickets-alt', 27 ),
 		'treats_subscriber' => array( __( 'Subscribers', 'treats' ), __( 'Subscriber', 'treats' ), 'dashicons-megaphone', 28 ),
@@ -447,7 +448,7 @@ add_action( 'manage_treats_booking_posts_custom_column', 'treats_booking_column_
  * @return void
  */
 function treats_record_details_meta_box() {
-	$types = array( 'treats_booking', 'treats_enquiry', 'treats_order', 'treats_voucher', 'treats_subscriber' );
+	$types = array( 'treats_booking', 'treats_enquiry', 'treats_event', 'treats_order', 'treats_voucher', 'treats_subscriber' );
 
 	foreach ( $types as $type ) {
 		add_meta_box(

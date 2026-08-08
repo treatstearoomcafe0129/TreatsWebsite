@@ -10,7 +10,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'TREATS_VERSION', '1.0.2' );
+define( 'TREATS_VERSION', '1.1.0' );
 define( 'TREATS_DIR', trailingslashit( get_template_directory() ) );
 define( 'TREATS_URI', trailingslashit( get_template_directory_uri() ) );
 
@@ -43,6 +43,8 @@ $treats_modules = array(
 	'forms',          // AJAX handlers: booking, contact, newsletter, orders.
 	'activation',     // First-run page/menu scaffolding.
 	'compat-enfold',  // Strips leftover Avia shortcodes from old content.
+	'menu-data',      // The printed menu, as data.
+	'menu-import',    // Tools screen that loads it into WordPress.
 );
 
 foreach ( $treats_modules as $treats_module ) {

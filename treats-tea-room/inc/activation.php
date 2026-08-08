@@ -19,6 +19,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function treats_after_switch_theme() {
 	if ( get_option( 'treats_scaffolded' ) ) {
+		treats_sync_new_pages();
 		flush_rewrite_rules();
 
 		return;
@@ -95,6 +96,26 @@ function treats_page_blueprint() {
 			'eyebrow'  => __( 'Reservations', 'treats' ),
 			'intro'    => __( 'Tell us when you would like to come and we will confirm your table by email or phone.', 'treats' ),
 		),
+		'events'    => array(
+			'title'    => __( 'Evening Venue Hire', 'treats' ),
+			'template' => 'page-templates/template-events.php',
+			'eyebrow'  => __( 'Private bookings', 'treats' ),
+			'intro'    => __( 'Host your special occasion in our beautiful tea room setting.', 'treats' ),
+			'content'  => __(
+				"<p>Once the tea room closes for the day, it can be yours. Exclusive use of the whole place, every evening of the week, with two of our staff looking after you and your guests.</p>
+
+<p>It suits the occasions that don't fit anywhere else — a birthday that has outgrown a table for eight, a christening tea, a retirement do, a wake, a committee that needs somewhere quiet and a pot of tea. We have hosted all of them.</p>
+
+<h2>What is included</h2>
+
+<ul><li>The entire tea room, to yourselves</li><li>Two members of staff for the evening</li><li>Tables set however you would like them</li><li>Tea, coffee and soft drinks served throughout</li></ul>
+
+<h2>Food</h2>
+
+<p>Add one of the packages below, priced per guest, or tell us what you had in mind and we will put a bespoke menu together. We cater for vegetarian, vegan and gluten free guests as a matter of course — just let us know the numbers when you book.</p>",
+				'treats'
+			),
+		),
 		'vouchers'  => array(
 			'title'    => __( 'Gift Vouchers', 'treats' ),
 			'template' => 'page-templates/template-vouchers.php',
@@ -140,6 +161,74 @@ function treats_page_blueprint() {
 			'template' => '',
 			'content'  => treats_accessibility_content(),
 		),
+	);
+}
+
+/**
+ * Add pages introduced by a later version of the theme.
+ *
+ * The scaffold only runs once, on first activation, which means a site set up
+ * before a page existed would never get it. This runs on every activation
+ * after the first — `treats_create_pages()` skips anything already there, so
+ * it only ever fills gaps. It never touches content.
+ *
+ * @return void
+ */
+function treats_sync_new_pages() {
+	if ( get_option( 'treats_pages_version' ) === TREATS_VERSION ) {
+		return;
+	}
+
+	$pages = treats_create_pages();
+
+	treats_add_page_to_primary_menu( $pages, 'events' );
+
+	update_option( 'treats_pages_version', TREATS_VERSION, false );
+}
+
+/**
+ * Put a newly created page into the primary menu, if it is not there already.
+ *
+ * A page nobody can navigate to is not much use, but somebody's menu is their
+ * own — so this only ever appends, only when the item is genuinely missing,
+ * and never reorders or removes anything.
+ *
+ * @param array<string,int> $pages Blueprint key to page ID.
+ * @param string            $key   Which page to add.
+ * @return void
+ */
+function treats_add_page_to_primary_menu( $pages, $key ) {
+	if ( empty( $pages[ $key ] ) ) {
+		return;
+	}
+
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['primary'] ) ) {
+		return;
+	}
+
+	$menu_id = (int) $locations['primary'];
+	$items   = wp_get_nav_menu_items( $menu_id );
+
+	if ( is_array( $items ) ) {
+		foreach ( $items as $item ) {
+			if ( (int) $item->object_id === (int) $pages[ $key ] && 'post_type' === $item->type ) {
+				return;
+			}
+		}
+	}
+
+	wp_update_nav_menu_item(
+		$menu_id,
+		0,
+		array(
+			'menu-item-object-id' => (int) $pages[ $key ],
+			'menu-item-object'    => 'page',
+			'menu-item-type'      => 'post_type',
+			'menu-item-title'     => __( 'Events', 'treats' ),
+			'menu-item-status'    => 'publish',
+		)
 	);
 }
 
