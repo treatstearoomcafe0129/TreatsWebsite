@@ -9,7 +9,8 @@ belongs in the WordPress media library, not in this folder.
 | `apple-touch-icon.png` | iOS home-screen icon, 180×180 |
 | `icon-192.png`, `icon-512.png` | Web app manifest icons |
 | `social-default.jpg` | Fallback Open Graph / Twitter card image, 1200×630 |
-| `logo.png` | The Treats logotype, 720×380, transparent |
+| `logo.svg` | The Treats logotype, vector. This is the one the theme serves |
+| `logo.png` | The same logotype as the original raster artwork, 720×380. Kept as the faithful master; not served while `logo.svg` exists |
 | `texture-suede.png` | The suede nap tiled across the sage ground, 320×320, seamless |
 | `texture-suede-cloud.png` | Slow, large-scale variation in the pile, 512×512, seamless |
 
@@ -28,22 +29,43 @@ or the whole palette shifts and the contrast tuning stops holding.
 
 ## The logo
 
-`logo.png` is the real logotype — gold script, "Est.1984", the swash and the
-TEA ROOMS | CAFE line — and the theme uses it in the header and the footer
-without any dashboard visit. A logo uploaded through *Customize → Site
-Identity* still wins over it, and `logo.svg` would win over both (the lookup
-order is `logo.svg`, `logo.png`, `logo.webp`).
+`logo.svg` is what the theme serves. `logo.png` is the same mark as a raster,
+kept because it is the faithful original; the lookup order is `logo.svg`,
+`logo.png`, `logo.webp`, so deleting the SVG falls back to it. A logo uploaded
+through *Customize → Site Identity* beats both.
 
-It arrived as a 2.1MB "SVG" that was a base64 PNG in a wrapper, 1522×993 with
-a lot of empty space around the artwork. What ships is that image trimmed to
-its opaque bounds, resized to 720px wide and quantised to a 256-colour
-palette: **59KB**, which is a 27× saving, and side-by-side crops at 2× show no
-banding in the gold. 720px covers the largest render (240 CSS px) at 3× device
-pixel ratio.
+### Where they came from
 
-To regenerate it from a new master, trim to the alpha bounding box, resize to
-720px wide, then `Image.quantize(colors=256, method=Image.FASTOCTREE)` — that
-method keeps the alpha channel, which the default does not.
+The artwork arrived as a 2.1MB "SVG" that was really a 1522×993 PNG base64'd
+inside an `<image>` wrapper, with a wide transparent margin around the mark.
+
+`logo.png` is that image trimmed to its opaque bounds, resized to 720px wide
+and quantised to a 256-colour palette — 59KB, a 27× saving, with no banding in
+the gold at 2× zoom. Use `Image.quantize(colors=256, method=Image.FASTOCTREE)`
+to regenerate: that method keeps the alpha channel, the default does not.
+
+`logo.svg` is a genuine vector, traced from the same raster with vtracer and
+then coloured by hand. **42KB, about 16KB over the wire once gzipped**, and
+resolution-independent. It was built in three passes:
+
+1. Trace the alpha mask as a binary silhouette (`colormode='binary'`,
+   `path_precision=1`). Colour tracing was tried first and produced 531KB to
+   1.7MB — far worse than the raster, and blotchy.
+2. Split the shapes by connected component: the two script strokes take the
+   metallic gradient, the eighteen small glyphs of "Est.1984" and
+   "TEA ROOMS | CAFE" take a flatter, darker one. Without that split the fine
+   caps line landed in the pale end of the gradient and vanished at header
+   size.
+3. Sample the gold from the original for the gradient stops.
+
+What it trades away is the 3D bevel modelling inside each stroke — the vector
+is elegant flat gold where the raster is embossed metal. At 56–68px, the size
+it actually renders at, side-by-side comparison on both the sage and the dark
+ground showed the vector reading *better*, because nothing is being resampled.
+At poster sizes the raster is richer. If a true vector master ever turns up
+from whoever drew it, prefer it over both.
+
+### How it is sized
 
 The logo renders at `--t-header-h` minus 32px — 56px on phones, 68px from
 640px up — and is capped at 240px or 46vw wide, whichever is smaller, so an

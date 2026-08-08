@@ -30,8 +30,10 @@ theme, and no dependency on the previous Enfold installation.
    None of this runs twice, and everything it creates is ordinary content you
    can edit or delete.
 4. **The logo is already in.** The real logotype ships at
-   `images/logo.png` and is used in the header and the footer — nothing to
-   do. To replace it, either upload a new one at *Appearance → Customize →
+   `images/logo.svg` — a true vector, ~16KB gzipped — and is used in the
+   header and the footer. Nothing to do. `images/logo.png` is the same mark as
+   a raster, kept as the faithful master and used automatically if the SVG is
+   ever removed. To replace it, either upload a new one at *Appearance → Customize →
    Site Identity → Logo*, which takes priority, or drop a file into the theme
    at `images/logo.svg`, `images/logo.png` or `images/logo.webp` (that is the
    order of preference). The built-in script wordmark is the fallback when
