@@ -325,7 +325,11 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: optimizeLegibility;
 	overflow-x: hidden;
-	transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+	/* The page background is deliberately NOT transitioned. Animating it means
+	   every backdrop-filtered panel on the page re-samples its backdrop on
+	   every frame of the fade, which is the most expensive thing this theme
+	   could possibly animate — measured, it could stall the scheme flip for
+	   longer than the fade itself. Switching schemes is instant. */
 }
 
 body.is-locked {
@@ -4667,6 +4671,7 @@ body::before {
 .card::before,
 .action-card::before,
 .value-bar::before,
+.menu-controls__inner::before,
 .info-bar::before,
 .info-card::before,
 .form-card::before,
@@ -4711,6 +4716,7 @@ body::before {
 .card > *,
 .action-card > *,
 .value-bar > *,
+.menu-controls__inner > *,
 .info-bar > *,
 .info-card > *,
 .form-card > *,

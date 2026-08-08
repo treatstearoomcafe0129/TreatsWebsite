@@ -8,25 +8,34 @@
    Menu controls
    ---------------------------------------------------------------------- */
 
+/* The filter bar used to be a full-bleed band with a hard rule under it —
+   the old frosted-nav idiom. On a page made of floating panels that read as
+   a lid. It is a glass bar now, the same object as the header, and the menu
+   scrolls behind it. */
 .menu-controls {
 	position: sticky;
 	/* Follows the header, and rises to the top edge when it hides. */
 	top: var(--t-sticky-top, var(--t-header-h));
 	z-index: 40;
-	padding-block: var(--sp-4);
-	background: color-mix(in srgb, var(--c-bg) 88%, transparent);
-	backdrop-filter: saturate(180%) blur(14px);
-	-webkit-backdrop-filter: saturate(180%) blur(14px);
-	border-bottom: 1px solid var(--c-line);
+	padding-block: var(--sp-3);
 	margin-bottom: var(--sp-7);
 }
 
 .menu-controls__inner {
+	position: relative;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: var(--sp-3);
 	justify-content: space-between;
+	padding: 0.6rem 0.9rem;
+	border: 1px solid transparent;
+	border-radius: var(--r-lg);
+	background-color: var(--glass-bg);
+	background-image: var(--glass-sheen);
+	box-shadow: var(--glass-shadow);
+	backdrop-filter: var(--glass-filter);
+	-webkit-backdrop-filter: var(--glass-filter);
 }
 
 .menu-filters {
@@ -35,8 +44,8 @@
 	overflow-x: auto;
 	scrollbar-width: none;
 	padding-bottom: 2px;
-	margin-inline: calc(var(--gutter) * -1);
-	padding-inline: var(--gutter);
+	margin-inline: -0.9rem;
+	padding-inline: 0.9rem;
 	flex: 1;
 	min-width: 0;
 }
