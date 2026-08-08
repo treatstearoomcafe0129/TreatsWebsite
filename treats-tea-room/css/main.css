@@ -69,28 +69,38 @@
 	--c-header-bg: transparent;
 
 	/* Glass */
-	/* Glass, not frost. Frosted panels are heavy blur plus white fill; glass
-	   is nearly clear, and its edges do the work — a crisp lit rim, an inner
-	   bevel for thickness, and a sharp specular streak. The pane behaves
-	   like a lens: barely any blur, a little more saturation and light. */
-	--glass-bg: rgba(255, 255, 255, 0.1);
-	--glass-bg-strong: rgba(255, 255, 255, 0.17);
-	--glass-border: rgba(255, 255, 255, 0.8);
-	--glass-blur: 2px;
-	--glass-filter: blur(var(--glass-blur)) saturate(155%) brightness(1.09) contrast(1.02);
-	/* A sharp reflection running across the pane, plus a gentle lift towards
-	   the lit corner. Sharper edges than a frosted surface would give. */
+	/* Clear glass floating over the sage ground. The body of a panel carries
+	   no fill of its own — it is exactly the colour of the background behind
+	   it, only smoothed, the way a clean pane smooths what you see through
+	   it. Everything that says "glass" happens at the edges: a lit rim, a
+	   bevel for thickness, a refracted band just inside the border, and one
+	   sharp specular streak. Everything that says "floating" is the shadow:
+	   a tight contact darkening, a mid drop, and a long soft cast. */
+	--glass-bg: transparent;
+	--glass-bg-strong: rgba(255, 255, 255, 0.09);
+	--glass-bg-fallback: rgba(255, 255, 255, 0.24);
+	/* Controls are sunk into the pane rather than laid on top of it: a
+	   whisper of fill and a shadow falling inwards from the top edge. */
+	--glass-recess: rgba(255, 255, 255, 0.18);
+	--glass-recess-shadow: inset 0 1px 2px rgba(46, 56, 43, 0.16);
+	--glass-border: rgba(255, 255, 255, 0.72);
+	--glass-blur: 3px;
+	/* No brightness, no saturation shift — the pane must not tint the ground. */
+	--glass-filter: blur(var(--glass-blur));
+	/* Reflections only: a narrow specular streak and a hairline catch along
+	   the top and bottom edges. Nothing that washes across the body. */
 	--glass-sheen:
-		linear-gradient(114deg, transparent 30%, rgba(255, 255, 255, 0.42) 40%, rgba(255, 255, 255, 0.16) 46%, transparent 54%),
-		linear-gradient(114deg, transparent 58%, rgba(255, 255, 255, 0.14) 64%, transparent 70%),
-		linear-gradient(150deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.02) 48%, rgba(255, 255, 255, 0.12) 100%);
+		linear-gradient(114deg, transparent 35%, rgba(255, 255, 255, 0.17) 40%, rgba(255, 255, 255, 0.04) 43.5%, transparent 47%),
+		linear-gradient(114deg, transparent 61%, rgba(255, 255, 255, 0.06) 64.5%, transparent 68%),
+		linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 8%, rgba(255, 255, 255, 0) 92%, rgba(255, 255, 255, 0.05) 100%);
 	--glass-shadow:
-		0 24px 48px -24px rgba(46, 56, 43, 0.45),
-		0 3px 10px -5px rgba(46, 56, 43, 0.18),
-		inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
-		inset 0 0 0 1px rgba(255, 255, 255, 0.28),
-		inset -1.5px -1.5px 0 rgba(255, 255, 255, 0.45),
-		inset 0 0 22px rgba(255, 255, 255, 0.28);
+		0 1px 2px rgba(46, 56, 43, 0.16),
+		0 8px 18px -10px rgba(46, 56, 43, 0.32),
+		0 30px 56px -28px rgba(46, 56, 43, 0.5),
+		inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.92),
+		inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+		inset -1.5px -1.5px 0 rgba(255, 255, 255, 0.42),
+		inset 0 -1px 3px rgba(46, 56, 43, 0.1);
 
 	--shadow-xs: 0 1px 2px rgba(35, 45, 33, 0.06);
 	--shadow-sm: 0 4px 14px -8px rgba(35, 45, 33, 0.25);
@@ -182,16 +192,23 @@
 		--c-on-accent: #232a22;
 		--c-scrim: rgba(8, 11, 8, 0.7);
 
-		--glass-bg: rgba(255, 255, 255, 0.05);
-		--glass-bg-strong: rgba(255, 255, 255, 0.09);
-		--glass-border: rgba(255, 255, 255, 0.3);
-		--glass-filter: blur(var(--glass-blur)) saturate(140%) brightness(1.16);
+		--glass-bg: transparent;
+		--glass-bg-strong: rgba(255, 255, 255, 0.08);
+		--glass-bg-fallback: rgba(20, 25, 19, 0.3);
+		--glass-recess: rgba(255, 255, 255, 0.07);
+		--glass-recess-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+		--glass-border: rgba(255, 255, 255, 0.26);
+		--glass-filter: blur(var(--glass-blur));
 		--glass-sheen:
-			linear-gradient(118deg, transparent 28%, rgba(255, 255, 255, 0.12) 43%, rgba(255, 255, 255, 0.02) 57%, transparent 70%),
-			linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0.08) 100%);
+			linear-gradient(114deg, transparent 35%, rgba(255, 255, 255, 0.09) 40%, rgba(255, 255, 255, 0.02) 43.5%, transparent 47%),
+			linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 10%, rgba(255, 255, 255, 0) 90%, rgba(255, 255, 255, 0.04) 100%);
 		--glass-shadow:
-			0 14px 40px -18px rgba(0, 0, 0, 0.7),
-			inset 0 1px 0 rgba(255, 255, 255, 0.14);
+			0 1px 2px rgba(0, 0, 0, 0.4),
+			0 8px 18px -10px rgba(0, 0, 0, 0.55),
+			0 30px 56px -28px rgba(0, 0, 0, 0.75),
+			inset 1.2px 1.2px 0 rgba(255, 255, 255, 0.3),
+			inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+			inset -1.2px -1.2px 0 rgba(255, 255, 255, 0.12);
 
 		color-scheme: dark;
 	}
@@ -218,16 +235,23 @@
 	--c-on-accent: #232a22;
 	--c-scrim: rgba(8, 11, 8, 0.7);
 
-	--glass-bg: rgba(255, 255, 255, 0.05);
-	--glass-bg-strong: rgba(255, 255, 255, 0.09);
-	--glass-border: rgba(255, 255, 255, 0.3);
-	--glass-filter: blur(var(--glass-blur)) saturate(140%) brightness(1.16);
+	--glass-bg: transparent;
+	--glass-bg-strong: rgba(255, 255, 255, 0.08);
+	--glass-bg-fallback: rgba(20, 25, 19, 0.3);
+	--glass-recess: rgba(255, 255, 255, 0.07);
+	--glass-recess-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+	--glass-border: rgba(255, 255, 255, 0.26);
+	--glass-filter: blur(var(--glass-blur));
 	--glass-sheen:
-		linear-gradient(118deg, transparent 28%, rgba(255, 255, 255, 0.12) 43%, rgba(255, 255, 255, 0.02) 57%, transparent 70%),
-		linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0.08) 100%);
+		linear-gradient(114deg, transparent 35%, rgba(255, 255, 255, 0.09) 40%, rgba(255, 255, 255, 0.02) 43.5%, transparent 47%),
+		linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 10%, rgba(255, 255, 255, 0) 90%, rgba(255, 255, 255, 0.04) 100%);
 	--glass-shadow:
-		0 14px 40px -18px rgba(0, 0, 0, 0.7),
-		inset 0 1px 0 rgba(255, 255, 255, 0.14);
+		0 1px 2px rgba(0, 0, 0, 0.4),
+		0 8px 18px -10px rgba(0, 0, 0, 0.55),
+		0 30px 56px -28px rgba(0, 0, 0, 0.75),
+		inset 1.2px 1.2px 0 rgba(255, 255, 255, 0.3),
+		inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+		inset -1.2px -1.2px 0 rgba(255, 255, 255, 0.12);
 
 	color-scheme: dark;
 }
@@ -3552,8 +3576,9 @@ body::before {
 	-webkit-backdrop-filter: var(--glass-filter);
 }
 
-/* Browsers without backdrop-filter fall back to a denser fill so text
-   stays readable over the nap. */
+/* Browsers without backdrop-filter get a faint fill instead — enough to
+   separate the panel from the nap, in a direction that helps the text
+   rather than fighting it. */
 @supports not (backdrop-filter: blur(1px)) {
 	.glass,
 	.card,
@@ -3565,7 +3590,7 @@ body::before {
 	.site-header__inner,
 	.site-footer__grid,
 	.icon-badge {
-		background-color: rgba(255, 255, 255, 0.62);
+		background-color: var(--glass-bg-fallback);
 	}
 }
 
@@ -3838,7 +3863,7 @@ body::before {
 	}
 
 	.sub-menu .nav__link:hover {
-		background: rgba(255, 255, 255, 0.4);
+		background: var(--glass-bg-strong);
 		color: var(--c-accent-strong);
 	}
 }
@@ -4012,19 +4037,11 @@ body::before {
 .form input,
 .search-form input[type="search"],
 .menu-search input {
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--glass-recess);
 	border-color: var(--glass-border);
 	border-radius: var(--r-md);
+	box-shadow: var(--glass-recess-shadow);
 	color: var(--c-ink);
-}
-
-:root[data-theme="dark"] .input,
-:root[data-theme="dark"] .form select,
-:root[data-theme="dark"] .form textarea,
-:root[data-theme="dark"] .form input,
-:root[data-theme="dark"] .search-form input[type="search"],
-:root[data-theme="dark"] .menu-search input {
-	background: rgba(255, 255, 255, 0.08);
 }
 
 .input:focus,
@@ -4032,17 +4049,14 @@ body::before {
 .form select:focus,
 .form textarea:focus {
 	border-color: var(--gold-mid);
-	box-shadow: 0 0 0 3px var(--c-accent-soft);
+	box-shadow: var(--glass-recess-shadow), 0 0 0 3px var(--c-accent-soft);
 }
 
 .choice__label {
-	background: rgba(255, 255, 255, 0.34);
+	background: var(--glass-recess);
 	border-color: var(--glass-border);
 	border-radius: var(--r-md);
-}
-
-:root[data-theme="dark"] .choice__label {
-	background: rgba(255, 255, 255, 0.07);
+	box-shadow: var(--glass-recess-shadow);
 }
 
 .choice input:checked + .choice__label {
@@ -4054,14 +4068,10 @@ body::before {
 .tab {
 	border-radius: var(--r-pill);
 	border-color: var(--glass-border);
-	background: rgba(255, 255, 255, 0.28);
+	background: var(--glass-recess);
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
 	font-size: var(--fs-2xs);
-}
-
-:root[data-theme="dark"] .tab {
-	background: rgba(255, 255, 255, 0.07);
 }
 
 .tab[aria-pressed="true"],
@@ -4142,16 +4152,12 @@ body::before {
 
 .social-links a {
 	border-color: var(--glass-border);
-	background: rgba(255, 255, 255, 0.24);
+	background: var(--glass-recess);
 	color: var(--c-accent);
 }
 
-:root[data-theme="dark"] .social-links a {
-	background: rgba(255, 255, 255, 0.07);
-}
-
 .social-links a:hover {
-	background: rgba(255, 255, 255, 0.45);
+	background: var(--glass-bg-strong);
 	color: var(--c-accent-strong);
 }
 
@@ -4386,13 +4392,10 @@ body::before {
 /* The footer used to sit on a solid dark panel; on the sage ground it is
    glass like everything else, so those inverted overrides are undone. */
 .site-footer .newsletter__row .input {
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--glass-recess);
 	border-color: var(--glass-border);
+	box-shadow: var(--glass-recess-shadow);
 	color: var(--c-ink);
-}
-
-:root[data-theme="dark"] .site-footer .newsletter__row .input {
-	background: rgba(255, 255, 255, 0.08);
 }
 
 .site-footer .newsletter__row .input::placeholder {
@@ -4401,7 +4404,7 @@ body::before {
 
 .site-footer .newsletter__row .input:focus {
 	border-color: var(--gold-mid);
-	box-shadow: 0 0 0 3px var(--c-accent-soft);
+	box-shadow: var(--glass-recess-shadow), 0 0 0 3px var(--c-accent-soft);
 }
 
 .site-footer .newsletter__small,
@@ -4416,7 +4419,7 @@ body::before {
 }
 
 .site-footer .check input[type="checkbox"] {
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--glass-recess);
 	border-color: var(--glass-border);
 }
 
@@ -4507,12 +4510,8 @@ body::before {
 }
 
 .site-footer__bar .theme-toggle:hover {
-	background-color: rgba(255, 255, 255, 0.7);
+	background-color: var(--glass-bg-strong);
 	color: var(--c-accent-strong);
-}
-
-:root[data-theme="dark"] .site-footer__bar .theme-toggle:hover {
-	background-color: rgba(255, 255, 255, 0.18);
 }
 
 /* The booking button leads with its icon, as in the reference. */
@@ -4597,9 +4596,11 @@ body::before {
 /* --- Edge refraction -------------------------------------------------- */
 
 /* The one thing that most makes real glass look like glass is what happens
-   at its edge: light bends through the thicker rim, so a bright, distorted
-   band appears just inside the border. CSS cannot refract, but it can blur
-   and brighten a band around the perimeter, which reads convincingly.
+   at its edge: light bends through the thicker rim, so the view through it
+   smears just inside the border. CSS cannot refract, but it can blur a band
+   around the perimeter far harder than the pane itself, which reads as the
+   same thing. The brightening is kept almost to nothing — the panel must
+   stay the colour of the ground behind it.
 
    A pseudo-element takes its own, much stronger backdrop-filter and is
    masked to a ring, so only the rim is affected. It sits behind content and
@@ -4621,8 +4622,8 @@ body::before {
 		z-index: 0;
 		border-radius: inherit;
 		pointer-events: none;
-		backdrop-filter: blur(7px) brightness(1.16) saturate(140%);
-		-webkit-backdrop-filter: blur(7px) brightness(1.16) saturate(140%);
+		backdrop-filter: blur(14px) brightness(1.04);
+		-webkit-backdrop-filter: blur(14px) brightness(1.04);
 		/* Keep only a band just inside the edge. */
 		mask:
 			linear-gradient(#000 0 0) content-box,

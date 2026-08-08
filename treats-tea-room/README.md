@@ -4,8 +4,8 @@ A bespoke, production-ready theme for **Treats Tea Room Café**, 10/11 Silver
 Street, Durham. Built from scratch: no page builder, no framework, no parent
 theme, and no dependency on the previous Enfold installation.
 
-- Frosted-glass panels on a textured sage ground, gold line detailing,
-  script wordmark and small-caps serif headings
+- Clear glass panels floating over a textured sage ground, gold line
+  detailing, script wordmark and small-caps serif headings
 - Mobile-first, dark-mode aware, WCAG 2.2 AA oriented
 - Self-hosted variable fonts, conditional CSS/JS, no jQuery on the front end
 - Online booking, Click & Collect, gift voucher orders, contact and newsletter
@@ -138,7 +138,7 @@ The visual language lives in one place: the token block at the top of
 | Token group | What it controls |
 | --- | --- |
 | `--c-bg` + `images/texture-suede.png` | The sage ground: a seamless suede nap blended with `soft-light`, plus a viewport-fixed lighting layer on `body::before` |
-| `--glass-*` | Panel fill, hairline border, blur radius, sheen gradients and the lit rim. The blur is deliberately low (5px) — that is what makes a panel read as see-through glass rather than a milky fill |
+| `--glass-*` | The glass. `--glass-bg` is `transparent` on purpose: a panel is exactly the colour of the ground behind it. The read comes from the edges — the lit rim, the bevel insets, a hard-blurred refraction band just inside the border — and from the three-part shadow that lifts it off the ground. `--glass-recess` is the opposite move, for controls sunk *into* the pane |
 | `--gold` | Gold used for **text**. Tuned to clear 4.5:1 on the glass |
 | `--gold-mid`, `--gold-bright` | Gold used for **decoration** — icons, rules, borders — where contrast minimums don't apply |
 | `--font-script` | The wordmark face (Pinyon Script) |
