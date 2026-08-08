@@ -210,6 +210,12 @@ function treats_resource_hints_head() {
 			esc_url( $href )
 		);
 	}
+
+	// The suede ground cannot paint until this arrives.
+	printf(
+		'<link rel="preload" href="%s" as="image">' . "\n",
+		esc_url( TREATS_URI . 'images/texture-suede.png' )
+	);
 }
 add_action( 'wp_head', 'treats_resource_hints_head', 1 );
 
@@ -244,7 +250,7 @@ add_filter( 'script_loader_tag', 'treats_defer_scripts', 10, 2 );
 function treats_critical_css() {
 	?>
 <style id="treats-critical">
-:root{--t-bg:#9daa98;--t-ink:#2b302a;--t-header-h:84px}
+:root{--t-bg:#a3b09e;--t-ink:#2b302a;--t-header-h:84px}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--t-bg);color:var(--t-ink);font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}

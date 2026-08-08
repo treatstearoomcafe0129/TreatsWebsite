@@ -131,8 +131,8 @@ The visual language lives in one place: the token block at the top of
 
 | Token group | What it controls |
 | --- | --- |
-| `--c-bg`, the `body` background layers | The sage ground: light sweep, plaster mottling and a fine SVG grain |
-| `--glass-*` | Panel fill, hairline border, blur radius and the inner highlight |
+| `--c-bg` + `images/texture-suede.png` | The sage ground: a seamless suede nap blended with `soft-light`, plus a viewport-fixed lighting layer on `body::before` |
+| `--glass-*` | Panel fill, hairline border, blur radius, sheen gradients and the lit rim. The blur is deliberately low (5px) — that is what makes a panel read as see-through glass rather than a milky fill |
 | `--gold` | Gold used for **text**. Tuned to clear 4.5:1 on the glass |
 | `--gold-mid`, `--gold-bright` | Gold used for **decoration** — icons, rules, borders — where contrast minimums don't apply |
 | `--font-script` | The wordmark face (Pinyon Script) |

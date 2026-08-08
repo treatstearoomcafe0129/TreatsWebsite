@@ -176,7 +176,7 @@ function treats_seo_meta() {
 		printf( '<meta name="twitter:image" content="%s">' . "\n", esc_url( $image ) );
 	}
 
-	printf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: light)">' . "\n", '#9daa98' );
+	printf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: light)">' . "\n", '#a3b09e' );
 	printf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: dark)">' . "\n", '#1d221c' );
 	echo '<meta name="format-detection" content="telephone=no">' . "\n";
 	printf( '<meta name="geo.placename" content="%s">' . "\n", esc_attr( treats_get_address()['locality'] ) );

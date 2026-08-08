@@ -9,6 +9,20 @@ belongs in the WordPress media library, not in this folder.
 | `apple-touch-icon.png` | iOS home-screen icon, 180×180 |
 | `icon-192.png`, `icon-512.png` | Web app manifest icons |
 | `social-default.jpg` | Fallback Open Graph / Twitter card image, 1200×630 |
+| `texture-suede.png` | The suede nap tiled across the sage ground, 320×320, seamless |
+
+## The suede texture
+
+`texture-suede.png` is a greyscale height-lit fibre field, generated on a
+torus so it tiles with no seam and — unlike a mirrored tile — no symmetry to
+read as a pattern. It is blended over the sage with `soft-light`, so it
+carries light and shade rather than colour; its mean is exactly mid-grey, so
+it neither lightens nor darkens the ground overall.
+
+Regenerating it (numpy + Pillow): blur white noise with a wrap-around
+Gaussian, take periodic gradients with `np.roll`, light them from azimuth
+128° / elevation 55°, re-centre on 0.5, then quantise. Keep the mean at 127
+or the whole palette shifts and the contrast tuning stops holding.
 
 ## Replacing them
 
