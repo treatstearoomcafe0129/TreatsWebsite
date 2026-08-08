@@ -5,8 +5,8 @@ Street, Durham. Built from scratch: no page builder, no framework, no parent
 theme, and no dependency on the previous Enfold installation.
 
 - Clear glass panels floating over a textured sage ground: no fill, no
-  outline, a ground and frosted edge, gold line detailing, script wordmark
-  and small-caps serif headings
+  outline, a feathered frosted edge, gold line detailing, script wordmark and
+  small-caps serif headings
 - Mobile-first, dark-mode aware, WCAG 2.2 AA oriented
 - Self-hosted variable fonts, conditional CSS/JS, no jQuery on the front end
 - Online booking, Click & Collect, gift voucher orders, contact and newsletter
@@ -140,7 +140,7 @@ The visual language lives in one place: the token block at the top of
 | --- | --- |
 | `--c-bg` + `images/texture-suede.png` | The sage ground: a seamless suede nap blended with `soft-light`, plus a viewport-fixed lighting layer on `body::before` |
 | `--glass-*` | The glass. `--glass-bg` is `transparent` on purpose: a panel is exactly the colour of the ground behind it. There is no border either — panels draw no outline at all. What is left is the shadow, which does two jobs: three drops to lift the panel off the ground, and a pale bloom below it, because a slab of glass gathers light as well as blocking it. `--glass-recess` is the opposite move, for controls sunk *into* the pane |
-| `--frost-*` | The ground edge that replaces the outline. `--frost-depth` is how far the milk reaches in, `--frost-core` how much of the band is solid before it fades, `--frost-fade` where it disappears, `--frost-grain` the scale of the noise tile that makes its coverage patchy. `#treats-glass-rough` (in `template-parts/components/glass-filters.php`) then displaces the band's own shape so the rim thickens and thins its way round the panel |
+| `--frost-*` | The feathered edge that replaces the outline. `--frost-depth` is how far the milk carries in from a lit edge, `--frost-depth-dim` from an unlit one, `--frost-fade` where the band has faded to nothing. `--frost-top` / `--frost-side` / `--frost-dim` set how bright each edge is — they are deliberately unequal, because a uniformly bright edge reads as a border and an unevenly bright one reads as an object |
 | `--gold` | Gold used for **text**. Tuned to clear 4.5:1 on the glass |
 | `--gold-mid`, `--gold-bright` | Gold used for **decoration** — icons, rules, borders — where contrast minimums don't apply |
 | `--font-script` | The wordmark face (Pinyon Script) |

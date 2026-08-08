@@ -11,7 +11,6 @@ belongs in the WordPress media library, not in this folder.
 | `social-default.jpg` | Fallback Open Graph / Twitter card image, 1200×630 |
 | `texture-suede.png` | The suede nap tiled across the sage ground, 320×320, seamless |
 | `texture-suede-cloud.png` | Slow, large-scale variation in the pile, 512×512, seamless |
-| `glass-grain.png` | Alpha noise that makes the frosted panel edges patchy, 128×128, seamless |
 
 ## The suede texture
 
@@ -25,19 +24,6 @@ Regenerating it (numpy + Pillow): blur white noise with a wrap-around
 Gaussian, take periodic gradients with `np.roll`, light them from azimuth
 128° / elevation 55°, re-centre on 0.5, then quantise. Keep the mean at 127
 or the whole palette shifts and the contrast tuning stops holding.
-
-## The glass grain
-
-`glass-grain.png` is not drawn on screen — it is a **mask**. It multiplies the
-coverage of the frosted band around every panel, so the ground edge is patchy
-the way an abraded edge actually is rather than an evenly airbrushed ribbon.
-Only its alpha channel matters, which is why it ships as an 8-bit LA PNG.
-
-Same recipe as the suede, with two differences: the noise is built from three
-octaves (fine grit at sigma 0.75, then 1.8, then 5.5) so there is slow
-unevenness under the fine grain, and the alpha is biased into 0.5–1.0 rather
-than 0–1. That bias matters — grain that reaches zero punches holes in the
-band instead of thinning it.
 
 ## Replacing them
 
