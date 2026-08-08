@@ -9,6 +9,7 @@ belongs in the WordPress media library, not in this folder.
 | `apple-touch-icon.png` | iOS home-screen icon, 180×180 |
 | `icon-192.png`, `icon-512.png` | Web app manifest icons |
 | `social-default.jpg` | Fallback Open Graph / Twitter card image, 1200×630 |
+| `logo.svg` | Optional. The site logotype — drop it here and the theme uses it |
 | `texture-suede.png` | The suede nap tiled across the sage ground, 320×320, seamless |
 | `texture-suede-cloud.png` | Slow, large-scale variation in the pile, 512×512, seamless |
 
@@ -24,6 +25,19 @@ Regenerating it (numpy + Pillow): blur white noise with a wrap-around
 Gaussian, take periodic gradients with `np.roll`, light them from azimuth
 128° / elevation 55°, re-centre on 0.5, then quantise. Keep the mean at 127
 or the whole palette shifts and the contrast tuning stops holding.
+
+## The logo
+
+`logo.svg` is not shipped — the theme falls back to its built-in wordmark
+without it. Drop the real artwork in as `logo.svg` (or `logo.png`, or
+`logo.webp`) and it appears in the header and the footer, no dashboard visit
+needed. A logo uploaded through *Customize → Site Identity* always wins over
+this one.
+
+It is rendered at 52px tall, capped at 240px or 46vw wide, whichever is
+smaller, so an unusually wide logotype cannot push the header off a phone.
+Width and height attributes are read from the file — from `width`/`height` or
+the `viewBox` on an SVG — so it reserves its space before it loads.
 
 ## Replacing them
 

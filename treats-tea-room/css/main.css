@@ -1150,8 +1150,16 @@ pre {
 }
 
 .site-logo__img {
-	max-height: calc(var(--t-header-h) - 28px);
+	/* A definite height, not `max-height` on an auto-sized box. The logo is a
+	   flex item inside a flex item that is itself sized from its content, and
+	   in that position a percentage `max-width` — which every image inherits
+	   from the reset — has nothing definite to resolve against and collapses
+	   the image to zero. A fixed height and a viewport-relative cap break the
+	   circularity. */
+	height: calc(var(--t-header-h) - 32px);
 	width: auto;
+	max-width: min(240px, 46vw);
+	object-fit: contain;
 }
 
 /* Desktop navigation */
@@ -4476,7 +4484,7 @@ body::before {
 }
 
 .site-logo__img {
-	max-height: 52px;
+	height: 52px;
 }
 
 /* --- Fit the card titles on one line where the reference does ---------- */

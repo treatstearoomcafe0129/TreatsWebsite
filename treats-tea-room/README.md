@@ -29,12 +29,19 @@ theme, and no dependency on the previous Enfold installation.
 
    None of this runs twice, and everything it creates is ordinary content you
    can edit or delete.
-4. **Upload the logo.** Go to *Appearance → Customize → Site Identity → Logo*
-   and upload the Treats logotype (SVG preferred, or a PNG at least 600px
-   wide with a transparent background). This replaces the built-in wordmark
-   entirely. The wordmark that ships with the theme — script word, "Est 1984"
-   and a swash — is a stand-in arranged to the same composition, not the real
-   artwork.
+4. **Add the logo.** Two ways, and the first wins if you do both:
+
+   - *Appearance → Customize → Site Identity → Logo* — upload the Treats
+     logotype through the dashboard. Nothing to deploy.
+   - Or drop the file into the theme at **`treats-tea-room/images/logo.svg`**
+     (`logo.png` and `logo.webp` also work, in that order of preference) and
+     it is picked up automatically. Useful when the theme is deployed from a
+     repository and nobody wants to touch the dashboard.
+
+   SVG is preferred; a PNG should be at least 600px wide with a transparent
+   background. Either replaces the built-in wordmark entirely. The wordmark
+   that ships with the theme — script word, "Est 1984" and a swash — is a
+   stand-in arranged to the same composition, not the real artwork.
 5. Open **Appearance → Customize → Treats Tea Room** and fill in the real phone
    number, opening hours, social links and photography.
 
@@ -204,6 +211,7 @@ icon), `.glass-title` (small-caps serif), `.gold-rule` (the short gold line),
 | `treats_ip_headers` | Trust a proxy header behind a load balancer |
 | `treats_force_reduced_motion` | Disable animations site-wide |
 | `treats_form_submitted` | Action fired after a submission is stored and emailed |
+| `treats_bundled_logo_files` | Which file names in `images/` count as the theme's logo |
 
 ## How it was tested
 

@@ -507,7 +507,87 @@ function treats_divider() {
 }
 
 /**
- * The site logo: custom logo if set, otherwise the bespoke wordmark.
+ * Intrinsic dimensions of an SVG file.
+ *
+ * Only the opening tag is read — enough for `width`/`height`, or a `viewBox`
+ * to fall back on. Nothing is rendered or executed.
+ *
+ * @param string $path Absolute path to the file.
+ * @return array|false array( width, height ), or false if neither is declared.
+ */
+function treats_svg_dimensions( $path ) {
+	$head = file_get_contents( $path, false, null, 0, 2048 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local theme file, not a remote request.
+
+	if ( false === $head ) {
+		return false;
+	}
+
+	if ( preg_match( '/<svg[^>]*\swidth="([\d.]+)(?:px)?"[^>]*\sheight="([\d.]+)(?:px)?"/i', $head, $m ) ) {
+		return array( (int) round( (float) $m[1] ), (int) round( (float) $m[2] ) );
+	}
+
+	if ( preg_match( '/<svg[^>]*\sviewBox="[\d.\-]+[,\s]+[\d.\-]+[,\s]+([\d.]+)[,\s]+([\d.]+)"/i', $head, $m ) ) {
+		return array( (int) round( (float) $m[1] ), (int) round( (float) $m[2] ) );
+	}
+
+	return false;
+}
+
+/**
+ * A logo shipped with the theme rather than uploaded to the media library.
+ *
+ * Drop the artwork into the theme's `images/` folder as `logo.svg` (or
+ * `logo.png` / `logo.webp`) and it is used automatically — useful when the
+ * theme is deployed from a repository and nobody wants to touch the
+ * dashboard. A logo set in the Customizer always wins over this.
+ *
+ * @return array|false array( url, width, height ), or false if there is none.
+ */
+function treats_bundled_logo() {
+	static $cache = null;
+
+	if ( null !== $cache ) {
+		return $cache;
+	}
+
+	$cache = false;
+
+	/**
+	 * Filters the file names looked for, in order of preference.
+	 *
+	 * @param string[] $names File names, relative to the theme's images folder.
+	 */
+	$names = apply_filters( 'treats_bundled_logo_files', array( 'logo.svg', 'logo.png', 'logo.webp' ) );
+
+	foreach ( $names as $name ) {
+		$path = get_theme_file_path( 'images/' . $name );
+
+		if ( ! file_exists( $path ) ) {
+			continue;
+		}
+
+		if ( '.svg' === substr( $name, -4 ) ) {
+			$size = treats_svg_dimensions( $path );
+		} else {
+			$raw  = getimagesize( $path );
+			$size = $raw ? array( (int) $raw[0], (int) $raw[1] ) : false;
+		}
+
+		$cache = array(
+			'url'    => get_theme_file_uri( 'images/' . $name ),
+			'width'  => $size ? $size[0] : 0,
+			'height' => $size ? $size[1] : 0,
+		);
+
+		break;
+	}
+
+	return $cache;
+}
+
+/**
+ * The site logo: custom logo if set, then a logo bundled with the theme,
+ * otherwise the bespoke wordmark.
  *
  * @param string $class Extra class names.
  * @return void
@@ -534,6 +614,25 @@ function treats_the_logo( $class = '' ) {
 			esc_url( home_url( '/' ) ),
 			esc_attr( sprintf( /* translators: %s: business name. */ __( '%s — home', 'treats' ), $name ) ),
 			$logo_img // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Core-generated markup.
+		);
+
+		return;
+	}
+
+	$bundled = treats_bundled_logo();
+
+	if ( $bundled ) {
+		$dimensions = ( $bundled['width'] && $bundled['height'] )
+			? sprintf( ' width="%d" height="%d"', $bundled['width'], $bundled['height'] )
+			: '';
+
+		printf(
+			'<a class="site-logo %1$s" href="%2$s" rel="home" aria-label="%3$s"><img class="site-logo__img" src="%4$s" alt=""%5$s fetchpriority="high" decoding="async"></a>',
+			esc_attr( $class ),
+			esc_url( home_url( '/' ) ),
+			esc_attr( sprintf( /* translators: %s: business name. */ __( '%s — home', 'treats' ), $name ) ),
+			esc_url( $bundled['url'] ),
+			$dimensions // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from integers above.
 		);
 
 		return;
