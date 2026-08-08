@@ -83,24 +83,49 @@
 	   whisper of fill and a shadow falling inwards from the top edge. */
 	--glass-recess: rgba(255, 255, 255, 0.18);
 	--glass-recess-shadow: inset 0 1px 2px rgba(46, 56, 43, 0.16);
+	/* Panels have no drawn outline at all — a hairline is the one thing real
+	   glass never has, since its edge is ground, scattered and irregular.
+	   That edge is built in the "frosted edge" section below. This token is
+	   for controls, which do still need a visible boundary. */
 	--glass-border: rgba(255, 255, 255, 0.72);
 	--glass-blur: 3px;
 	/* No brightness, no saturation shift — the pane must not tint the ground. */
 	--glass-filter: blur(var(--glass-blur));
+	/* The frosted rim: how far the ground glass reaches in, how milky it is,
+	   and how far the whole band fades before it disappears. */
+	--frost-depth: 8px;
+	--frost-core: 5px;
+	--frost-fade: 16px;
+	--frost-light: 0.3;
+	--frost-dim: 0.17;
+	--frost-grain: 104px;
+	--glass-divider: linear-gradient(
+		to bottom,
+		transparent 0%,
+		color-mix(in srgb, var(--gold-mid) 45%, transparent) 22%,
+		color-mix(in srgb, var(--gold-mid) 45%, transparent) 78%,
+		transparent 100%
+	);
 	/* Reflections only: a narrow specular streak and a hairline catch along
 	   the top and bottom edges. Nothing that washes across the body. */
 	--glass-sheen:
 		linear-gradient(114deg, transparent 35%, rgba(255, 255, 255, 0.17) 40%, rgba(255, 255, 255, 0.04) 43.5%, transparent 47%),
 		linear-gradient(114deg, transparent 61%, rgba(255, 255, 255, 0.06) 64.5%, transparent 68%),
 		linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 8%, rgba(255, 255, 255, 0) 92%, rgba(255, 255, 255, 0.05) 100%);
+	/* Three drops for the float, then the thickness of the slab: a broad soft
+	   glow inside the edge, warm where the light comes from and cool
+	   opposite it. Glass splits light; a single white line does not. */
 	--glass-shadow:
-		0 1px 2px rgba(46, 56, 43, 0.16),
-		0 8px 18px -10px rgba(46, 56, 43, 0.32),
-		0 30px 56px -28px rgba(46, 56, 43, 0.5),
-		inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.92),
-		inset 0 0 0 1px rgba(255, 255, 255, 0.16),
-		inset -1.5px -1.5px 0 rgba(255, 255, 255, 0.42),
-		inset 0 -1px 3px rgba(46, 56, 43, 0.1);
+		0 1px 2px rgba(46, 56, 43, 0.14),
+		0 10px 22px -12px rgba(46, 56, 43, 0.3),
+		/* The caustic. A slab of glass does not only block light, it gathers
+		   it and drops it on the surface below — so the shade under a panel
+		   has a pale bloom in it, not just darkness. */
+		0 16px 26px -18px rgba(255, 255, 255, 0.5),
+		0 34px 62px -30px rgba(46, 56, 43, 0.5),
+		inset 0 0 20px rgba(255, 255, 255, 0.2),
+		inset 3px 4px 12px rgba(255, 247, 226, 0.26),
+		inset -3px -4px 12px rgba(212, 230, 255, 0.18);
 
 	--shadow-xs: 0 1px 2px rgba(35, 45, 33, 0.06);
 	--shadow-sm: 0 4px 14px -8px rgba(35, 45, 33, 0.25);
@@ -197,18 +222,25 @@
 		--glass-bg-fallback: rgba(20, 25, 19, 0.3);
 		--glass-recess: rgba(255, 255, 255, 0.07);
 		--glass-recess-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
-		--glass-border: rgba(255, 255, 255, 0.26);
+		--glass-border: rgba(255, 255, 255, 0.3);
 		--glass-filter: blur(var(--glass-blur));
+		--frost-depth: 8px;
+		--frost-core: 5px;
+		--frost-fade: 16px;
+		--frost-light: 0.2;
+		--frost-dim: 0.11;
+		--frost-grain: 104px;
 		--glass-sheen:
 			linear-gradient(114deg, transparent 35%, rgba(255, 255, 255, 0.09) 40%, rgba(255, 255, 255, 0.02) 43.5%, transparent 47%),
 			linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 10%, rgba(255, 255, 255, 0) 90%, rgba(255, 255, 255, 0.04) 100%);
 		--glass-shadow:
 			0 1px 2px rgba(0, 0, 0, 0.4),
-			0 8px 18px -10px rgba(0, 0, 0, 0.55),
-			0 30px 56px -28px rgba(0, 0, 0, 0.75),
-			inset 1.2px 1.2px 0 rgba(255, 255, 255, 0.3),
-			inset 0 0 0 1px rgba(255, 255, 255, 0.07),
-			inset -1.2px -1.2px 0 rgba(255, 255, 255, 0.12);
+			0 10px 22px -12px rgba(0, 0, 0, 0.55),
+			0 16px 26px -18px rgba(255, 255, 255, 0.14),
+			0 34px 62px -30px rgba(0, 0, 0, 0.75),
+			inset 0 0 20px rgba(255, 255, 255, 0.09),
+			inset 3px 4px 12px rgba(255, 247, 226, 0.12),
+			inset -3px -4px 12px rgba(212, 230, 255, 0.08);
 
 		color-scheme: dark;
 	}
@@ -240,18 +272,25 @@
 	--glass-bg-fallback: rgba(20, 25, 19, 0.3);
 	--glass-recess: rgba(255, 255, 255, 0.07);
 	--glass-recess-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
-	--glass-border: rgba(255, 255, 255, 0.26);
+	--glass-border: rgba(255, 255, 255, 0.3);
 	--glass-filter: blur(var(--glass-blur));
+	--frost-depth: 8px;
+	--frost-core: 5px;
+	--frost-fade: 16px;
+	--frost-light: 0.2;
+	--frost-dim: 0.11;
+	--frost-grain: 104px;
 	--glass-sheen:
 		linear-gradient(114deg, transparent 35%, rgba(255, 255, 255, 0.09) 40%, rgba(255, 255, 255, 0.02) 43.5%, transparent 47%),
 		linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 10%, rgba(255, 255, 255, 0) 90%, rgba(255, 255, 255, 0.04) 100%);
 	--glass-shadow:
 		0 1px 2px rgba(0, 0, 0, 0.4),
-		0 8px 18px -10px rgba(0, 0, 0, 0.55),
-		0 30px 56px -28px rgba(0, 0, 0, 0.75),
-		inset 1.2px 1.2px 0 rgba(255, 255, 255, 0.3),
-		inset 0 0 0 1px rgba(255, 255, 255, 0.07),
-		inset -1.2px -1.2px 0 rgba(255, 255, 255, 0.12);
+		0 10px 22px -12px rgba(0, 0, 0, 0.55),
+		0 16px 26px -18px rgba(255, 255, 255, 0.14),
+		0 34px 62px -30px rgba(0, 0, 0, 0.75),
+		inset 0 0 20px rgba(255, 255, 255, 0.09),
+		inset 3px 4px 12px rgba(255, 247, 226, 0.12),
+		inset -3px -4px 12px rgba(212, 230, 255, 0.08);
 
 	color-scheme: dark;
 }
@@ -1767,7 +1806,7 @@ pre {
 	padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.75rem);
 	background-color: var(--glass-bg);
 	background-image: var(--glass-sheen);
-	border: 1px solid var(--glass-border);
+	border: 1px solid transparent;
 	border-radius: var(--r-lg);
 	box-shadow: var(--glass-shadow);
 	backdrop-filter: var(--glass-filter);
@@ -3569,7 +3608,7 @@ body::before {
 	position: relative;
 	background-color: var(--glass-bg);
 	background-image: var(--glass-sheen);
-	border: 1px solid var(--glass-border);
+	border: 1px solid transparent;
 	border-radius: var(--r-lg);
 	box-shadow: var(--glass-shadow);
 	backdrop-filter: var(--glass-filter);
@@ -3612,7 +3651,7 @@ body::before {
 	border-radius: 50%;
 	background-color: var(--glass-bg-strong);
 	background-image: var(--glass-sheen);
-	border: 1px solid var(--glass-border);
+	border: 1px solid transparent;
 	box-shadow: var(--glass-shadow);
 	backdrop-filter: var(--glass-filter);
 	-webkit-backdrop-filter: var(--glass-filter);
@@ -3746,7 +3785,7 @@ body::before {
 	padding: 0.6rem 0.75rem 0.6rem 1.35rem;
 	background-color: var(--glass-bg);
 	background-image: var(--glass-sheen);
-	border: 1px solid var(--glass-border);
+	border: 1px solid transparent;
 	border-radius: var(--r-lg);
 	box-shadow: var(--glass-shadow);
 	backdrop-filter: var(--glass-filter);
@@ -3955,7 +3994,7 @@ body::before {
 .card {
 	background-color: var(--glass-bg);
 	background-image: var(--glass-sheen);
-	border: 1px solid var(--glass-border);
+	border: 1px solid transparent;
 	border-radius: var(--r-lg);
 	box-shadow: var(--glass-shadow);
 	backdrop-filter: var(--glass-filter);
@@ -4016,7 +4055,7 @@ body::before {
 .rating-summary {
 	background-color: var(--glass-bg);
 	background-image: var(--glass-sheen);
-	border: 1px solid var(--glass-border);
+	border: 1px solid transparent;
 	border-radius: var(--r-lg);
 	box-shadow: var(--glass-shadow);
 	backdrop-filter: var(--glass-filter);
@@ -4125,7 +4164,7 @@ body::before {
 	padding: clamp(1.75rem, 3vw, 2.75rem);
 	background-color: var(--glass-bg);
 	background-image: var(--glass-sheen);
-	border: 1px solid var(--glass-border);
+	border: 1px solid transparent;
 	border-radius: var(--r-lg);
 	box-shadow: var(--glass-shadow);
 	backdrop-filter: var(--glass-filter);
@@ -4216,10 +4255,15 @@ body::before {
 	text-align: center;
 }
 
-/* Hairline gold dividers between columns, as in the reference. */
+/* Gold dividers between columns, as in the reference — but drawn as a rule
+   that fades out at both ends rather than a border that stops dead. Inside a
+   slab of glass an internal line looks etched, not ruled. */
 @media (min-width: 620px) {
 	.value-bar__item + .value-bar__item {
-		border-left: 1px solid color-mix(in srgb, var(--gold-mid) 45%, transparent);
+		background-image: var(--glass-divider);
+		background-size: 1px 100%;
+		background-repeat: no-repeat;
+		background-position: left center;
 	}
 }
 
@@ -4359,7 +4403,10 @@ body::before {
 
 @media (min-width: 780px) {
 	.info-bar__item + .info-bar__item {
-		border-left: 1px solid color-mix(in srgb, var(--gold-mid) 45%, transparent);
+		background-image: var(--glass-divider);
+		background-size: 1px 100%;
+		background-repeat: no-repeat;
+		background-position: left center;
 	}
 }
 
@@ -4526,7 +4573,7 @@ body::before {
 .cta-banner {
 	background: var(--glass-bg);
 	background-image: var(--glass-sheen);
-	border: 1px solid var(--glass-border);
+	border: 1px solid transparent;
 	border-radius: var(--r-lg);
 	box-shadow: var(--glass-shadow);
 	backdrop-filter: var(--glass-filter);
@@ -4593,61 +4640,159 @@ body::before {
 	--btn-border: var(--c-line-strong);
 }
 
-/* --- Edge refraction -------------------------------------------------- */
+/* --- The frosted edge ------------------------------------------------- */
 
-/* The one thing that most makes real glass look like glass is what happens
-   at its edge: light bends through the thicker rim, so the view through it
-   smears just inside the border. CSS cannot refract, but it can blur a band
-   around the perimeter far harder than the pane itself, which reads as the
-   same thing. The brightening is kept almost to nothing — the panel must
-   stay the colour of the ground behind it.
+/* This is where a panel earns the word "glass".
 
-   A pseudo-element takes its own, much stronger backdrop-filter and is
-   masked to a ring, so only the rim is affected. It sits behind content and
-   ignores pointer events. Browsers without mask-composite simply skip it. */
-@supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
-	.glass::after,
-	.card::after,
-	.action-card::after,
-	.value-bar::after,
-	.info-bar::after,
-	.info-card::after,
-	.form-card::after,
-	.site-header__inner::after,
-	.site-footer__grid::after,
-	.page-hero__inner::after {
-		content: "";
-		position: absolute;
-		inset: 0;
-		z-index: 0;
-		border-radius: inherit;
-		pointer-events: none;
-		backdrop-filter: blur(14px) brightness(1.04);
-		-webkit-backdrop-filter: blur(14px) brightness(1.04);
-		/* Keep only a band just inside the edge. */
-		mask:
-			linear-gradient(#000 0 0) content-box,
-			linear-gradient(#000 0 0);
-		mask-composite: exclude;
-		-webkit-mask:
-			linear-gradient(#000 0 0) content-box,
-			linear-gradient(#000 0 0);
-		-webkit-mask-composite: xor;
-		padding: 9px;
+   A real pane has no outline. What you see at its edge is thickness: light
+   entering the side of the slab, scattering through a ground, sanded rim and
+   coming back out milky and uneven. Draw that as a 1px white stroke and the
+   panel instantly reads as a rectangle someone outlined — crisp, flat, and
+   obviously not glass.
+
+   So the outline is gone entirely, and in its place sits a band: a milky
+   gradient, brightest hard against the edge and gone within a centimetre,
+   under a mask that fades the whole thing out before it reaches the middle
+   of the panel. Nothing in it has a hard boundary anywhere.
+
+   The band deliberately carries no backdrop blur of its own. It did — a
+   second, much heavier blur at the rim, for the scatter of ground glass —
+   and it measured at about 200ms of first paint across the panels on this
+   page for a difference invisible side by side. One blur, on the panel, is
+   the whole optical budget.
+
+   An SVG filter then takes the last of the perfection out of its shape, and
+   a noise tile takes it out of its coverage — both below. Without masks at
+   all the band never renders and the panel falls back to blur and shadow,
+   which is a perfectly respectable piece of glass. */
+
+.glass::before,
+.card::before,
+.action-card::before,
+.value-bar::before,
+.info-bar::before,
+.info-card::before,
+.form-card::before,
+.voucher-card::before,
+.icon-badge::before,
+.site-header__inner::before,
+.site-footer__grid::before,
+.page-hero__inner::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	border-radius: inherit;
+	pointer-events: none;
+
+	/* The milk: brightest against the edge, gone by --frost-depth. Lit from
+	   the top left, so those two edges carry more of it. */
+	background-image:
+		/* One source of light, up and to the left, so the rim is not lit
+		   evenly all the way round. A uniformly bright edge is a drawn
+		   outline; an unevenly bright one is an object. */
+		radial-gradient(70% 130% at 20% -10%, rgba(255, 255, 255, 0.45), transparent 62%),
+		linear-gradient(to bottom, rgba(255, 255, 255, var(--frost-light)), transparent var(--frost-depth)),
+		linear-gradient(to right, rgba(255, 255, 255, var(--frost-light)), transparent var(--frost-depth)),
+		linear-gradient(to top, rgba(255, 255, 255, var(--frost-dim)), transparent var(--frost-depth)),
+		linear-gradient(to left, rgba(255, 255, 255, var(--frost-dim)), transparent var(--frost-depth));
+
+	/* And the whole band fades away before it reaches the panel proper.
+	   Four edge ramps, added together — the corners overlap and come out
+	   slightly heavier, which is exactly what a ground corner looks like. */
+	-webkit-mask-image:
+		linear-gradient(to bottom, #000 0 var(--frost-core), transparent var(--frost-fade)),
+		linear-gradient(to top, #000 0 var(--frost-core), transparent var(--frost-fade)),
+		linear-gradient(to right, #000 0 var(--frost-core), transparent var(--frost-fade)),
+		linear-gradient(to left, #000 0 var(--frost-core), transparent var(--frost-fade));
+	mask-image:
+		linear-gradient(to bottom, #000 0 var(--frost-core), transparent var(--frost-fade)),
+		linear-gradient(to top, #000 0 var(--frost-core), transparent var(--frost-fade)),
+		linear-gradient(to right, #000 0 var(--frost-core), transparent var(--frost-fade)),
+		linear-gradient(to left, #000 0 var(--frost-core), transparent var(--frost-fade));
+}
+
+/* The grit. A ground edge is abraded, not airbrushed, so the band's coverage
+   is multiplied by a seamless noise tile — fine grit riding on a slower,
+   larger unevenness, because nothing sands a surface uniformly. Without
+   `mask-composite` the band simply stays smooth. */
+@supports (mask-composite: intersect) {
+	.glass::before,
+	.card::before,
+	.action-card::before,
+	.value-bar::before,
+	.info-bar::before,
+	.info-card::before,
+	.form-card::before,
+	.voucher-card::before,
+	.icon-badge::before,
+	.site-header__inner::before,
+	.site-footer__grid::before,
+	.page-hero__inner::before {
+		mask-image:
+			url("../images/glass-grain.png"),
+			linear-gradient(to bottom, #000 0 var(--frost-core), transparent var(--frost-fade)),
+			linear-gradient(to top, #000 0 var(--frost-core), transparent var(--frost-fade)),
+			linear-gradient(to right, #000 0 var(--frost-core), transparent var(--frost-fade)),
+			linear-gradient(to left, #000 0 var(--frost-core), transparent var(--frost-fade));
+		mask-size: var(--frost-grain) var(--frost-grain), auto, auto, auto, auto;
+		mask-repeat: repeat;
+		/* grain ∩ (top + bottom + left + right) */
+		mask-composite: intersect, add, add, add;
 	}
+}
 
-	/* Content has to clear the ring. */
-	.glass > *,
-	.card > *,
-	.action-card > *,
-	.value-bar > *,
-	.info-bar > *,
-	.info-card > *,
-	.form-card > *,
-	.site-header__inner > *,
-	.site-footer__grid > *,
-	.page-hero__inner > * {
-		position: relative;
-		z-index: 1;
-	}
+/* Content sits above both the band and the pane wobble. */
+.glass > *,
+.card > *,
+.action-card > *,
+.value-bar > *,
+.info-bar > *,
+.info-card > *,
+.form-card > *,
+.voucher-card > *,
+.icon-badge > *,
+.site-header__inner > *,
+.site-footer__grid > *,
+.page-hero__inner > * {
+	position: relative;
+	z-index: 2;
+}
+
+/* --- Taking the perfection out ---------------------------------------- */
+
+/* The band above is still too well behaved: an even ribbon tracing a perfect
+   rounded rectangle. One SVG filter fixes that. It displaces the band's own
+   rendering by a wandering amount, so the rim thickens and thins its way
+   round the panel the way a ground edge actually does.
+
+   Note what this deliberately is *not*: a filter inside `backdrop-filter`.
+   That works, and an earlier pass used it — turbulence applied to what shows
+   through the rim, for a granular rather than smooth scatter. Measured, it
+   cost roughly three times the paint budget of the whole glass system for a
+   difference invisible at arm's length. This filters the band's own few
+   pixels instead, which is cheap, and it works in every engine that renders
+   SVG filters rather than only in Chromium and WebKit. */
+.glass::before,
+.card::before,
+.action-card::before,
+.value-bar::before,
+.info-bar::before,
+.info-card::before,
+.form-card::before,
+.voucher-card::before,
+.icon-badge::before,
+.site-header__inner::before,
+.site-footer__grid::before,
+.page-hero__inner::before {
+	filter: url("#treats-glass-rough");
+}
+
+/* The filter host itself takes no space and is never announced. */
+.glass-filters {
+	position: absolute;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	pointer-events: none;
 }

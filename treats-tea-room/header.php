@@ -39,6 +39,7 @@ $treats_over_hero      = is_front_page() && ! is_paged();
 
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<?php get_template_part( 'template-parts/components/glass-filters' ); ?>
 
 <a class="skip-link" href="#main"><?php esc_html_e( 'Skip to content', 'treats' ); ?></a>
 

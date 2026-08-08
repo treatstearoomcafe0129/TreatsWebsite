@@ -4,8 +4,9 @@ A bespoke, production-ready theme for **Treats Tea Room Café**, 10/11 Silver
 Street, Durham. Built from scratch: no page builder, no framework, no parent
 theme, and no dependency on the previous Enfold installation.
 
-- Clear glass panels floating over a textured sage ground, gold line
-  detailing, script wordmark and small-caps serif headings
+- Clear glass panels floating over a textured sage ground: no fill, no
+  outline, a ground and frosted edge, gold line detailing, script wordmark
+  and small-caps serif headings
 - Mobile-first, dark-mode aware, WCAG 2.2 AA oriented
 - Self-hosted variable fonts, conditional CSS/JS, no jQuery on the front end
 - Online booking, Click & Collect, gift voucher orders, contact and newsletter
@@ -138,7 +139,8 @@ The visual language lives in one place: the token block at the top of
 | Token group | What it controls |
 | --- | --- |
 | `--c-bg` + `images/texture-suede.png` | The sage ground: a seamless suede nap blended with `soft-light`, plus a viewport-fixed lighting layer on `body::before` |
-| `--glass-*` | The glass. `--glass-bg` is `transparent` on purpose: a panel is exactly the colour of the ground behind it. The read comes from the edges — the lit rim, the bevel insets, a hard-blurred refraction band just inside the border — and from the three-part shadow that lifts it off the ground. `--glass-recess` is the opposite move, for controls sunk *into* the pane |
+| `--glass-*` | The glass. `--glass-bg` is `transparent` on purpose: a panel is exactly the colour of the ground behind it. There is no border either — panels draw no outline at all. What is left is the shadow, which does two jobs: three drops to lift the panel off the ground, and a pale bloom below it, because a slab of glass gathers light as well as blocking it. `--glass-recess` is the opposite move, for controls sunk *into* the pane |
+| `--frost-*` | The ground edge that replaces the outline. `--frost-depth` is how far the milk reaches in, `--frost-core` how much of the band is solid before it fades, `--frost-fade` where it disappears, `--frost-grain` the scale of the noise tile that makes its coverage patchy. `#treats-glass-rough` (in `template-parts/components/glass-filters.php`) then displaces the band's own shape so the rim thickens and thins its way round the panel |
 | `--gold` | Gold used for **text**. Tuned to clear 4.5:1 on the glass |
 | `--gold-mid`, `--gold-bright` | Gold used for **decoration** — icons, rules, borders — where contrast minimums don't apply |
 | `--font-script` | The wordmark face (Pinyon Script) |
@@ -219,7 +221,11 @@ headless browser rather than eyeballed:
 - **Layout** — no horizontal overflow at 390px on any page.
 - **Admin** — every custom post type screen, the Customizer and the menu
   editor load without a warning; submission records show their stored fields.
-- **Performance** — 10–12 requests, ~230–290KB uncompressed, CLS 0.
+- **Performance** — 14–16 requests, ~390–420KB uncompressed, CLS 0, first
+  paint 440–530ms in headless software rendering. The glass was tuned against
+  those numbers, not by eye: an earlier version put SVG turbulence inside
+  `backdrop-filter` and added ~200ms of first paint plus roughly 3× the scroll
+  paint cost, for a difference invisible side by side. It was removed.
 
 ## File map
 
