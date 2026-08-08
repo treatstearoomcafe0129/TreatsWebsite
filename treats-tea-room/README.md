@@ -29,19 +29,13 @@ theme, and no dependency on the previous Enfold installation.
 
    None of this runs twice, and everything it creates is ordinary content you
    can edit or delete.
-4. **Add the logo.** Two ways, and the first wins if you do both:
-
-   - *Appearance → Customize → Site Identity → Logo* — upload the Treats
-     logotype through the dashboard. Nothing to deploy.
-   - Or drop the file into the theme at **`treats-tea-room/images/logo.svg`**
-     (`logo.png` and `logo.webp` also work, in that order of preference) and
-     it is picked up automatically. Useful when the theme is deployed from a
-     repository and nobody wants to touch the dashboard.
-
-   SVG is preferred; a PNG should be at least 600px wide with a transparent
-   background. Either replaces the built-in wordmark entirely. The wordmark
-   that ships with the theme — script word, "Est 1984" and a swash — is a
-   stand-in arranged to the same composition, not the real artwork.
+4. **The logo is already in.** The real logotype ships at
+   `images/logo.png` and is used in the header and the footer — nothing to
+   do. To replace it, either upload a new one at *Appearance → Customize →
+   Site Identity → Logo*, which takes priority, or drop a file into the theme
+   at `images/logo.svg`, `images/logo.png` or `images/logo.webp` (that is the
+   order of preference). The built-in script wordmark is the fallback when
+   none of those exist.
 5. Open **Appearance → Customize → Treats Tea Room** and fill in the real phone
    number, opening hours, social links and photography.
 
@@ -150,7 +144,7 @@ The visual language lives in one place: the token block at the top of
 | `--frost-*` | The feathered edge that replaces the outline. `--frost-depth` is how far the milk carries in from a lit edge, `--frost-depth-dim` from an unlit one, `--frost-fade` where the band has faded to nothing. `--frost-top` / `--frost-side` / `--frost-dim` set how bright each edge is — they are deliberately unequal, because a uniformly bright edge reads as a border and an unevenly bright one reads as an object |
 | `--gold` | Gold used for **text**. Tuned to clear 4.5:1 on the glass |
 | `--gold-mid`, `--gold-bright` | Gold used for **decoration** — icons, rules, borders — where contrast minimums don't apply |
-| `--font-script` | The wordmark face (Pinyon Script) |
+| `--font-script` | The face used by the fallback wordmark (Pinyon Script) |
 
 Both golds flip with the colour scheme, so components never hard-code one.
 If you change the ground colour, re-check the gold: `--gold` has to stay

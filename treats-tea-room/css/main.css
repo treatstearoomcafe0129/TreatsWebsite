@@ -170,7 +170,9 @@
 	--w-content: 760px;
 	--w-narrow: 620px;
 	--gutter: clamp(1rem, 3vw, 2rem);
-	--t-header-h: 84px;
+	/* Grows at the first breakpoint: the logotype is a full lockup — script,
+	   swash and the TEA ROOMS | CAFE line — and it needs the room. */
+	--t-header-h: 88px;
 
 	/* Radii — soft, generous, matching the glass panels */
 	--r-sm: 10px;
@@ -187,6 +189,14 @@
 	--dur-slow: 700ms;
 
 	color-scheme: light;
+}
+
+/* The header bar has room to breathe once there is a viewport to spare, and
+   the logo follows it — see `.site-logo__img`. */
+@media (min-width: 640px) {
+	:root {
+		--t-header-h: 100px;
+	}
 }
 
 /* Dark mode keeps the same glass language over a deep sage night ground. */
@@ -1050,7 +1060,6 @@ pre {
 	border-bottom-color: var(--c-line);
 	box-shadow: var(--shadow-sm);
 	color: var(--c-ink);
-	--t-header-h: 66px;
 }
 
 .site-header.is-stuck .site-logo,
@@ -3794,7 +3803,6 @@ body::before {
 	-webkit-backdrop-filter: none;
 	box-shadow: none;
 	border-bottom-color: transparent;
-	--t-header-h: 84px;
 }
 
 .site-header.is-stuck .site-header__inner {
@@ -4481,10 +4489,6 @@ body::before {
 	font-size: clamp(2.1rem, 2.8vw, 2.75rem);
 	line-height: 1;
 	padding-bottom: 0.1em;
-}
-
-.site-logo__img {
-	height: 52px;
 }
 
 /* --- Fit the card titles on one line where the reference does ---------- */

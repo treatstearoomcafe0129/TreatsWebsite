@@ -9,7 +9,7 @@ belongs in the WordPress media library, not in this folder.
 | `apple-touch-icon.png` | iOS home-screen icon, 180×180 |
 | `icon-192.png`, `icon-512.png` | Web app manifest icons |
 | `social-default.jpg` | Fallback Open Graph / Twitter card image, 1200×630 |
-| `logo.svg` | Optional. The site logotype — drop it here and the theme uses it |
+| `logo.png` | The Treats logotype, 720×380, transparent |
 | `texture-suede.png` | The suede nap tiled across the sage ground, 320×320, seamless |
 | `texture-suede-cloud.png` | Slow, large-scale variation in the pile, 512×512, seamless |
 
@@ -28,16 +28,27 @@ or the whole palette shifts and the contrast tuning stops holding.
 
 ## The logo
 
-`logo.svg` is not shipped — the theme falls back to its built-in wordmark
-without it. Drop the real artwork in as `logo.svg` (or `logo.png`, or
-`logo.webp`) and it appears in the header and the footer, no dashboard visit
-needed. A logo uploaded through *Customize → Site Identity* always wins over
-this one.
+`logo.png` is the real logotype — gold script, "Est.1984", the swash and the
+TEA ROOMS | CAFE line — and the theme uses it in the header and the footer
+without any dashboard visit. A logo uploaded through *Customize → Site
+Identity* still wins over it, and `logo.svg` would win over both (the lookup
+order is `logo.svg`, `logo.png`, `logo.webp`).
 
-It is rendered at 52px tall, capped at 240px or 46vw wide, whichever is
-smaller, so an unusually wide logotype cannot push the header off a phone.
-Width and height attributes are read from the file — from `width`/`height` or
-the `viewBox` on an SVG — so it reserves its space before it loads.
+It arrived as a 2.1MB "SVG" that was a base64 PNG in a wrapper, 1522×993 with
+a lot of empty space around the artwork. What ships is that image trimmed to
+its opaque bounds, resized to 720px wide and quantised to a 256-colour
+palette: **59KB**, which is a 27× saving, and side-by-side crops at 2× show no
+banding in the gold. 720px covers the largest render (240 CSS px) at 3× device
+pixel ratio.
+
+To regenerate it from a new master, trim to the alpha bounding box, resize to
+720px wide, then `Image.quantize(colors=256, method=Image.FASTOCTREE)` — that
+method keeps the alpha channel, which the default does not.
+
+The logo renders at `--t-header-h` minus 32px — 56px on phones, 68px from
+640px up — and is capped at 240px or 46vw wide, whichever is smaller, so an
+unusually wide logotype cannot push the header off a phone. Width and height
+come from the file, so it reserves its space before it loads.
 
 ## Replacing them
 
