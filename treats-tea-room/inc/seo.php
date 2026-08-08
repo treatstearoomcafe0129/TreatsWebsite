@@ -86,7 +86,7 @@ function treats_get_share_image() {
 
 	$hero = (string) get_theme_mod( 'treats_hero_image', '' );
 
-	return '' !== $hero ? $hero : TREATS_URI . 'images/social-default.png';
+	return '' !== $hero ? $hero : TREATS_URI . 'images/social-default.jpg';
 }
 
 /**
@@ -176,8 +176,8 @@ function treats_seo_meta() {
 		printf( '<meta name="twitter:image" content="%s">' . "\n", esc_url( $image ) );
 	}
 
-	printf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: light)">' . "\n", '#fdfcfa' );
-	printf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: dark)">' . "\n", '#101310' );
+	printf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: light)">' . "\n", '#9daa98' );
+	printf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: dark)">' . "\n", '#1d221c' );
 	echo '<meta name="format-detection" content="telephone=no">' . "\n";
 	printf( '<meta name="geo.placename" content="%s">' . "\n", esc_attr( treats_get_address()['locality'] ) );
 	echo '<meta name="geo.region" content="GB-DUR">' . "\n";
@@ -232,6 +232,6 @@ function treats_favicons() {
 	printf( '<link rel="icon" href="%s" type="image/svg+xml">' . "\n", esc_url( TREATS_URI . 'images/favicon.svg' ) );
 	printf( '<link rel="icon" href="%s" sizes="192x192">' . "\n", esc_url( TREATS_URI . 'images/icon-192.png' ) );
 	printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( TREATS_URI . 'images/apple-touch-icon.png' ) );
-	printf( '<link rel="mask-icon" href="%s" color="#6f9375">' . "\n", esc_url( TREATS_URI . 'images/favicon.svg' ) );
+	printf( '<link rel="mask-icon" href="%s" color="#a8873c">' . "\n", esc_url( TREATS_URI . 'images/favicon.svg' ) );
 }
 add_action( 'wp_head', 'treats_favicons', 4 );

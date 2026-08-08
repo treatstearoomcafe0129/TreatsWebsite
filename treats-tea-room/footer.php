@@ -29,7 +29,7 @@ $treats_social  = treats_get_social_links();
 					echo esc_html(
 						get_theme_mod(
 							'treats_footer_blurb',
-							__( 'A family tea room on Silver Street, serving Durham good food at good prices since 1991.', 'treats' )
+							__( 'A family tea room on Silver Street, serving Durham good food at good prices since 1984.', 'treats' )
 						)
 					);
 					?>

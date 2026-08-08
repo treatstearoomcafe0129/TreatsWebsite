@@ -31,10 +31,10 @@ function treats_get_business_name() {
  */
 function treats_get_address() {
 	return array(
-		'street'   => (string) get_theme_mod( 'treats_address_street', '10–11 Silver Street' ),
+		'street'   => (string) get_theme_mod( 'treats_address_street', '10/11 Silver Street' ),
 		'locality' => (string) get_theme_mod( 'treats_address_locality', 'Durham' ),
 		'region'   => (string) get_theme_mod( 'treats_address_region', 'County Durham' ),
-		'postcode' => (string) get_theme_mod( 'treats_address_postcode', 'DH1 3RB' ),
+		'postcode' => (string) get_theme_mod( 'treats_address_postcode', 'DH1 3RD' ),
 		'country'  => (string) get_theme_mod( 'treats_address_country', 'United Kingdom' ),
 	);
 }
@@ -56,7 +56,7 @@ function treats_get_address_line() {
  * @return string
  */
 function treats_get_phone() {
-	return (string) get_theme_mod( 'treats_phone', '0191 384 5620' );
+	return (string) get_theme_mod( 'treats_phone', '0191 386 0925' );
 }
 
 /**
@@ -85,7 +85,7 @@ function treats_get_phone_link() {
  * @return string
  */
 function treats_get_email() {
-	return (string) get_theme_mod( 'treats_email', get_option( 'admin_email' ) );
+	return (string) get_theme_mod( 'treats_email', 'info@treatstearoom.co.uk' );
 }
 
 /**
@@ -127,13 +127,13 @@ function treats_format_price( $price ) {
  */
 function treats_get_opening_hours() {
 	$defaults = array(
-		0 => array( '09:00', '17:00', false ),
-		1 => array( '09:00', '17:00', false ),
-		2 => array( '09:00', '17:00', false ),
-		3 => array( '09:00', '17:00', false ),
-		4 => array( '09:00', '17:00', false ),
-		5 => array( '09:00', '17:30', false ),
-		6 => array( '10:00', '16:30', false ),
+		0 => array( '08:30', '17:00', false ),
+		1 => array( '08:30', '17:00', false ),
+		2 => array( '08:30', '17:00', false ),
+		3 => array( '08:30', '17:00', false ),
+		4 => array( '08:30', '17:00', false ),
+		5 => array( '08:30', '17:00', false ),
+		6 => array( '08:30', '17:00', false ),
 	);
 
 	$hours = array();
@@ -365,7 +365,11 @@ function treats_icon_paths() {
 		'sun'         => '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 		'moon'        => '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>',
 		'leaf'        => '<path d="M11 20A7 7 0 0 1 4 13c0-6 8-9 16-9 0 8-3 16-9 16Z"/><path d="M4 20c3-3 6-5 9-6"/>',
-		'cup'         => '<path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5Z"/><path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M7 3v2M11 3v2"/>',
+		'cup'         => '<path d="M5 10h11v4.5a4.5 4.5 0 0 1-4.5 4.5h-2A4.5 4.5 0 0 1 5 14.5Z"/><path d="M16 11.5h1.4a2.3 2.3 0 0 1 0 4.6H16"/><path d="M4 21h13"/><path d="M8 4.5c0 1-1 1.3-1 2.3M12 4.5c0 1-1 1.3-1 2.3"/>',
+		'teapot'      => '<path d="M6.5 9.5h9a3.5 3.5 0 0 1 3.5 3.5v1a5 5 0 0 1-5 5h-6a5 5 0 0 1-5-5v-1a3.5 3.5 0 0 1 3.5-3.5Z"/><path d="M19 12.5c1.6.4 2.6 1.4 2.6 2.6M6.5 9.5C7 7.4 8.9 6 11 6s4 1.4 4.5 3.5"/><path d="M11 6V4.2M9 4.2h4"/>',
+		'heart'       => '<path d="M12 20s-7-4.4-7-9.3A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7 2.7C19 15.6 12 20 12 20Z"/>',
+		'tag'         => '<path d="M4 11.5V5a1 1 0 0 1 1-1h6.5a1 1 0 0 1 .7.3l7.5 7.5a1 1 0 0 1 0 1.4l-6.5 6.5a1 1 0 0 1-1.4 0L4.3 12.2a1 1 0 0 1-.3-.7Z"/><circle cx="8.5" cy="8.5" r="1.2"/>',
+		'user'        => '<circle cx="12" cy="8.5" r="3.6"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',
 		'cake'        => '<path d="M4 15h16v6H4Z"/><path d="M6 15v-3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3"/><path d="M12 7V5"/>',
 		'facebook'    => '<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v9h4v-9h3l1-4h-4V9a1 1 0 0 1 1-1Z"/>',
 		'instagram'   => '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/>',
@@ -503,8 +507,9 @@ function treats_the_logo( $class = '' ) {
 			</svg>
 		</span>
 		<span class="site-logo__text">
-			<span class="site-logo__name"><?php echo esc_html( $name ); ?></span>
-			<span class="site-logo__tag"><?php echo esc_html( get_theme_mod( 'treats_logo_tagline', __( 'Tea Room & Café · Durham', 'treats' ) ) ); ?></span>
+			<span class="site-logo__name"><?php echo esc_html( get_theme_mod( 'treats_logo_script', 'Treats' ) ); ?></span>
+			<span class="site-logo__tag"><?php echo esc_html( get_theme_mod( 'treats_logo_tagline', __( 'Tea Room', 'treats' ) ) ); ?></span>
+			<span class="screen-reader-text"><?php echo esc_html( $name ); ?></span>
 		</span>
 	</a>
 	<?php

@@ -1,10 +1,11 @@
 # Treats Tea Room — WordPress theme
 
-A bespoke, production-ready theme for **Treats Tea Room Café**, 10–11 Silver
+A bespoke, production-ready theme for **Treats Tea Room Café**, 10/11 Silver
 Street, Durham. Built from scratch: no page builder, no framework, no parent
 theme, and no dependency on the previous Enfold installation.
 
-- Light sage & white palette, elegant serif display type, generous white space
+- Frosted-glass panels on a textured sage ground, gold line detailing,
+  script wordmark and small-caps serif headings
 - Mobile-first, dark-mode aware, WCAG 2.2 AA oriented
 - Self-hosted variable fonts, conditional CSS/JS, no jQuery on the front end
 - Online booking, Click & Collect, gift voucher orders, contact and newsletter
@@ -56,6 +57,19 @@ zip -r treats-tea-room.zip treats-tea-room -x "*.DS_Store"
 | Journal | default (blog index) |
 | Privacy Policy, Accessibility | default |
 
+The home page is assembled from `template-parts/home/` in the order set by the
+`treats_home_sections` filter — by default `hero`, `values`, `actions`,
+`contact-bar`, matching the approved design. The menu-preview, reviews and
+gallery sections are still in the folder and are one line away if you want
+them back:
+
+```php
+add_filter( 'treats_home_sections', function ( $s ) {
+	array_splice( $s, 3, 0, array( 'menus', 'reviews' ) );
+	return $s;
+} );
+```
+
 Each **Menu** page is bound to a menu category in the *Treats details* panel on
 its edit screen. Change that dropdown and the page shows a different menu — no
 code involved.
@@ -83,7 +97,8 @@ the dashboard — only the front-end forms write to them.
 
 Everything business-specific is under **Customize → Treats Tea Room**:
 
-- **Brand & Appearance** — business name, wordmark tagline, accent colour,
+- **Brand & Appearance** — business name, wordmark script word and caps line,
+  accent colour,
   default colour scheme, dark-mode toggle, scroll animations
 - **Contact & Location** — address, phone, public email, notification email,
   Google Maps embed, travel note
@@ -109,10 +124,32 @@ Everything business-specific is under **Customize → Treats Tea Room**:
 | Instagram | Curated gallery images | Add a Basic Display access token for the live feed (cached hourly) |
 | Maps | Click-to-load Google embed | Paste your own embed URL |
 
+## The design system
+
+The visual language lives in one place: the token block at the top of
+`css/main.css`, and the "Glass surface system" section at the bottom of it.
+
+| Token group | What it controls |
+| --- | --- |
+| `--c-bg`, the `body` background layers | The sage ground: light sweep, plaster mottling and a fine SVG grain |
+| `--glass-*` | Panel fill, hairline border, blur radius and the inner highlight |
+| `--gold` | Gold used for **text**. Tuned to clear 4.5:1 on the glass |
+| `--gold-mid`, `--gold-bright` | Gold used for **decoration** — icons, rules, borders — where contrast minimums don't apply |
+| `--font-script` | The wordmark face (Pinyon Script) |
+
+Both golds flip with the colour scheme, so components never hard-code one.
+If you change the ground colour, re-check the gold: `--gold` has to stay
+readable against the darkest part of the mottling, not just against glass.
+
+Reusable pieces: `.glass` (panel), `.glass--pad`, `.icon-badge` (round gold
+icon), `.glass-title` (small-caps serif), `.gold-rule` (the short gold line),
+`.ornament` (the leaf-between-rules divider).
+
 ## Performance
 
-- Fonts are self-hosted (`Inter` + `Cormorant Garamond`, variable, latin +
-  latin-ext subsets only) and preloaded; `@font-face` is inlined.
+- Fonts are self-hosted (`Cormorant Garamond` + `Inter`, variable, and
+  `Pinyon Script` for the wordmark; latin + latin-ext subsets only) and
+  preloaded; `@font-face` is inlined.
 - Critical CSS for the first paint is inlined; the rest loads normally.
 - `css/menu.css` and `css/forms.css` load only where they are needed.
 - All scripts are deferred; there is no jQuery on the front end.
@@ -190,7 +227,7 @@ treats-tea-room/
 ├── screenshot.png
 ├── css/     main · menu · forms · print · editor
 ├── js/      main · menu · forms · customizer
-├── fonts/   Inter + Cormorant Garamond (woff2, variable)
+├── fonts/   Cormorant Garamond, Inter, Pinyon Script (woff2)
 ├── images/  favicon, app icons, social card
 ├── inc/     setup, enqueue, template-tags, post-types, meta-boxes,
 │            customizer, nav-walker, seo, schema, performance,
@@ -204,7 +241,9 @@ treats-tea-room/
 ## Before launch
 
 1. Replace the starter menu items with real dishes and prices.
-2. Confirm the opening hours in the Customizer — the defaults are placeholders.
+2. Confirm the opening hours, phone and email in the Customizer. Defaults are
+   taken from the approved design: 10/11 Silver Street, DH1 3RD,
+   0191 386 0925, info@treatstearoom.co.uk, Mon–Sun 8:30–17:00, est. 1984.
 3. Upload photography (see `images/README.md` for the crops the layout wants).
 4. Set the notification email so bookings reach a monitored inbox, and send a
    test booking to confirm `wp_mail()` is delivering. On most hosts you want an
@@ -215,5 +254,5 @@ treats-tea-room/
 
 ## Licence
 
-GPL-2.0-or-later, matching WordPress. Inter and Cormorant Garamond are both
-licensed under the SIL Open Font License 1.1.
+GPL-2.0-or-later, matching WordPress. Cormorant Garamond, Inter and Pinyon
+Script are all licensed under the SIL Open Font License 1.1.

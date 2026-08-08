@@ -316,11 +316,8 @@
 /* Form card — the panel a form sits inside */
 
 .form-card {
-	background: var(--c-surface);
-	border: 1px solid var(--c-line);
-	border-radius: var(--r-xl);
+	border-radius: var(--r-lg);
 	padding: clamp(1.5rem, 4vw, 3rem);
-	box-shadow: var(--shadow-md);
 }
 
 .form-card__header {
@@ -343,8 +340,6 @@
 .info-card {
 	padding: clamp(1.25rem, 3vw, 2rem);
 	border-radius: var(--r-lg);
-	background: var(--c-bg-alt);
-	border: 1px solid var(--c-line);
 }
 
 .info-card__title {
@@ -386,44 +381,8 @@
 	color: var(--c-ink-mute);
 }
 
-.site-footer .newsletter__row .input {
-	background: rgba(255, 255, 255, 0.08);
-	border-color: rgba(238, 242, 238, 0.22);
-	color: #fff;
-}
-
-.site-footer .newsletter__row .input::placeholder {
-	color: rgba(238, 242, 238, 0.5);
-}
-
-.site-footer .newsletter__row .input:focus {
-	border-color: var(--sage-300);
-	box-shadow: 0 0 0 3px rgba(180, 203, 182, 0.18);
-}
-
-.site-footer .newsletter__small {
-	color: rgba(238, 242, 238, 0.72);
-}
-
-.site-footer .newsletter .btn--primary {
-	--btn-bg: var(--sage-300);
-	--btn-ink: var(--sage-900);
-}
-
-.site-footer .check {
-	color: rgba(238, 242, 238, 0.68);
-}
-
-.site-footer .check input[type="checkbox"] {
-	background: rgba(255, 255, 255, 0.08);
-	border-color: rgba(238, 242, 238, 0.28);
-}
-
-.site-footer .form-response--success {
-	background: rgba(255, 255, 255, 0.1);
-	border-color: rgba(238, 242, 238, 0.25);
-	color: #fff;
-}
+/* The footer sits on glass like every other panel, so its form inherits the
+   ordinary field styling — no inverted overrides needed. */
 
 /* Voucher cards */
 

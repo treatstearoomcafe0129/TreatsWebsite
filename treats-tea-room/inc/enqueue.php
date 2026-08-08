@@ -169,6 +169,7 @@ function treats_font_face_css() {
 		array( 'Cormorant Garamond', 'cormorant-garamond-latin-ext.woff2', '300 700', $ext ),
 		array( 'Inter', 'inter-latin.woff2', '100 900', $latin ),
 		array( 'Inter', 'inter-latin-ext.woff2', '100 900', $ext ),
+			array( 'Pinyon Script', 'pinyon-script-latin.woff2', '400', $latin ),
 	);
 
 	$css = '';
@@ -200,6 +201,7 @@ function treats_resource_hints_head() {
 	$preloads = array(
 		TREATS_URI . 'fonts/inter-latin.woff2',
 		TREATS_URI . 'fonts/cormorant-garamond-latin.woff2',
+		TREATS_URI . 'fonts/pinyon-script-latin.woff2',
 	);
 
 	foreach ( $preloads as $href ) {
@@ -242,7 +244,7 @@ add_filter( 'script_loader_tag', 'treats_defer_scripts', 10, 2 );
 function treats_critical_css() {
 	?>
 <style id="treats-critical">
-:root{--t-bg:#fdfcfa;--t-ink:#1a1d1a;--t-sage:#6f9375;--t-header-h:76px}
+:root{--t-bg:#9daa98;--t-ink:#2b302a;--t-header-h:84px}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--t-bg);color:var(--t-ink);font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}

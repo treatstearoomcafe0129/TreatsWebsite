@@ -8,7 +8,7 @@ belongs in the WordPress media library, not in this folder.
 | `favicon.svg` | Browser tab icon (used when no Site Icon is set in the Customizer) |
 | `apple-touch-icon.png` | iOS home-screen icon, 180×180 |
 | `icon-192.png`, `icon-512.png` | Web app manifest icons |
-| `social-default.png` | Fallback Open Graph / Twitter card image, 1200×630 |
+| `social-default.jpg` | Fallback Open Graph / Twitter card image, 1200×630 |
 
 ## Replacing them
 

@@ -22,22 +22,15 @@ $treats_sections = apply_filters(
 	'treats_home_sections',
 	array(
 		'hero',
-		'feature-strip',
-		'story',
-		'menus',
-		'signatures',
-		'afternoon-tea',
-		'reviews',
-		'gallery',
-		'visit',
+		'values',
+		'actions',
+		'contact-bar',
 	)
 );
 
 foreach ( $treats_sections as $treats_section ) {
 	get_template_part( 'template-parts/home/' . $treats_section );
 }
-
-get_template_part( 'template-parts/components/cta-banner' );
 
 // Any content added to the Home page in the editor renders beneath the
 // designed sections, so the owner can add a seasonal note without code.

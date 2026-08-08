@@ -167,10 +167,22 @@ function treats_customize_register( $wp_customize ) {
 
 	treats_add_control(
 		$wp_customize,
+		'treats_logo_script',
+		array(
+			'label'       => __( 'Wordmark script word', 'treats' ),
+			'description' => __( 'Set in the script face. Keep it short — one word reads best.', 'treats' ),
+			'default'     => 'Treats',
+			'transport'   => 'postMessage',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
 		'treats_logo_tagline',
 		array(
-			'label'   => __( 'Wordmark tagline', 'treats' ),
-			'default' => 'Tea Room & Café · Durham',
+			'label'     => __( 'Wordmark caps line', 'treats' ),
+			'default'   => 'Tea Room',
+			'transport' => 'postMessage',
 		)
 	);
 
@@ -208,7 +220,7 @@ function treats_customize_register( $wp_customize ) {
 		array(
 			'label'     => __( 'Accent colour', 'treats' ),
 			'type'      => 'color',
-			'default'   => '#6f9375',
+			'default'   => '#8a6d2c',
 			'sanitize'  => 'sanitize_hex_color',
 			'transport' => 'postMessage',
 		)
@@ -229,12 +241,12 @@ function treats_customize_register( $wp_customize ) {
 	/* ------------------------------------------------------------- Contact */
 
 	$contact_fields = array(
-		'treats_address_street'   => array( __( 'Street address', 'treats' ), '10–11 Silver Street' ),
+		'treats_address_street'   => array( __( 'Street address', 'treats' ), '10/11 Silver Street' ),
 		'treats_address_locality' => array( __( 'Town / city', 'treats' ), 'Durham' ),
 		'treats_address_region'   => array( __( 'County', 'treats' ), 'County Durham' ),
-		'treats_address_postcode' => array( __( 'Postcode', 'treats' ), 'DH1 3RB' ),
+		'treats_address_postcode' => array( __( 'Postcode', 'treats' ), 'DH1 3RD' ),
 		'treats_address_country'  => array( __( 'Country', 'treats' ), 'United Kingdom' ),
-		'treats_phone'            => array( __( 'Telephone', 'treats' ), '0191 384 5620' ),
+		'treats_phone'            => array( __( 'Telephone', 'treats' ), '0191 386 0925' ),
 	);
 
 	foreach ( $contact_fields as $id => $config ) {
@@ -256,7 +268,7 @@ function treats_customize_register( $wp_customize ) {
 			'label'    => __( 'Public email address', 'treats' ),
 			'section'  => 'treats_contact',
 			'type'     => 'email',
-			'default'  => get_option( 'admin_email' ),
+			'default'  => 'info@treatstearoom.co.uk',
 			'sanitize' => 'sanitize_email',
 		)
 	);
@@ -300,13 +312,13 @@ function treats_customize_register( $wp_customize ) {
 	/* --------------------------------------------------------------- Hours */
 
 	$hour_defaults = array(
-		0 => array( '09:00', '17:00' ),
-		1 => array( '09:00', '17:00' ),
-		2 => array( '09:00', '17:00' ),
-		3 => array( '09:00', '17:00' ),
-		4 => array( '09:00', '17:00' ),
-		5 => array( '09:00', '17:30' ),
-		6 => array( '10:00', '16:30' ),
+		0 => array( '08:30', '17:00' ),
+		1 => array( '08:30', '17:00' ),
+		2 => array( '08:30', '17:00' ),
+		3 => array( '08:30', '17:00' ),
+		4 => array( '08:30', '17:00' ),
+		5 => array( '08:30', '17:00' ),
+		6 => array( '08:30', '17:00' ),
 	);
 
 	foreach ( $hour_defaults as $index => $defaults ) {
@@ -387,9 +399,9 @@ function treats_customize_register( $wp_customize ) {
 	/* ---------------------------------------------------------------- Home */
 
 	$home_fields = array(
-		'treats_hero_eyebrow'   => array( __( 'Hero eyebrow', 'treats' ), 'Durham · Since 1991', 'text' ),
+		'treats_hero_eyebrow'   => array( __( 'Hero eyebrow', 'treats' ), 'Durham · Since 1984', 'text' ),
 		'treats_hero_title'     => array( __( 'Hero heading', 'treats' ), 'A proper tea room in the heart of Durham', 'textarea' ),
-		'treats_hero_intro'     => array( __( 'Hero paragraph', 'treats' ), 'Freshly baked cakes, generous breakfasts and traditional afternoon tea, served on Silver Street since 1991.', 'textarea' ),
+		'treats_hero_intro'     => array( __( 'Hero paragraph', 'treats' ), 'Freshly baked cakes, generous breakfasts and traditional afternoon tea, served on Silver Street since 1984.', 'textarea' ),
 		'treats_hero_cta_label' => array( __( 'Hero button label', 'treats' ), 'Book a table', 'text' ),
 		'treats_hero_cta_url'   => array( __( 'Hero button URL', 'treats' ), '', 'url' ),
 		'treats_hero_alt_label' => array( __( 'Hero secondary button label', 'treats' ), 'View our menus', 'text' ),
@@ -745,7 +757,7 @@ function treats_customize_register( $wp_customize ) {
 		array(
 			'label'    => __( 'Year established', 'treats' ),
 			'section'  => 'treats_seo',
-			'default'  => '1991',
+			'default'  => '1984',
 			'sanitize' => 'sanitize_text_field',
 		)
 	);
@@ -830,9 +842,9 @@ add_action( 'customize_preview_init', 'treats_customize_preview_js' );
  * @return void
  */
 function treats_customizer_css() {
-	$accent = get_theme_mod( 'treats_accent_color', '#6f9375' );
+	$accent = get_theme_mod( 'treats_accent_color', '#8a6d2c' );
 
-	if ( '#6f9375' === strtolower( (string) $accent ) || ! $accent ) {
+	if ( '#8a6d2c' === strtolower( (string) $accent ) || ! $accent ) {
 		return;
 	}
 

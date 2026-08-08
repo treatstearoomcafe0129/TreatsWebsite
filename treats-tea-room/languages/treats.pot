@@ -3,14 +3,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Treats Tea Room 1.0.0\n"
-"Report-Msgid-Bugs-To: https://treatstearoom.co.uk\n"
-"POT-Creation-Date: 2026-08-05T21:06:01+00:00\n"
+"POT-Creation-Date: 2026-08-08T11:35:45+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: treats\n"
 
@@ -24,8 +20,7 @@ msgid "Breakfast, lunch, afternoon tea and the cake counter."
 msgstr ""
 
 #: 404.php:21 header.php:68 page-templates/template-about.php:181 page-templates/template-menu.php:30
-#: page-templates/template-menu.php:83 template-parts/components/cta-banner.php:30 template-parts/content/none.php:24 template-parts/home/hero.php:73
-#: template-parts/home/visit.php:92
+#: page-templates/template-menu.php:83 template-parts/components/cta-banner.php:30 template-parts/content/none.php:24 template-parts/home/visit.php:92
 msgid "Book a table"
 msgstr ""
 
@@ -94,7 +89,7 @@ msgid "Comment"
 msgstr ""
 
 #: footer.php:32
-msgid "A family tea room on Silver Street, serving Durham good food at good prices since 1991."
+msgid "A family tea room on Silver Street, serving Durham good food at good prices since 1984."
 msgstr ""
 
 #: footer.php:52
@@ -299,7 +294,7 @@ msgstr ""
 msgid "Anniversary"
 msgstr ""
 
-#: page-templates/template-booking.php:22
+#: page-templates/template-booking.php:22 template-parts/home/actions.php:20
 msgid "Afternoon tea"
 msgstr ""
 
@@ -332,12 +327,12 @@ msgid "Your name"
 msgstr ""
 
 #: page-templates/template-booking.php:70 page-templates/template-contact.php:70 page-templates/template-vouchers.php:142 template-parts/components/collect-drawer.php:49
-#: inc/forms.php:167 inc/post-types.php:476
+#: inc/forms.php:187 inc/post-types.php:476
 msgid "Phone"
 msgstr ""
 
 #: page-templates/template-booking.php:76 page-templates/template-contact.php:64 page-templates/template-contact.php:143 template-parts/components/collect-drawer.php:55
-#: template-parts/home/visit.php:51 inc/forms.php:162 inc/post-types.php:475
+#: template-parts/home/visit.php:51 inc/forms.php:182 inc/post-types.php:475
 msgid "Email"
 msgstr ""
 
@@ -349,15 +344,15 @@ msgstr ""
 msgid "For parties larger than %1$d, please call us on %2$s."
 msgstr ""
 
-#: page-templates/template-booking.php:105 inc/forms.php:183 inc/post-types.php:477
+#: page-templates/template-booking.php:105 inc/forms.php:203 inc/post-types.php:477
 msgid "Date"
 msgstr ""
 
-#: page-templates/template-booking.php:112 inc/forms.php:188 inc/post-types.php:478
+#: page-templates/template-booking.php:112 inc/forms.php:208 inc/post-types.php:478
 msgid "Time"
 msgstr ""
 
-#: page-templates/template-booking.php:125 inc/forms.php:200 inc/post-types.php:480
+#: page-templates/template-booking.php:125 inc/forms.php:220 inc/post-types.php:480
 msgid "Occasion"
 msgstr ""
 
@@ -393,7 +388,7 @@ msgstr ""
 msgid "Opening hours"
 msgstr ""
 
-#: page-templates/template-booking.php:185 page-templates/template-contact.php:161 template-parts/home/visit.php:68
+#: page-templates/template-booking.php:185 page-templates/template-contact.php:161 template-parts/home/contact-bar.php:59 template-parts/home/visit.php:68
 msgid "Closed"
 msgstr ""
 
@@ -441,7 +436,7 @@ msgstr ""
 msgid "What is it about?"
 msgstr ""
 
-#: page-templates/template-contact.php:86 inc/forms.php:230 inc/post-types.php:482
+#: page-templates/template-contact.php:86 inc/forms.php:250 inc/post-types.php:482
 msgid "Message"
 msgstr ""
 
@@ -470,7 +465,7 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
-#: page-templates/template-contact.php:133 template-parts/home/visit.php:41 inc/customizer.php:237
+#: page-templates/template-contact.php:133 template-parts/home/visit.php:41 inc/customizer.php:249
 msgid "Telephone"
 msgstr ""
 
@@ -670,15 +665,15 @@ msgstr ""
 msgid "Your collection order is empty. Add anything you like from our menus."
 msgstr ""
 
-#: template-parts/components/collect-drawer.php:43 inc/forms.php:156 inc/forms.php:318 inc/post-types.php:474
+#: template-parts/components/collect-drawer.php:43 inc/forms.php:176 inc/forms.php:343 inc/post-types.php:474
 msgid "Name"
 msgstr ""
 
-#: template-parts/components/collect-drawer.php:61 inc/forms.php:251
+#: template-parts/components/collect-drawer.php:61 inc/forms.php:271
 msgid "Collection date"
 msgstr ""
 
-#: template-parts/components/collect-drawer.php:67 inc/forms.php:256
+#: template-parts/components/collect-drawer.php:67 inc/forms.php:276
 msgid "Collection time"
 msgstr ""
 
@@ -830,6 +825,74 @@ msgstr[1] ""
 msgid "Allergen information is available for every dish — please ask a member of the team."
 msgstr ""
 
+#: template-parts/home/actions.php:18 inc/activation.php:72 inc/activation.php:364
+msgid "Afternoon Tea"
+msgstr ""
+
+#: template-parts/home/actions.php:19
+msgid "Our signature experience. Beautifully presented and made to be savoured."
+msgstr ""
+
+#: template-parts/home/actions.php:25 inc/activation.php:93
+msgid "Book a Table"
+msgstr ""
+
+#: template-parts/home/actions.php:26
+msgid "Planning something special? Reserve your table today and let us take care of the rest."
+msgstr ""
+
+#: template-parts/home/actions.php:27
+msgid "Book now"
+msgstr ""
+
+#: template-parts/home/actions.php:32 inc/activation.php:99 inc/customizer.php:135
+msgid "Gift Vouchers"
+msgstr ""
+
+#: template-parts/home/actions.php:33
+msgid "The perfect gift for any occasion. Treat someone to something special."
+msgstr ""
+
+#: template-parts/home/actions.php:34
+msgid "Buy a voucher"
+msgstr ""
+
+#: template-parts/home/actions.php:39
+msgid "Staff Portal"
+msgstr ""
+
+#: template-parts/home/actions.php:40
+msgid "Access important updates, schedules, documents and resources."
+msgstr ""
+
+#: template-parts/home/actions.php:41
+msgid "Staff login"
+msgstr ""
+
+#: template-parts/home/actions.php:49
+msgid "Products"
+msgstr ""
+
+#: template-parts/home/actions.php:50
+msgid "Discover our handpicked products and treats, available to buy online."
+msgstr ""
+
+#: template-parts/home/actions.php:51
+msgid "View products"
+msgstr ""
+
+#: template-parts/home/actions.php:56
+msgid "News & Offers"
+msgstr ""
+
+#: template-parts/home/actions.php:57
+msgid "Stay up to date with our latest news, offers and seasonal highlights."
+msgstr ""
+
+#: template-parts/home/actions.php:58
+msgid "View offers"
+msgstr ""
+
 #: template-parts/home/afternoon-tea.php:14
 msgid "A tier of finger sandwiches, cut fresh to order"
 msgstr ""
@@ -868,6 +931,26 @@ msgstr ""
 
 #: template-parts/home/afternoon-tea.php:61
 msgid "A three-tier afternoon tea at Treats"
+msgstr ""
+
+#: template-parts/home/contact-bar.php:33
+msgid "Find Us"
+msgstr ""
+
+#: template-parts/home/contact-bar.php:44 inc/customizer.php:130
+msgid "Opening Hours"
+msgstr ""
+
+#: template-parts/home/contact-bar.php:50
+msgid "Mon – Sun  %1$s – %2$s"
+msgstr ""
+
+#: template-parts/home/contact-bar.php:55
+msgid "Open 7 days a week"
+msgstr ""
+
+#: template-parts/home/contact-bar.php:69
+msgid "Get In Touch"
 msgstr ""
 
 #: template-parts/home/feature-strip.php:13 inc/activation.php:82
@@ -918,36 +1001,8 @@ msgstr ""
 msgid "Follow us on Instagram"
 msgstr ""
 
-#: template-parts/home/hero.php:57
-msgid "Durham · Since 1991"
-msgstr ""
-
-#: template-parts/home/hero.php:64
-msgid "A proper tea room in the heart of Durham"
-msgstr ""
-
-#: template-parts/home/hero.php:68
-msgid "Freshly baked cakes, generous breakfasts and traditional afternoon tea, served on Silver Street since 1991."
-msgstr ""
-
-#: template-parts/home/hero.php:77
-msgid "View our menus"
-msgstr ""
-
-#: template-parts/home/hero.php:88
-msgid "Open now — until %s today"
-msgstr ""
-
-#: template-parts/home/hero.php:96
-msgid "Closed now — today we are open %1$s to %2$s"
-msgstr ""
-
-#: template-parts/home/hero.php:102
-msgid "Closed today — see our opening hours"
-msgstr ""
-
-#: template-parts/home/hero.php:109
-msgid "Scroll"
+#: template-parts/home/hero.php:36
+msgid "Book your table"
 msgstr ""
 
 #: template-parts/home/menus.php:14
@@ -1046,6 +1101,38 @@ msgstr ""
 msgid "More about us"
 msgstr ""
 
+#: template-parts/home/values.php:14
+msgid "Locally Sourced"
+msgstr ""
+
+#: template-parts/home/values.php:15
+msgid "The finest local ingredients, supporting our community."
+msgstr ""
+
+#: template-parts/home/values.php:19
+msgid "Made With Care"
+msgstr ""
+
+#: template-parts/home/values.php:20
+msgid "Everything is prepared fresh, every day."
+msgstr ""
+
+#: template-parts/home/values.php:24
+msgid "Award Winning"
+msgstr ""
+
+#: template-parts/home/values.php:25
+msgid "Recognised for quality, service and hospitality."
+msgstr ""
+
+#: template-parts/home/values.php:29
+msgid "Family Run"
+msgstr ""
+
+#: template-parts/home/values.php:32
+msgid "Independent and passionate since %s."
+msgstr ""
+
 #: template-parts/home/visit.php:19
 msgid "Visit us"
 msgstr ""
@@ -1062,7 +1149,7 @@ msgstr ""
 msgid "Opening hours by day"
 msgstr ""
 
-#: inc/activation.php:53 inc/template-tags.php:556
+#: inc/activation.php:53 inc/template-tags.php:561
 msgid "Home"
 msgstr ""
 
@@ -1088,10 +1175,6 @@ msgstr ""
 
 #: inc/activation.php:69
 msgid "Homemade pies, quiches, soups, salads and sandwiches, made fresh in our kitchen each morning."
-msgstr ""
-
-#: inc/activation.php:72 inc/activation.php:364
-msgid "Afternoon Tea"
 msgstr ""
 
 #: inc/activation.php:75
@@ -1120,14 +1203,6 @@ msgstr ""
 
 #: inc/activation.php:90
 msgid "Loose leaf teas by the pot, speciality coffee, hot chocolate worth the walk, and cold drinks for the summer."
-msgstr ""
-
-#: inc/activation.php:93
-msgid "Book a Table"
-msgstr ""
-
-#: inc/activation.php:99 inc/customizer.php:135
-msgid "Gift Vouchers"
 msgstr ""
 
 #: inc/activation.php:102
@@ -1718,10 +1793,6 @@ msgstr ""
 msgid "Contact & Location"
 msgstr ""
 
-#: inc/customizer.php:130
-msgid "Opening Hours"
-msgstr ""
-
 #: inc/customizer.php:131
 msgid "Social Profiles"
 msgstr ""
@@ -1747,290 +1818,298 @@ msgid "Business name"
 msgstr ""
 
 #: inc/customizer.php:172
-msgid "Wordmark tagline"
+msgid "Wordmark script word"
 msgstr ""
 
-#: inc/customizer.php:181
+#: inc/customizer.php:173
+msgid "Set in the script face. Keep it short — one word reads best."
+msgstr ""
+
+#: inc/customizer.php:183
+msgid "Wordmark caps line"
+msgstr ""
+
+#: inc/customizer.php:193
 msgid "Default colour scheme"
 msgstr ""
 
-#: inc/customizer.php:182
+#: inc/customizer.php:194
 msgid "Visitors can always override this with the toggle in the header."
 msgstr ""
 
-#: inc/customizer.php:186
+#: inc/customizer.php:198
 msgid "Follow the visitor’s device"
 msgstr ""
 
-#: inc/customizer.php:187
+#: inc/customizer.php:199
 msgid "Always light"
 msgstr ""
 
-#: inc/customizer.php:188
+#: inc/customizer.php:200
 msgid "Always dark"
 msgstr ""
 
-#: inc/customizer.php:198
+#: inc/customizer.php:210
 msgid "Show the dark mode toggle"
 msgstr ""
 
-#: inc/customizer.php:209
+#: inc/customizer.php:221
 msgid "Accent colour"
 msgstr ""
 
-#: inc/customizer.php:221
+#: inc/customizer.php:233
 msgid "Enable scroll animations"
 msgstr ""
 
-#: inc/customizer.php:222
+#: inc/customizer.php:234
 msgid "Always disabled automatically for visitors who prefer reduced motion."
 msgstr ""
 
-#: inc/customizer.php:232
+#: inc/customizer.php:244
 msgid "Street address"
 msgstr ""
 
-#: inc/customizer.php:233
+#: inc/customizer.php:245
 msgid "Town / city"
 msgstr ""
 
-#: inc/customizer.php:234
+#: inc/customizer.php:246
 msgid "County"
 msgstr ""
 
-#: inc/customizer.php:235
+#: inc/customizer.php:247
 msgid "Postcode"
 msgstr ""
 
-#: inc/customizer.php:236
+#: inc/customizer.php:248
 msgid "Country"
 msgstr ""
 
-#: inc/customizer.php:256
+#: inc/customizer.php:268
 msgid "Public email address"
 msgstr ""
 
-#: inc/customizer.php:268
+#: inc/customizer.php:280
 msgid "Send form notifications to"
 msgstr ""
 
-#: inc/customizer.php:269
+#: inc/customizer.php:281
 msgid "Where bookings, enquiries and orders are emailed. Defaults to the public address."
 msgstr ""
 
-#: inc/customizer.php:280
+#: inc/customizer.php:292
 msgid "Google Maps embed URL"
 msgstr ""
 
-#: inc/customizer.php:281
+#: inc/customizer.php:293
 msgid "Optional. Leave blank to generate one from the address above."
 msgstr ""
 
-#: inc/customizer.php:292
+#: inc/customizer.php:304
 msgid "Getting here note"
 msgstr ""
 
-#: inc/customizer.php:318
+#: inc/customizer.php:330
 msgid "%s — closed all day"
 msgstr ""
 
-#: inc/customizer.php:331
+#: inc/customizer.php:343
 msgid "%s — opens"
 msgstr ""
 
-#: inc/customizer.php:344
+#: inc/customizer.php:356
 msgid "%s — closes"
 msgstr ""
 
-#: inc/customizer.php:357
+#: inc/customizer.php:369
 msgid "Opening hours note"
 msgstr ""
 
-#: inc/customizer.php:368
+#: inc/customizer.php:380
 msgid "Facebook URL"
 msgstr ""
 
-#: inc/customizer.php:369
+#: inc/customizer.php:381
 msgid "Instagram URL"
 msgstr ""
 
-#: inc/customizer.php:370
+#: inc/customizer.php:382
 msgid "Tripadvisor URL"
 msgstr ""
 
-#: inc/customizer.php:371
+#: inc/customizer.php:383
 msgid "X (Twitter) URL"
 msgstr ""
 
-#: inc/customizer.php:390 inc/meta-boxes.php:80
+#: inc/customizer.php:402 inc/meta-boxes.php:80
 msgid "Hero eyebrow"
 msgstr ""
 
-#: inc/customizer.php:391
+#: inc/customizer.php:403
 msgid "Hero heading"
 msgstr ""
 
-#: inc/customizer.php:392
+#: inc/customizer.php:404
 msgid "Hero paragraph"
 msgstr ""
 
-#: inc/customizer.php:393
+#: inc/customizer.php:405
 msgid "Hero button label"
 msgstr ""
 
-#: inc/customizer.php:394
+#: inc/customizer.php:406
 msgid "Hero button URL"
 msgstr ""
 
-#: inc/customizer.php:395
+#: inc/customizer.php:407
 msgid "Hero secondary button label"
 msgstr ""
 
-#: inc/customizer.php:396
+#: inc/customizer.php:408
 msgid "Hero secondary button URL"
 msgstr ""
 
-#: inc/customizer.php:417
+#: inc/customizer.php:429
 msgid "Hero image"
 msgstr ""
 
-#: inc/customizer.php:418
+#: inc/customizer.php:430
 msgid "Landscape, at least 2400px wide. A sage gradient is used when empty."
 msgstr ""
 
-#: inc/customizer.php:429
+#: inc/customizer.php:441
 msgid "Story section heading"
 msgstr ""
 
-#: inc/customizer.php:441
+#: inc/customizer.php:453
 msgid "Story section text"
 msgstr ""
 
-#: inc/customizer.php:453
+#: inc/customizer.php:465
 msgid "Story image"
 msgstr ""
 
-#: inc/customizer.php:466
+#: inc/customizer.php:478
 msgid "External booking system URL"
 msgstr ""
 
-#: inc/customizer.php:467
+#: inc/customizer.php:479
 msgid "Optional. If set, booking buttons point here instead of the built-in form."
 msgstr ""
 
-#: inc/customizer.php:478
+#: inc/customizer.php:490
 msgid "Booking widget embed code"
 msgstr ""
 
-#: inc/customizer.php:479
+#: inc/customizer.php:491
 msgid "Optional. Paste an iframe from OpenTable, ResDiary or similar to replace the built-in form."
 msgstr ""
 
-#: inc/customizer.php:490
+#: inc/customizer.php:502
 msgid "Largest party bookable online"
 msgstr ""
 
-#: inc/customizer.php:506
+#: inc/customizer.php:518
 msgid "Minimum notice (hours)"
 msgstr ""
 
-#: inc/customizer.php:519
+#: inc/customizer.php:531
 msgid "How far ahead bookings are accepted (days)"
 msgstr ""
 
-#: inc/customizer.php:532
+#: inc/customizer.php:544
 msgid "Bookable times"
 msgstr ""
 
-#: inc/customizer.php:533
+#: inc/customizer.php:545
 msgid "One per line, 24-hour format. Leave blank to generate them from opening hours."
 msgstr ""
 
-#: inc/customizer.php:544
+#: inc/customizer.php:556
 msgid "Booking form note"
 msgstr ""
 
-#: inc/customizer.php:558
+#: inc/customizer.php:570
 msgid "Enable Click & Collect"
 msgstr ""
 
-#: inc/customizer.php:570
+#: inc/customizer.php:582
 msgid "Collection notice"
 msgstr ""
 
-#: inc/customizer.php:584
+#: inc/customizer.php:596
 msgid "Voucher page intro"
 msgstr ""
 
-#: inc/customizer.php:596
+#: inc/customizer.php:608
 msgid "Voucher amounts"
 msgstr ""
 
-#: inc/customizer.php:597
+#: inc/customizer.php:609
 msgid "Comma separated, numbers only."
 msgstr ""
 
-#: inc/customizer.php:608
+#: inc/customizer.php:620
 msgid "Voucher terms"
 msgstr ""
 
-#: inc/customizer.php:620
+#: inc/customizer.php:632
 msgid "Payment link"
 msgstr ""
 
-#: inc/customizer.php:621
+#: inc/customizer.php:633
 msgid "Optional. A Stripe, SumUp or Square payment link. When set, buyers are sent here after submitting their details."
 msgstr ""
 
-#: inc/customizer.php:634
+#: inc/customizer.php:646
 msgid "Instagram handle"
 msgstr ""
 
-#: inc/customizer.php:645
+#: inc/customizer.php:657
 msgid "Instagram Basic Display access token"
 msgstr ""
 
-#: inc/customizer.php:646
+#: inc/customizer.php:658
 msgid "Optional. With a token the feed pulls live posts; without one, the curated gallery below is shown instead."
 msgstr ""
 
-#: inc/customizer.php:656
+#: inc/customizer.php:668
 msgid "Number of posts"
 msgstr ""
 
-#: inc/customizer.php:674
+#: inc/customizer.php:686
 msgid "Newsletter heading"
 msgstr ""
 
-#: inc/customizer.php:685
+#: inc/customizer.php:697
 msgid "Newsletter text"
 msgstr ""
 
-#: inc/customizer.php:697
+#: inc/customizer.php:709
 msgid "External list URL"
 msgstr ""
 
-#: inc/customizer.php:698
+#: inc/customizer.php:710
 msgid "Optional Mailchimp/Brevo form action. Without one, subscribers are stored in WordPress."
 msgstr ""
 
-#: inc/customizer.php:711
+#: inc/customizer.php:723
 msgid "Default meta description"
 msgstr ""
 
-#: inc/customizer.php:712
+#: inc/customizer.php:724
 msgid "Used on the home page and anywhere without its own excerpt. Aim for 150–160 characters."
 msgstr ""
 
-#: inc/customizer.php:724
+#: inc/customizer.php:736
 msgid "Default sharing image"
 msgstr ""
 
-#: inc/customizer.php:735
+#: inc/customizer.php:747
 msgid "Price range"
 msgstr ""
 
-#: inc/customizer.php:746
+#: inc/customizer.php:758
 msgid "Year established"
 msgstr ""
 
@@ -2114,115 +2193,127 @@ msgstr ""
 msgid "please check this value."
 msgstr ""
 
-#: inc/forms.php:120
+#: inc/forms.php:124
+msgid "Please tell us the voucher amount you would like."
+msgstr ""
+
+#: inc/forms.php:127
+msgid "Please enter an amount."
+msgstr ""
+
+#: inc/forms.php:140
 msgid "We could not save your request. Please call us."
 msgstr ""
 
-#: inc/forms.php:176
+#: inc/forms.php:196
 msgid "New table booking request"
 msgstr ""
 
-#: inc/forms.php:177
+#: inc/forms.php:197
 msgid "Thank you — your request is with us. We will confirm by email or phone shortly."
 msgstr ""
 
-#: inc/forms.php:193 inc/post-types.php:479
+#: inc/forms.php:213 inc/post-types.php:479
 msgid "Party size"
 msgstr ""
 
-#: inc/forms.php:205 inc/forms.php:272 inc/post-types.php:481
+#: inc/forms.php:225 inc/forms.php:292 inc/post-types.php:481
 msgid "Notes"
 msgstr ""
 
-#: inc/forms.php:210 inc/forms.php:236 inc/post-types.php:489
+#: inc/forms.php:230 inc/forms.php:256 inc/post-types.php:489
 msgid "Marketing opt-in"
 msgstr ""
 
-#: inc/forms.php:218
+#: inc/forms.php:238
 msgid "New website enquiry"
 msgstr ""
 
-#: inc/forms.php:219
+#: inc/forms.php:239
 msgid "Thank you for getting in touch — we will reply as soon as we can."
 msgstr ""
 
-#: inc/forms.php:225 inc/post-types.php:483
+#: inc/forms.php:245 inc/post-types.php:483
 msgid "Subject"
 msgstr ""
 
-#: inc/forms.php:244
+#: inc/forms.php:264
 msgid "New Click & Collect order"
 msgstr ""
 
-#: inc/forms.php:245
+#: inc/forms.php:265
 msgid "Order received. We will call to confirm your collection time."
 msgstr ""
 
-#: inc/forms.php:261 inc/post-types.php:484
+#: inc/forms.php:281 inc/post-types.php:484
 msgid "Items"
 msgstr ""
 
-#: inc/forms.php:267 inc/post-types.php:485
+#: inc/forms.php:287 inc/post-types.php:485
 msgid "Total"
 msgstr ""
 
-#: inc/forms.php:281
+#: inc/forms.php:301
 msgid "New gift voucher order"
 msgstr ""
 
-#: inc/forms.php:282
+#: inc/forms.php:302
 msgid "Thank you — we will email you to arrange payment and delivery of the voucher."
 msgstr ""
 
-#: inc/forms.php:288 inc/post-types.php:486
+#: inc/forms.php:308 inc/post-types.php:486
 msgid "Amount"
 msgstr ""
 
-#: inc/forms.php:294
+#: inc/forms.php:314
+msgid "Custom amount"
+msgstr ""
+
+#: inc/forms.php:319
 msgid "Recipient name"
 msgstr ""
 
-#: inc/forms.php:299 inc/post-types.php:488
+#: inc/forms.php:324 inc/post-types.php:488
 msgid "Delivery"
 msgstr ""
 
-#: inc/forms.php:304
+#: inc/forms.php:329
 msgid "Gift message"
 msgstr ""
 
-#: inc/forms.php:313
+#: inc/forms.php:338
 msgid "New newsletter subscriber"
 msgstr ""
 
-#: inc/forms.php:314
+#: inc/forms.php:339
 msgid "You are on the list — thank you."
 msgstr ""
 
-#: inc/forms.php:491
+#: inc/forms.php:516
 msgid "Reference: %s"
 msgstr ""
 
-#: inc/forms.php:500
+#: inc/forms.php:525
 msgid "Yes"
 msgstr ""
 
-#: inc/forms.php:508
+#: inc/forms.php:533
 msgid "Manage this submission: %s"
 msgstr ""
 
-#: inc/forms.php:531
+#: inc/forms.php:556
 msgid "Hello %s,"
 msgstr ""
 
-#: inc/forms.php:535
+#: inc/forms.php:560
 msgid "Your reference is %s."
 msgstr ""
 
-#: inc/forms.php:545
+#: inc/forms.php:570
 msgid "%1$s — we have your request (%2$s)"
 msgstr ""
 
-#: inc/forms.php:619
+#: inc/forms.php:644
 msgid "Leave this field empty"
 msgstr ""
 
@@ -2670,31 +2761,31 @@ msgstr ""
 msgid "X"
 msgstr ""
 
-#: inc/template-tags.php:489
+#: inc/template-tags.php:493
 msgid "%s — home"
 msgstr ""
 
-#: inc/template-tags.php:507
-msgid "Tea Room & Café · Durham"
+#: inc/template-tags.php:511
+msgid "Tea Room"
 msgstr ""
 
-#: inc/template-tags.php:531
+#: inc/template-tags.php:536
 msgid "Breadcrumb"
 msgstr ""
 
-#: inc/template-tags.php:609
+#: inc/template-tags.php:614
 msgid "Search: %s"
 msgstr ""
 
-#: inc/template-tags.php:614
+#: inc/template-tags.php:619
 msgid "Page not found"
 msgstr ""
 
-#: inc/template-tags.php:726
+#: inc/template-tags.php:731
 msgid "Rated %s out of 5"
 msgstr ""
 
-#: inc/template-tags.php:850
+#: inc/template-tags.php:855
 msgid "%s min read"
 msgid_plural "%s min read"
 msgstr[0] ""
