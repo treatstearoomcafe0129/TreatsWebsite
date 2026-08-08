@@ -10,7 +10,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'TREATS_VERSION', '1.0.0' );
+define( 'TREATS_VERSION', '1.0.2' );
 define( 'TREATS_DIR', trailingslashit( get_template_directory() ) );
 define( 'TREATS_URI', trailingslashit( get_template_directory_uri() ) );
 

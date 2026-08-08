@@ -69,6 +69,33 @@
 	width: min(100%, 260px);
 }
 
+/* Chips keep their own width; the row scrolls instead of squeezing them.
+   Flex items shrink by default, and on a phone the fixed-width search left
+   the chip row about 90px to live in — the active chip was crushed into a
+   half-circle with its label clipped mid-word. */
+.menu-filters .tab {
+	flex: 0 0 auto;
+}
+
+/* Narrow screens stack: a full-width scrolling chip row, search underneath.
+   Side by side there is not enough width for both to be usable. */
+@media (max-width: 720px) {
+	.menu-controls__inner {
+		flex-direction: column;
+		/* nowrap matters: the base rule wraps, and a column container that
+		   wraps becomes multi-column, at which point items size to their
+		   content instead of stretching — which put the whole chip row,
+		   655px of it, outside a 390px screen. */
+		flex-wrap: nowrap;
+		align-items: stretch;
+		gap: var(--sp-2);
+	}
+
+	.menu-search {
+		width: 100%;
+	}
+}
+
 .menu-search input {
 	width: 100%;
 	padding: 0.6rem 2.4rem 0.6rem 2.4rem;

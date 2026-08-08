@@ -32,9 +32,16 @@ foreach ( $treats_sections as $treats_section ) {
 	get_template_part( 'template-parts/home/' . $treats_section );
 }
 
-// Any content added to the Home page in the editor renders beneath the
-// designed sections, so the owner can add a seasonal note without code.
-if ( have_posts() ) {
+/**
+ * Anything typed into the Home page in the editor can render beneath the
+ * designed sections — useful for a seasonal note without touching code.
+ *
+ * It is off by default. The home page is a composed layout, and a site
+ * switching over from another theme will have a page full of old copy sitting
+ * in that editor which would land underneath the design unannounced. Switch
+ * it on in Customize → Home Page when there is something to say.
+ */
+if ( get_theme_mod( 'treats_home_show_content', false ) && have_posts() ) {
 	while ( have_posts() ) {
 		the_post();
 

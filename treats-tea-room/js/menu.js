@@ -118,10 +118,15 @@
 
 		filters.forEach(function (button) {
 			on(button, 'click', function () {
-				activeFilter = button.dataset.menuFilter || '';
+				var value = button.dataset.menuFilter || '';
+
+				// Pressing the active filter again clears it. With no
+				// "Everything" button that is the way back to the full menu,
+				// which is also what a pressed toggle should do.
+				activeFilter = activeFilter === value ? '' : value;
 
 				filters.forEach(function (other) {
-					var isActive = other === button;
+					var isActive = activeFilter !== '' && other === button;
 
 					other.classList.toggle('is-active', isActive);
 					other.setAttribute('aria-pressed', isActive ? 'true' : 'false');

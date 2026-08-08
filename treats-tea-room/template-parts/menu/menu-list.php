@@ -54,10 +54,16 @@ if ( is_wp_error( $dietary_terms ) ) {
 			<div class="container menu-controls__inner">
 				<?php if ( $config['show_filters'] ) : ?>
 					<div class="menu-filters" role="group" aria-label="<?php esc_attr_e( 'Filter the menu', 'treats' ); ?>">
-						<button class="tab is-active" type="button" aria-pressed="true" data-menu-filter="">
-							<?php esc_html_e( 'Everything', 'treats' ); ?>
-						</button>
-
+						<?php
+						/*
+						 * There is no "Everything" button. The menu starts
+						 * unfiltered, so a control whose only job is to restore
+						 * the state you are already in is noise — and on a phone
+						 * it was the first thing in the row, pushing the real
+						 * categories off screen. Pressing an active filter again
+						 * clears it; see js/menu.js.
+						 */
+						?>
 						<?php foreach ( $groups as $group ) : ?>
 							<?php if ( ! $group['term'] ) : ?>
 								<?php continue; ?>

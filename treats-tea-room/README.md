@@ -215,10 +215,11 @@ icon), `.glass-title` (small-caps serif), `.gold-rule` (the short gold line),
 The theme was built against a real WordPress 6.7 install and driven with a
 headless browser rather than eyeballed:
 
-- **42 interaction tests** — mobile drawer (open, focus trap, <kbd>Esc</kbd>,
+- **44 interaction tests** — mobile drawer (open, focus trap, <kbd>Esc</kbd>,
   submenus), colour-scheme toggle and persistence, sticky/hiding header,
   scroll reveals under slow, fast and jump-to-bottom scrolling, menu search
-  and filters, Click & Collect basket including persistence across reloads,
+  and filters including toggling a filter back off, Click & Collect basket
+  including persistence across reloads,
   FAQ accordion and topic filter, click-to-load map, gallery lightbox.
 - **15 form tests** — client validation, honeypot, time trap, rate limiting,
   every form's success path, and the no-JavaScript fallback with JS disabled.

@@ -424,6 +424,19 @@ function treats_customize_register( $wp_customize ) {
 
 	treats_add_control(
 		$wp_customize,
+		'treats_home_show_content',
+		array(
+			'label'       => __( 'Show the Home page editor content', 'treats' ),
+			'description' => __( 'Adds whatever is typed into the Home page in the editor below the designed sections. Off by default — a page carried over from a previous theme usually has old copy sitting in there.', 'treats' ),
+			'section'     => 'treats_home',
+			'type'        => 'checkbox',
+			'default'     => false,
+			'sanitize'    => 'treats_sanitize_checkbox',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
 		'treats_hero_image',
 		array(
 			'label'       => __( 'Hero image', 'treats' ),
