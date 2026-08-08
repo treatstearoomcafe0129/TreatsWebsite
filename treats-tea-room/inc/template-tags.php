@@ -498,15 +498,24 @@ function treats_the_logo( $class = '' ) {
 	}
 	?>
 	<a class="site-logo site-logo--wordmark <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
-		<span class="site-logo__mark" aria-hidden="true">
-			<svg viewBox="0 0 44 44" width="40" height="40" fill="none" aria-hidden="true">
-				<circle cx="22" cy="22" r="21" stroke="currentColor" stroke-width="1"/>
-				<path d="M13 18h14v6a7 7 0 0 1-7 7 7 7 0 0 1-7-7v-6Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-				<path d="M27 19.5h1.8a2.7 2.7 0 0 1 0 5.4H27" stroke="currentColor" stroke-width="1.4"/>
-				<path d="M17 14.5c0-1.4 1-1.6 1-2.8M20 14.5c0-1.4 1-1.6 1-2.8M23 14.5c0-1.4 1-1.6 1-2.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-			</svg>
-		</span>
 		<span class="site-logo__text">
+			<span class="site-logo__flourish" aria-hidden="true">
+				<svg viewBox="0 0 132 18" width="132" height="18" fill="none" aria-hidden="true" focusable="false">
+					<path d="M2 12c14-7 30-9 44-4M130 12c-14-7-30-9-44-4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+					<path d="M52 9c3-3 7-3 10 0M70 9c3-3 7-3 10 0" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+					<circle cx="66" cy="8" r="1.4" fill="currentColor"/>
+				</svg>
+				<?php
+				$founded = trim( (string) get_theme_mod( 'treats_seo_founding_year', '1984' ) );
+
+				if ( '' !== $founded ) {
+					printf(
+						'<span class="site-logo__est">%s</span>',
+						esc_html( sprintf( /* translators: %s: year established. */ __( 'est. %s', 'treats' ), $founded ) )
+					);
+				}
+				?>
+			</span>
 			<span class="site-logo__name"><?php echo esc_html( get_theme_mod( 'treats_logo_script', 'Treats' ) ); ?></span>
 			<span class="site-logo__tag"><?php echo esc_html( get_theme_mod( 'treats_logo_tagline', __( 'Tea Room', 'treats' ) ) ); ?></span>
 			<span class="screen-reader-text"><?php echo esc_html( $name ); ?></span>

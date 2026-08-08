@@ -69,22 +69,23 @@
 	--c-header-bg: transparent;
 
 	/* Glass */
-	/* A low blur is what makes this read as glass rather than as a milky
-	   fill: enough to soften the nap behind, not enough to erase it. */
-	--glass-bg: rgba(255, 255, 255, 0.13);
-	--glass-bg-strong: rgba(255, 255, 255, 0.22);
-	--glass-border: rgba(255, 255, 255, 0.55);
-	--glass-blur: 5px;
-	--glass-filter: blur(var(--glass-blur)) saturate(150%) brightness(1.05);
-	/* The tint and the specular streak across the pane. */
+	/* Frosted white glass: enough white to sit clearly above the sage, with
+	   a moderate blur so the nap behind stays suggested rather than sharp. */
+	--glass-bg: rgba(255, 255, 255, 0.46);
+	--glass-bg-strong: rgba(255, 255, 255, 0.58);
+	--glass-border: rgba(255, 255, 255, 0.75);
+	--glass-blur: 14px;
+	--glass-filter: blur(var(--glass-blur)) saturate(125%) brightness(1.04);
+	/* A soft sheen falling across the pane, brightest at the upper left. */
 	--glass-sheen:
-		linear-gradient(118deg, transparent 28%, rgba(255, 255, 255, 0.2) 43%, rgba(255, 255, 255, 0.03) 57%, transparent 70%),
-		linear-gradient(135deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0.02) 62%, rgba(255, 255, 255, 0.14) 100%);
+		linear-gradient(118deg, transparent 26%, rgba(255, 255, 255, 0.22) 44%, rgba(255, 255, 255, 0.04) 58%, transparent 72%),
+		linear-gradient(150deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.06) 45%, rgba(255, 255, 255, 0.16) 100%);
 	--glass-shadow:
-		0 16px 44px -20px rgba(35, 45, 33, 0.4),
-		inset 1px 1px 0 rgba(255, 255, 255, 0.62),
-		inset -1px -1px 0 rgba(255, 255, 255, 0.18),
-		inset 0 0 26px rgba(255, 255, 255, 0.1);
+		0 22px 50px -26px rgba(48, 58, 45, 0.42),
+		0 2px 10px -4px rgba(48, 58, 45, 0.12),
+		inset 1px 1px 0 rgba(255, 255, 255, 0.85),
+		inset -1px -1px 0 rgba(255, 255, 255, 0.35),
+		inset 0 0 40px rgba(255, 255, 255, 0.22);
 
 	--shadow-xs: 0 1px 2px rgba(35, 45, 33, 0.06);
 	--shadow-sm: 0 4px 14px -8px rgba(35, 45, 33, 0.25);
@@ -137,10 +138,10 @@
 	--t-header-h: 84px;
 
 	/* Radii — soft, generous, matching the glass panels */
-	--r-sm: 8px;
-	--r-md: 14px;
-	--r-lg: 22px;
-	--r-xl: 28px;
+	--r-sm: 10px;
+	--r-md: 16px;
+	--r-lg: 26px;
+	--r-xl: 32px;
 	--r-pill: 999px;
 
 	/* Motion */
@@ -176,10 +177,10 @@
 		--c-on-accent: #232a22;
 		--c-scrim: rgba(8, 11, 8, 0.7);
 
-		--glass-bg: rgba(255, 255, 255, 0.05);
-		--glass-bg-strong: rgba(255, 255, 255, 0.09);
-		--glass-border: rgba(255, 255, 255, 0.22);
-		--glass-filter: blur(var(--glass-blur)) saturate(140%) brightness(1.14);
+		--glass-bg: rgba(255, 255, 255, 0.08);
+		--glass-bg-strong: rgba(255, 255, 255, 0.13);
+		--glass-border: rgba(255, 255, 255, 0.24);
+		--glass-filter: blur(var(--glass-blur)) saturate(130%) brightness(1.12);
 		--glass-sheen:
 			linear-gradient(118deg, transparent 28%, rgba(255, 255, 255, 0.12) 43%, rgba(255, 255, 255, 0.02) 57%, transparent 70%),
 			linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0.08) 100%);
@@ -212,10 +213,10 @@
 	--c-on-accent: #232a22;
 	--c-scrim: rgba(8, 11, 8, 0.7);
 
-	--glass-bg: rgba(255, 255, 255, 0.05);
-	--glass-bg-strong: rgba(255, 255, 255, 0.09);
-	--glass-border: rgba(255, 255, 255, 0.22);
-	--glass-filter: blur(var(--glass-blur)) saturate(140%) brightness(1.14);
+	--glass-bg: rgba(255, 255, 255, 0.08);
+	--glass-bg-strong: rgba(255, 255, 255, 0.13);
+	--glass-border: rgba(255, 255, 255, 0.24);
+	--glass-filter: blur(var(--glass-blur)) saturate(130%) brightness(1.12);
 	--glass-sheen:
 		linear-gradient(118deg, transparent 28%, rgba(255, 255, 255, 0.12) 43%, rgba(255, 255, 255, 0.02) 57%, transparent 70%),
 		linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0.08) 100%);
@@ -3502,22 +3503,22 @@ pre {
 
 /* --- The ground ------------------------------------------------------- */
 
-/* Suede is a napped surface: short fibres catching the light from one
-   direction over a soft, uneven pile. Two seamless greyscale tiles carry
-   that: one seamless greyscale fibre tile, blended over the sage with
-   `soft-light` so it reads as light and shade rather than as grey noise. It
-   is a pre-rendered image — the same effect built from live SVG filters cost
-   several hundred milliseconds of paint time.
+/* Suede read across a room is mostly smooth: a whisper of nap, a soft
+   unevenness in the pile, and a broad beam of light falling across it. Two
+   seamless greyscale tiles carry the first two, blended with `soft-light` so
+   they add light and shade rather than colour; the beam and the pooling sit
+   on a viewport-fixed layer so they belong to the room rather than scrolling
+   with the page.
 
-   The tile repeats down the page with the content. The larger pooling of
-   light belongs to the room rather than the page, so it lives on a
-   viewport-fixed layer below everything; `background-attachment: fixed`
-   would repaint the whole blended stack on every scroll frame. */
+   Both tiles are pre-rendered — the same effect built from live SVG filters
+   cost roughly 200ms of extra paint time on every view. */
 body {
 	background-color: var(--c-bg);
-	background-image: url("../images/texture-suede.png");
-	background-blend-mode: soft-light;
-	background-size: 320px 320px;
+	background-image:
+		url("../images/texture-suede.png"),
+		url("../images/texture-suede-cloud.png");
+	background-blend-mode: soft-light, soft-light;
+	background-size: 320px 320px, 760px 760px;
 	background-repeat: repeat;
 	background-attachment: scroll;
 }
@@ -3529,13 +3530,14 @@ body::before {
 	z-index: -1;
 	pointer-events: none;
 	background-image:
-		/* the sheen sweeping across the upper right */
-		linear-gradient(112deg, transparent 36%, rgba(255, 255, 255, 0.26) 51%, rgba(255, 255, 255, 0.04) 63%, transparent 71%),
-		/* the soft pooling of light suede always has */
-		radial-gradient(58% 44% at 16% 10%, rgba(255, 255, 255, 0.2), transparent 70%),
-		radial-gradient(48% 38% at 84% 28%, rgba(255, 255, 255, 0.14), transparent 70%),
-		radial-gradient(64% 52% at 28% 78%, rgba(96, 110, 93, 0.1), transparent 72%),
-		radial-gradient(54% 46% at 90% 92%, rgba(96, 110, 93, 0.09), transparent 72%);
+		/* the broad beam falling across the upper right */
+		linear-gradient(108deg, transparent 30%, rgba(255, 255, 255, 0.4) 47%, rgba(255, 255, 255, 0.14) 58%, transparent 70%),
+		/* soft pooling of light and shade in the pile */
+		radial-gradient(70% 55% at 12% 6%, rgba(255, 255, 255, 0.26), transparent 72%),
+		radial-gradient(55% 45% at 88% 22%, rgba(255, 255, 255, 0.2), transparent 72%),
+		radial-gradient(60% 50% at 30% 80%, rgba(255, 255, 255, 0.12), transparent 72%),
+		radial-gradient(70% 55% at 22% 92%, rgba(104, 118, 100, 0.14), transparent 74%),
+		radial-gradient(60% 50% at 94% 88%, rgba(104, 118, 100, 0.12), transparent 74%);
 }
 
 /* --- The panel -------------------------------------------------------- */
@@ -3820,18 +3822,16 @@ body::before {
 
 @media (min-width: 1080px) {
 	.sub-menu {
-		/* A floating menu needs to stay readable, so it is denser than the
-		   structural panels. */
-		background-color: rgba(255, 255, 255, 0.62);
+		background-color: var(--glass-bg-strong);
 		background-image: var(--glass-sheen);
 		border-color: var(--glass-border);
 		border-radius: var(--r-md);
-		backdrop-filter: blur(14px) saturate(140%);
-		-webkit-backdrop-filter: blur(14px) saturate(140%);
+		backdrop-filter: var(--glass-filter);
+		-webkit-backdrop-filter: var(--glass-filter);
 	}
 
 	:root[data-theme="dark"] .sub-menu {
-		background-color: rgba(30, 36, 29, 0.86);
+		background-color: rgba(30, 36, 29, 0.9);
 	}
 
 	.sub-menu .nav__link {
@@ -4456,4 +4456,40 @@ body::before {
 
 .ornament .icon {
 	stroke-width: 1.1;
+}
+
+/* --- The wordmark ----------------------------------------------------- */
+
+/* A flourish, the script word, and a letterspaced line beneath — the
+   arrangement of the approved logo. It is live text rather than an image, so
+   it stays crisp at any size and is readable to search engines. Uploading a
+   real logo file under Customize → Site Identity replaces the whole lockup. */
+.site-logo__flourish {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0;
+	color: var(--gold);
+	margin-bottom: -0.15rem;
+}
+
+.site-logo__flourish svg {
+	width: clamp(84px, 9vw, 116px);
+	height: auto;
+	opacity: 0.9;
+}
+
+.site-logo__est {
+	font-family: var(--font-sans);
+	font-size: 0.5rem;
+	font-weight: 500;
+	letter-spacing: 0.22em;
+	text-indent: 0.22em;
+	text-transform: lowercase;
+	color: var(--gold);
+	margin-top: -0.5rem;
+}
+
+.site-footer .site-logo__flourish svg {
+	width: 108px;
 }
