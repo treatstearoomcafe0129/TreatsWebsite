@@ -157,9 +157,7 @@ while ( have_posts() ) :
 										<th scope="row"><?php echo esc_html( $day['label'] ); ?></th>
 										<td>
 											<?php
-											echo $day['closed']
-												? esc_html__( 'Closed', 'treats' )
-												: esc_html( $day['open'] . ' – ' . $day['close'] );
+											echo esc_html( treats_format_hours( $day ) );
 											?>
 										</td>
 									</tr>

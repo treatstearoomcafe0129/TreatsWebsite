@@ -151,6 +151,48 @@ function treats_get_opening_hours() {
 }
 
 /**
+ * A stored 24-hour time rendered the way the design shows it: 8:30am, 5:00pm.
+ *
+ * Values are stored as HH:MM so they stay sortable and comparable; only the
+ * display is converted.
+ *
+ * @param string $time HH:MM.
+ * @return string
+ */
+function treats_format_time( $time ) {
+	$time = trim( (string) $time );
+
+	if ( ! preg_match( '/^([01][0-9]|2[0-3]):([0-5][0-9])$/', $time, $parts ) ) {
+		return $time;
+	}
+
+	$hour   = (int) $parts[1];
+	$minute = $parts[2];
+	$suffix = $hour < 12 ? __( 'am', 'treats' ) : __( 'pm', 'treats' );
+	$hour12 = $hour % 12;
+
+	if ( 0 === $hour12 ) {
+		$hour12 = 12;
+	}
+
+	return $hour12 . ':' . $minute . $suffix;
+}
+
+/**
+ * An opening-to-closing span, formatted for display.
+ *
+ * @param array $day A row from treats_get_opening_hours().
+ * @return string
+ */
+function treats_format_hours( $day ) {
+	if ( ! empty( $day['closed'] ) ) {
+		return __( 'Closed', 'treats' );
+	}
+
+	return treats_format_time( $day['open'] ) . ' – ' . treats_format_time( $day['close'] );
+}
+
+/**
  * Weekday label for an index where 0 = Monday.
  *
  * @param int $index Weekday index.
@@ -499,24 +541,25 @@ function treats_the_logo( $class = '' ) {
 	?>
 	<a class="site-logo site-logo--wordmark <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 		<span class="site-logo__text">
-			<span class="site-logo__flourish" aria-hidden="true">
-				<svg viewBox="0 0 132 18" width="132" height="18" fill="none" aria-hidden="true" focusable="false">
-					<path d="M2 12c14-7 30-9 44-4M130 12c-14-7-30-9-44-4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-					<path d="M52 9c3-3 7-3 10 0M70 9c3-3 7-3 10 0" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
-					<circle cx="66" cy="8" r="1.4" fill="currentColor"/>
-				</svg>
+			<span class="site-logo__lockup">
+				<span class="site-logo__name"><?php echo esc_html( get_theme_mod( 'treats_logo_script', 'Treats' ) ); ?></span>
+
 				<?php
 				$founded = trim( (string) get_theme_mod( 'treats_seo_founding_year', '1984' ) );
 
 				if ( '' !== $founded ) {
 					printf(
-						'<span class="site-logo__est">%s</span>',
-						esc_html( sprintf( /* translators: %s: year established. */ __( 'est. %s', 'treats' ), $founded ) )
+						'<span class="site-logo__est" aria-hidden="true">%s</span>',
+						esc_html( sprintf( /* translators: %s: year established. */ __( 'Est %s', 'treats' ), $founded ) )
 					);
 				}
 				?>
+
+				<svg class="site-logo__swash" viewBox="0 0 200 26" fill="none" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+					<path d="M2 9c18 12 46 15 78 12 30-3 60-9 84-17-20 14-52 22-86 24C46 30 18 22 2 9Z" fill="currentColor"/>
+				</svg>
 			</span>
-			<span class="site-logo__name"><?php echo esc_html( get_theme_mod( 'treats_logo_script', 'Treats' ) ); ?></span>
+
 			<span class="site-logo__tag"><?php echo esc_html( get_theme_mod( 'treats_logo_tagline', __( 'Tea Room', 'treats' ) ) ); ?></span>
 			<span class="screen-reader-text"><?php echo esc_html( $name ); ?></span>
 		</span>

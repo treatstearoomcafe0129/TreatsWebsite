@@ -51,20 +51,8 @@ $treats_over_hero      = is_front_page() && ! is_paged();
 		</nav>
 
 		<div class="header-actions">
-			<?php if ( get_theme_mod( 'treats_enable_dark_toggle', true ) ) : ?>
-				<button class="header-action theme-toggle" type="button" aria-label="<?php esc_attr_e( 'Switch colour scheme', 'treats' ); ?>">
-					<span class="theme-toggle__icon theme-toggle__icon--sun"><?php treats_icon( 'sun', array( 'size' => 20 ) ); ?></span>
-					<span class="theme-toggle__icon theme-toggle__icon--moon"><?php treats_icon( 'moon', array( 'size' => 20 ) ); ?></span>
-				</button>
-			<?php endif; ?>
-
-			<?php if ( treats_get_phone() ) : ?>
-				<a class="header-action hide-sm" href="tel:<?php echo esc_attr( treats_get_phone_link() ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: phone number. */ __( 'Call us on %s', 'treats' ), treats_get_phone() ) ); ?>">
-					<?php treats_icon( 'phone', array( 'size' => 20 ) ); ?>
-				</a>
-			<?php endif; ?>
-
 			<a class="btn btn--primary btn--sm header-action--cta" href="<?php echo esc_url( treats_booking_url() ); ?>">
+				<?php treats_icon( 'calendar', array( 'size' => 17 ) ); ?>
 				<?php esc_html_e( 'Book a table', 'treats' ); ?>
 			</a>
 

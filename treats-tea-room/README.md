@@ -28,7 +28,13 @@ theme, and no dependency on the previous Enfold installation.
 
    None of this runs twice, and everything it creates is ordinary content you
    can edit or delete.
-4. Open **Appearance → Customize → Treats Tea Room** and fill in the real phone
+4. **Upload the logo.** Go to *Appearance → Customize → Site Identity → Logo*
+   and upload the Treats logotype (SVG preferred, or a PNG at least 600px
+   wide with a transparent background). This replaces the built-in wordmark
+   entirely. The wordmark that ships with the theme — script word, "Est 1984"
+   and a swash — is a stand-in arranged to the same composition, not the real
+   artwork.
+5. Open **Appearance → Customize → Treats Tea Room** and fill in the real phone
    number, opening hours, social links and photography.
 
 To zip it for a host that only accepts uploads:

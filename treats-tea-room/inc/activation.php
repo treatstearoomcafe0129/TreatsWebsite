@@ -105,7 +105,7 @@ function treats_page_blueprint() {
 			'title'    => __( 'About Us', 'treats' ),
 			'template' => 'page-templates/template-about.php',
 			'eyebrow'  => __( 'Our story', 'treats' ),
-			'intro'    => __( 'A family tea room on Silver Street, serving Durham since 1991.', 'treats' ),
+			'intro'    => __( 'A family tea room on Silver Street, serving Durham since 1984.', 'treats' ),
 		),
 		'contact'   => array(
 			'title'    => __( 'Contact', 'treats' ),
@@ -247,11 +247,26 @@ function treats_create_menus( $pages ) {
 		$menu_id = wp_create_nav_menu( __( 'Primary', 'treats' ) );
 
 		if ( ! is_wp_error( $menu_id ) ) {
+			if ( ! empty( $pages['home'] ) ) {
+				wp_update_nav_menu_item(
+					$menu_id,
+					0,
+					array(
+						'menu-item-object-id' => $pages['home'],
+						'menu-item-object'    => 'page',
+						'menu-item-type'      => 'post_type',
+						'menu-item-title'     => __( 'Home', 'treats' ),
+						'menu-item-status'    => 'publish',
+					)
+				);
+			}
+
+			// "Menu" holds the five menu pages beneath it.
 			$parent = wp_update_nav_menu_item(
 				$menu_id,
 				0,
 				array(
-					'menu-item-title'  => __( 'Menus', 'treats' ),
+					'menu-item-title'  => __( 'Menu', 'treats' ),
 					'menu-item-url'    => empty( $pages['breakfast'] ) ? home_url( '/' ) : get_permalink( $pages['breakfast'] ),
 					'menu-item-status' => 'publish',
 					'menu-item-type'   => 'custom',
@@ -276,7 +291,14 @@ function treats_create_menus( $pages ) {
 				);
 			}
 
-			foreach ( array( 'about', 'vouchers', 'faq', 'contact', 'booking' ) as $key ) {
+			$top = array(
+				'afternoon' => __( 'Afternoon Tea', 'treats' ),
+				'about'     => __( 'About', 'treats' ),
+				'booking'   => __( 'Bookings', 'treats' ),
+				'contact'   => __( 'Contact', 'treats' ),
+			);
+
+			foreach ( $top as $key => $label ) {
 				if ( empty( $pages[ $key ] ) ) {
 					continue;
 				}
@@ -288,6 +310,7 @@ function treats_create_menus( $pages ) {
 						'menu-item-object-id' => $pages[ $key ],
 						'menu-item-object'    => 'page',
 						'menu-item-type'      => 'post_type',
+						'menu-item-title'     => $label,
 						'menu-item-status'    => 'publish',
 					)
 				);

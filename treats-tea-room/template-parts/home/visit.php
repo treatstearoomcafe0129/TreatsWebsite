@@ -64,11 +64,7 @@ $note    = (string) get_theme_mod( 'treats_hours_note', '' );
 							<tr class="<?php echo (int) $index === $today ? 'is-today' : ''; ?>">
 								<th scope="row"><?php echo esc_html( $day['label'] ); ?></th>
 								<td>
-									<?php if ( $day['closed'] ) : ?>
-										<?php esc_html_e( 'Closed', 'treats' ); ?>
-									<?php else : ?>
-										<?php echo esc_html( $day['open'] . ' – ' . $day['close'] ); ?>
-									<?php endif; ?>
+									<?php echo esc_html( treats_format_hours( $day ) ); ?>
 								</td>
 							</tr>
 						<?php endforeach; ?>

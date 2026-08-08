@@ -186,33 +186,3 @@ function treats_nav_menu( $location, $args = array() ) {
 		)
 	);
 }
-
-/**
- * Allow an `is-cta` class on menu items via the menu UI without extra setup.
- *
- * Any menu item whose URL matches the booking page is automatically promoted
- * to a button in the header.
- *
- * @param array<int,string> $classes Menu item classes.
- * @param WP_Post           $item    Menu item.
- * @param stdClass          $args    Menu args.
- * @return array<int,string>
- */
-function treats_auto_cta_class( $classes, $item, $args ) {
-	if ( ! isset( $args->theme_location ) || 'primary' !== $args->theme_location ) {
-		return $classes;
-	}
-
-	if ( in_array( 'is-cta', (array) $classes, true ) ) {
-		return $classes;
-	}
-
-	$booking = untrailingslashit( treats_booking_url() );
-
-	if ( $booking && untrailingslashit( (string) $item->url ) === $booking ) {
-		$classes[] = 'is-cta';
-	}
-
-	return $classes;
-}
-add_filter( 'nav_menu_css_class', 'treats_auto_cta_class', 10, 3 );

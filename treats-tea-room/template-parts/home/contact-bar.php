@@ -48,15 +48,15 @@ $uniform = 7 === count( $open_days ) && 1 === count( $spans );
 							printf(
 								/* translators: 1: opening time, 2: closing time. */
 								esc_html__( 'Mon – Sun  %1$s – %2$s', 'treats' ),
-								esc_html( reset( $open_days )['open'] ),
-								esc_html( reset( $open_days )['close'] )
+								esc_html( treats_format_time( reset( $open_days )['open'] ) ),
+								esc_html( treats_format_time( reset( $open_days )['close'] ) )
 							);
 							?>
 							<br><?php esc_html_e( 'Open 7 days a week', 'treats' ); ?>
 						<?php else : ?>
 							<?php foreach ( $hours as $day ) : ?>
 								<?php echo esc_html( $day['label'] ); ?>
-								<?php echo $day['closed'] ? esc_html__( 'Closed', 'treats' ) : esc_html( $day['open'] . ' – ' . $day['close'] ); ?><br>
+								<?php echo esc_html( treats_format_hours( $day ) ); ?><br>
 							<?php endforeach; ?>
 						<?php endif; ?>
 					</p>
