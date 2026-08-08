@@ -208,6 +208,7 @@ icon), `.glass-title` (small-caps serif), `.gold-rule` (the short gold line),
 | `treats_force_reduced_motion` | Disable animations site-wide |
 | `treats_form_submitted` | Action fired after a submission is stored and emailed |
 | `treats_bundled_logo_files` | Which file names in `images/` count as the theme's logo |
+| `treats_strip_builder_markup` | Stop hiding leftover Enfold/Avia shortcodes in old content |
 
 ## How it was tested
 
@@ -247,11 +248,33 @@ treats-tea-room/
 ├── images/  favicon, app icons, social card
 ├── inc/     setup, enqueue, template-tags, post-types, meta-boxes,
 │            customizer, nav-walker, seo, schema, performance,
-│            security, forms, activation
+│            security, forms, activation, compat-enfold
 ├── page-templates/  menu, booking, vouchers, about, contact, faq,
 │                    gallery, full-width
 ├── template-parts/  components/ content/ home/ menu/
 └── languages/       treats.pot
+```
+
+## Migrating off Enfold
+
+Enfold stores page content as Avia shortcodes, and those only render while
+Enfold is active. Switch themes and WordPress prints them verbatim —
+screenfuls of `[av_slide_full slide_type='image' …]` where the page used to
+be, plus Enfold's `###lt###` / `###gt###` escapes.
+
+`inc/compat-enfold.php` strips both on output. The database is untouched, so
+re-activating Enfold restores every page exactly as it was — which matters,
+because that is the rollback path during a switch. It only matches the `av_`
+and `avia_` prefixes: stripping every unregistered shortcode would eat
+shortcodes belonging to plugins that register late.
+
+A page that was *only* builder markup comes back empty, so the section that
+would have held it does not render at all.
+
+Once the old content has been rewritten, retire the filter:
+
+```php
+add_filter( 'treats_strip_builder_markup', '__return_false' );
 ```
 
 ## Before launch

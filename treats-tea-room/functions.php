@@ -42,6 +42,7 @@ $treats_modules = array(
 	'security',       // Hardening and security headers.
 	'forms',          // AJAX handlers: booking, contact, newsletter, orders.
 	'activation',     // First-run page/menu scaffolding.
+	'compat-enfold',  // Strips leftover Avia shortcodes from old content.
 );
 
 foreach ( $treats_modules as $treats_module ) {
