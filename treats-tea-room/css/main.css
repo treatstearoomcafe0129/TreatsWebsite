@@ -4514,3 +4514,77 @@ body::before {
 .header-action--cta .icon {
 	margin-right: 0.1rem;
 }
+
+/* --- Call-to-action banner ------------------------------------------- */
+
+/* This was a dark gradient block in the previous design and clashed badly
+   with the glass language. It is a glass panel like everything else. */
+.cta-banner {
+	background: var(--glass-bg);
+	background-image: var(--glass-sheen);
+	border: 1px solid var(--glass-border);
+	border-radius: var(--r-lg);
+	box-shadow: var(--glass-shadow);
+	backdrop-filter: var(--glass-filter);
+	-webkit-backdrop-filter: var(--glass-filter);
+	color: var(--c-ink);
+}
+
+.cta-banner::before,
+.cta-banner::after {
+	display: none;
+}
+
+.cta-banner h2 {
+	color: var(--c-ink);
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.cta-banner p {
+	color: var(--c-ink-soft);
+}
+
+.cta-banner .eyebrow {
+	color: var(--c-accent);
+	justify-content: center;
+}
+
+/* On glass the light-on-dark button variants have nothing to sit against. */
+.cta-banner .btn--light {
+	--btn-bg: var(--glass-bg-strong);
+	--btn-ink: var(--c-accent);
+	--btn-border: var(--c-line-strong);
+}
+
+.cta-banner .btn--light:hover,
+.cta-banner .btn--outline-light:hover {
+	--btn-bg: rgba(255, 255, 255, 0.7);
+	--btn-ink: var(--c-accent-strong);
+	--btn-border: var(--gold-mid);
+}
+
+:root[data-theme="dark"] .cta-banner .btn--light:hover,
+:root[data-theme="dark"] .cta-banner .btn--outline-light:hover {
+	--btn-bg: rgba(255, 255, 255, 0.18);
+}
+
+.cta-banner .btn--outline-light {
+	--btn-bg: transparent;
+	--btn-ink: var(--c-accent);
+	--btn-border: var(--c-line-strong);
+}
+
+/* The afternoon-tea feature and the stats band were dark too. */
+.section--deep .btn--light {
+	--btn-bg: var(--glass-bg-strong);
+	--btn-ink: var(--c-accent);
+	--btn-border: var(--c-line-strong);
+}
+
+.section--deep .btn--outline-light {
+	--btn-bg: transparent;
+	--btn-ink: var(--c-accent);
+	--btn-border: var(--c-line-strong);
+}
