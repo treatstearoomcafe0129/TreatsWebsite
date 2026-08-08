@@ -4593,3 +4593,60 @@ body::before {
 	--btn-ink: var(--c-accent);
 	--btn-border: var(--c-line-strong);
 }
+
+/* --- Edge refraction -------------------------------------------------- */
+
+/* The one thing that most makes real glass look like glass is what happens
+   at its edge: light bends through the thicker rim, so a bright, distorted
+   band appears just inside the border. CSS cannot refract, but it can blur
+   and brighten a band around the perimeter, which reads convincingly.
+
+   A pseudo-element takes its own, much stronger backdrop-filter and is
+   masked to a ring, so only the rim is affected. It sits behind content and
+   ignores pointer events. Browsers without mask-composite simply skip it. */
+@supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
+	.glass::after,
+	.card::after,
+	.action-card::after,
+	.value-bar::after,
+	.info-bar::after,
+	.info-card::after,
+	.form-card::after,
+	.site-header__inner::after,
+	.site-footer__grid::after,
+	.page-hero__inner::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		border-radius: inherit;
+		pointer-events: none;
+		backdrop-filter: blur(7px) brightness(1.16) saturate(140%);
+		-webkit-backdrop-filter: blur(7px) brightness(1.16) saturate(140%);
+		/* Keep only a band just inside the edge. */
+		mask:
+			linear-gradient(#000 0 0) content-box,
+			linear-gradient(#000 0 0);
+		mask-composite: exclude;
+		-webkit-mask:
+			linear-gradient(#000 0 0) content-box,
+			linear-gradient(#000 0 0);
+		-webkit-mask-composite: xor;
+		padding: 9px;
+	}
+
+	/* Content has to clear the ring. */
+	.glass > *,
+	.card > *,
+	.action-card > *,
+	.value-bar > *,
+	.info-bar > *,
+	.info-card > *,
+	.form-card > *,
+	.site-header__inner > *,
+	.site-footer__grid > *,
+	.page-hero__inner > * {
+		position: relative;
+		z-index: 1;
+	}
+}
