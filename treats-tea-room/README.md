@@ -7,7 +7,8 @@ theme, and no dependency on the previous Enfold installation.
 - Clear glass panels floating over a textured sage ground: no fill, no
   outline, a feathered frosted edge, gold line detailing, script wordmark and
   small-caps serif headings
-- Mobile-first, dark-mode aware, WCAG 2.2 AA oriented
+- Mobile-first, WCAG 2.2 AA oriented. Light by default and light for
+  everyone — dark mode exists but ships switched off
 - Self-hosted variable fonts, conditional CSS/JS, no jQuery on the front end
 - Online booking, Click & Collect, gift voucher orders, contact and newsletter
   forms — all built in, all working without JavaScript
@@ -110,8 +111,8 @@ the dashboard — only the front-end forms write to them.
 Everything business-specific is under **Customize → Treats Tea Room**:
 
 - **Brand & Appearance** — business name, wordmark script word and caps line,
-  accent colour,
-  default colour scheme, dark-mode toggle, scroll animations
+  accent colour, colour scheme (light by default), dark-mode toggle, scroll
+  animations
 - **Contact & Location** — address, phone, public email, notification email,
   Google Maps embed, travel note
 - **Opening Hours** — per-day open/close/closed, plus a note
@@ -184,8 +185,12 @@ icon), `.glass-title` (small-caps serif), `.gold-rule` (the short gold line),
   keyboard, not just hover.
 - `prefers-reduced-motion` disables every animation, the hero pan and smooth
   scrolling.
-- `prefers-color-scheme` is respected, and the visitor's explicit choice always
-  wins. The scheme is applied before first paint, so there is no flash.
+- The colour scheme ships locked to light: `prefers-color-scheme` is ignored,
+  a stored choice from an earlier visit is ignored, and it holds with
+  JavaScript off, because the attribute is stamped on `<html>` on the server.
+  Set **Customize → Brand & Appearance → Default colour scheme** to *Follow
+  the visitor's device* to offer dark mode; the toggle appears with it, and
+  the scheme is then applied before first paint so there is no flash.
 - Form errors are announced, tied to their field, and never colour-only.
 
 ## Security

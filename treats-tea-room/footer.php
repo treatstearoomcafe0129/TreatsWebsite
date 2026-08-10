@@ -110,7 +110,7 @@ $treats_social  = treats_get_social_links();
 				?>
 			</p>
 
-			<?php if ( get_theme_mod( 'treats_enable_dark_toggle', true ) ) : ?>
+			<?php if ( get_theme_mod( 'treats_enable_dark_toggle', true ) && 'system' === treats_color_scheme() ) : ?>
 				<button class="header-action theme-toggle" type="button" aria-label="<?php esc_attr_e( 'Switch colour scheme', 'treats' ); ?>">
 					<span class="theme-toggle__icon theme-toggle__icon--sun"><?php treats_icon( 'sun', array( 'size' => 18 ) ); ?></span>
 					<span class="theme-toggle__icon theme-toggle__icon--moon"><?php treats_icon( 'moon', array( 'size' => 18 ) ); ?></span>

@@ -98,6 +98,22 @@ function treats_currency_symbol() {
 }
 
 /**
+ * The colour scheme the site is set to.
+ *
+ * Defaults to light. This is a tea room in Durham, not a code editor — the
+ * sage and gold is the brand, and a visitor whose phone happens to be in dark
+ * mode should still see it. Set it back to "Follow the visitor's device" in
+ * the Customizer if you would rather offer the choice.
+ *
+ * @return string 'light', 'dark' or 'system'.
+ */
+function treats_color_scheme() {
+	$scheme = get_theme_mod( 'treats_color_scheme_default', 'light' );
+
+	return in_array( $scheme, array( 'light', 'dark', 'system' ), true ) ? $scheme : 'light';
+}
+
+/**
  * Format a price for display.
  *
  * @param string|float $price Raw price value.

@@ -192,9 +192,9 @@ function treats_customize_register( $wp_customize ) {
 		'treats_color_scheme_default',
 		array(
 			'label'       => __( 'Default colour scheme', 'treats' ),
-			'description' => __( 'Visitors can always override this with the toggle in the header.', 'treats' ),
+			'description' => __( 'Choose “Always light” to switch dark mode off completely — the site then ignores the visitor’s device setting and the toggle is hidden. Only “Follow the visitor’s device” offers a choice.', 'treats' ),
 			'type'        => 'select',
-			'default'     => 'system',
+			'default'     => 'light',
 			'choices'     => array(
 				'system' => __( 'Follow the visitor’s device', 'treats' ),
 				'light'  => __( 'Always light', 'treats' ),
@@ -208,7 +208,8 @@ function treats_customize_register( $wp_customize ) {
 		$wp_customize,
 		'treats_enable_dark_toggle',
 		array(
-			'label'    => __( 'Show the dark mode toggle', 'treats' ),
+			'label'       => __( 'Show the dark mode toggle', 'treats' ),
+			'description' => __( 'Only applies when the scheme follows the visitor’s device.', 'treats' ),
 			'type'     => 'checkbox',
 			'default'  => true,
 			'sanitize' => 'treats_sanitize_checkbox',

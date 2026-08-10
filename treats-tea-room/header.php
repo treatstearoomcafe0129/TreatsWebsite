@@ -7,33 +7,46 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$treats_default_scheme = get_theme_mod( 'treats_color_scheme_default', 'system' );
+$treats_default_scheme = treats_color_scheme();
 $treats_over_hero      = is_front_page() && ! is_paged();
+
+/*
+ * "Always light" and "Always dark" mean exactly that. The scheme is stamped
+ * on the html element here, on the server, which settles it before a single
+ * byte of CSS is parsed: the device preference cannot win, a visitor's stored
+ * choice from an earlier visit cannot win, and it holds with JavaScript
+ * turned off. Only "follow the visitor's device" leaves the decision to the
+ * little script below.
+ */
+$treats_locked_scheme = in_array( $treats_default_scheme, array( 'light', 'dark' ), true )
+	? $treats_default_scheme
+	: '';
 ?>
 <!DOCTYPE html>
-<html <?php language_attributes(); ?> class="no-js">
+<html <?php language_attributes(); ?> class="no-js"<?php echo $treats_locked_scheme ? ' data-theme="' . esc_attr( $treats_locked_scheme ) . '"' : ''; ?>>
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
+	<?php if ( ! $treats_locked_scheme ) : ?>
 	<script>
-		/* Applies the stored colour scheme before first paint, so there is no
-		   flash of the wrong theme. Deliberately inline and tiny. */
+		/* Applies the visitor's stored choice before first paint, so there is
+		   no flash of the wrong theme. Only runs when the site is set to
+		   follow the device — otherwise the attribute is already on <html>.
+		   Deliberately inline and tiny. */
 		(function () {
-			var fallback = <?php echo wp_json_encode( $treats_default_scheme ); ?>;
 			var stored = null;
 
 			try {
 				stored = window.localStorage.getItem('treats-theme');
 			} catch (e) {}
 
-			var scheme = stored || (fallback === 'system' ? null : fallback);
-
-			if (scheme === 'dark' || scheme === 'light') {
-				document.documentElement.setAttribute('data-theme', scheme);
+			if (stored === 'dark' || stored === 'light') {
+				document.documentElement.setAttribute('data-theme', stored);
 			}
 		})();
 	</script>
+	<?php endif; ?>
 	<?php wp_head(); ?>
 </head>
 
