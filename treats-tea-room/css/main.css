@@ -4643,6 +4643,119 @@ body::before {
 	--btn-border: var(--c-line-strong);
 }
 
+/* --- Menus overview, and the cross-links between menus ----------------- */
+
+.menu-index {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: var(--sp-5);
+	grid-template-columns: 1fr;
+}
+
+@media (min-width: 620px) {
+	.menu-index {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 980px) {
+	.menu-index {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+.menu-index__item {
+	padding: 0;
+}
+
+/* The whole card is the target, not just the words at the bottom. */
+.menu-index__link {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: var(--sp-2);
+	height: 100%;
+	padding: clamp(1.75rem, 3vw, 2.5rem);
+	text-decoration: none;
+	color: inherit;
+	border-radius: inherit;
+}
+
+.menu-index__title {
+	margin-top: var(--sp-3);
+}
+
+.menu-index__note {
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+	max-width: 24ch;
+}
+
+.menu-index__count {
+	font-size: var(--fs-2xs);
+	letter-spacing: var(--tracking-caps);
+	text-transform: uppercase;
+	color: var(--c-ink-mute);
+}
+
+.menu-index__cta {
+	margin-top: auto;
+	pointer-events: none;
+}
+
+.menu-index__link:hover .menu-index__cta {
+	background-color: var(--glass-bg-strong);
+	border-color: var(--gold-mid);
+}
+
+.menu-more__heading {
+	font-family: var(--font-display);
+	font-size: var(--fs-lg);
+	letter-spacing: var(--tracking-caps);
+	text-transform: uppercase;
+	font-weight: 400;
+	text-align: center;
+	margin-bottom: var(--sp-5);
+}
+
+.menu-more {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--sp-3);
+}
+
+.menu-more__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.55rem;
+	padding: 0.6rem 1.15rem;
+	border: 1px solid var(--glass-border);
+	border-radius: var(--r-pill);
+	background: var(--glass-recess);
+	box-shadow: var(--glass-recess-shadow);
+	color: var(--c-ink-soft);
+	font-size: var(--fs-sm);
+	text-decoration: none;
+	transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.menu-more__link:hover {
+	color: var(--c-accent-strong);
+	border-color: var(--gold-mid);
+}
+
+.menu-more__link svg {
+	color: var(--gold-mid);
+	flex-shrink: 0;
+}
+
 /* --- Evening venue hire ----------------------------------------------- */
 
 .event-image {

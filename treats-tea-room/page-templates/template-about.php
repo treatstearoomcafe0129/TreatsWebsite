@@ -184,7 +184,7 @@ get_template_part(
 			),
 			array(
 				'label' => __( 'See our menus', 'treats' ),
-				'url'   => treats_get_template_page_url( 'page-templates/template-menu.php' ),
+				'url'   => treats_menus_url(),
 				'style' => 'btn--outline-light',
 			),
 		),

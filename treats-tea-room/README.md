@@ -54,6 +54,7 @@ zip -r treats-tea-room.zip treats-tea-room -x "*.DS_Store"
 | Page | Template |
 | --- | --- |
 | Home | `front-page.php` |
+| Menus | Menus Overview |
 | Evening Venue Hire | Evening Venue Hire |
 | Breakfast & Brunch | Menu |
 | Lunch | Menu |
@@ -301,6 +302,23 @@ dashboard will offer the import again.
 
 Everything it creates is ordinary content — edit any dish in **Menu** as
 normal afterwards.
+
+## How the pages link together
+
+Worth knowing, because it is deliberate:
+
+- **Menus** is the landing page the navigation's "Menu" item points at. The
+  five menu pages hang off it, and each one lists the other four at the foot
+  so nobody has to go back to the navigation to move between them.
+- **Every menu page** ends with *Book a table* and *Find us*. Gift vouchers
+  are promoted from the home page and the footer, not from the food.
+- **The home page** offers exactly four things a customer comes for —
+  afternoon tea, a table, a voucher, the venue — plus menus and directions.
+- `treats_menu_pages()` returns the menu pages in `menu_order`, and
+  `treats_menus_url()` resolves the overview. Use those rather than
+  `treats_get_template_page_url()` for anything menu-related: that helper
+  returns whichever page carrying a template is *newest*, which is right when
+  one page uses a template and wrong when five do.
 
 ## Before launch
 

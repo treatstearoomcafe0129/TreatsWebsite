@@ -12,51 +12,59 @@ defined( 'ABSPATH' ) || exit;
 
 $afternoon = treats_menu_page_url( 'afternoon-tea' );
 
+/*
+ * These are the four things a customer actually comes here to do. What was
+ * here before included a "Staff Portal" tile pointing at the WordPress login
+ * — a staff door on the shop front — and a "Products … available to buy
+ * online" tile that led to the cakes menu, which is not a shop. Both are
+ * gone. Evening venue hire took a place instead: it is a real service that
+ * nothing on the site linked to.
+ */
 $cards = array(
 	array(
 		'icon'  => 'cup',
 		'title' => __( 'Afternoon Tea', 'treats' ),
 		'text'  => __( 'Our signature experience. Beautifully presented and made to be savoured.', 'treats' ),
-		'label' => __( 'Afternoon tea', 'treats' ),
+		'label' => __( 'See the menu', 'treats' ),
 		'url'   => $afternoon,
 	),
 	array(
 		'icon'  => 'calendar',
 		'title' => __( 'Book a Table', 'treats' ),
-		'text'  => __( 'Planning something special? Reserve your table today and let us take care of the rest.', 'treats' ),
-		'label' => __( 'Book now', 'treats' ),
+		'text'  => __( 'Planning something special? Reserve your table and let us take care of the rest.', 'treats' ),
+		'label' => __( 'Book a table', 'treats' ),
 		'url'   => treats_booking_url(),
 	),
 	array(
 		'icon'  => 'gift',
 		'title' => __( 'Gift Vouchers', 'treats' ),
 		'text'  => __( 'The perfect gift for any occasion. Treat someone to something special.', 'treats' ),
-		'label' => __( 'Buy a voucher', 'treats' ),
+		'label' => __( 'Gift vouchers', 'treats' ),
 		'url'   => treats_vouchers_url(),
 	),
 	array(
-		'icon'  => 'user',
-		'title' => __( 'Staff Portal', 'treats' ),
-		'text'  => __( 'Access important updates, schedules, documents and resources.', 'treats' ),
-		'label' => __( 'Staff login', 'treats' ),
-		'url'   => wp_login_url(),
+		'icon'  => 'users',
+		'title' => __( 'Evening Venue Hire', 'treats' ),
+		'text'  => __( 'The whole tea room to yourselves, any evening of the week.', 'treats' ),
+		'label' => __( 'Venue hire', 'treats' ),
+		'url'   => treats_get_template_page_url( 'page-templates/template-events.php' ),
 	),
 );
 
 $wide = array(
 	array(
-		'icon'  => 'bag',
-		'title' => __( 'Products', 'treats' ),
-		'text'  => __( 'Discover our handpicked products and treats, available to buy online.', 'treats' ),
-		'label' => __( 'View products', 'treats' ),
-		'url'   => treats_menu_page_url( 'cakes-desserts' ),
+		'icon'  => 'teapot',
+		'title' => __( 'Our Menus', 'treats' ),
+		'text'  => __( 'Breakfast and brunch all day, lunch, afternoon tea, cakes and drinks.', 'treats' ),
+		'label' => __( 'See all menus', 'treats' ),
+		'url'   => treats_menus_url(),
 	),
 	array(
-		'icon'  => 'tag',
-		'title' => __( 'News & Offers', 'treats' ),
-		'text'  => __( 'Stay up to date with our latest news, offers and seasonal highlights.', 'treats' ),
-		'label' => __( 'View offers', 'treats' ),
-		'url'   => get_permalink( (int) get_option( 'page_for_posts' ) ) ?: home_url( '/' ),
+		'icon'  => 'pin',
+		'title' => __( 'Find Us', 'treats' ),
+		'text'  => __( 'On Silver Street, a minute from Durham Market Place. Opening hours and directions.', 'treats' ),
+		'label' => __( 'Find us', 'treats' ),
+		'url'   => treats_get_template_page_url( 'page-templates/template-contact.php' ),
 	),
 );
 ?>

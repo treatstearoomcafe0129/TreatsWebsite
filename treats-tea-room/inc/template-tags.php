@@ -114,6 +114,81 @@ function treats_color_scheme() {
 }
 
 /**
+ * The five menu pages, in the order they are meant to be read.
+ *
+ * Ordered by `menu_order` — the order the activation scaffold created them in
+ * — rather than by date. `treats_get_template_page_url()` returns whichever
+ * page carrying a template is newest, which is fine when only one page uses a
+ * template and wrong when five do: "See our menus" was landing on Drinks
+ * purely because Drinks was created last.
+ *
+ * @return array<int,array{title:string,url:string,note:string,icon:string,count:int}>
+ */
+function treats_menu_pages() {
+	$cached = wp_cache_get( 'treats_menu_pages', 'treats' );
+
+	if ( false !== $cached ) {
+		return (array) $cached;
+	}
+
+	$notes = array(
+		'breakfast-brunch' => array( __( 'Served all day, plus the morning menu until 10.30am.', 'treats' ), 'leaf' ),
+		'lunch'            => array( __( 'Sandwiches, burgers, jackets, salads and house specialities.', 'treats' ), 'bag' ),
+		'afternoon-tea'    => array( __( 'Our signature three tiers, for two.', 'treats' ), 'cup' ),
+		'cakes-desserts'   => array( __( 'Pancakes, and the cake counter.', 'treats' ), 'cake' ),
+		'drinks'           => array( __( 'Tea, coffee, smoothies, milkshakes and something stronger.', 'treats' ), 'teapot' ),
+	);
+
+	$pages = get_posts(
+		array(
+			'post_type'      => 'page',
+			'post_status'    => 'publish',
+			'posts_per_page' => 20,
+			'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'ASC' ),
+			'no_found_rows'  => true,
+			'meta_key'       => '_wp_page_template', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'meta_value'     => 'page-templates/template-menu.php', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+		)
+	);
+
+	$menus = array();
+
+	foreach ( $pages as $page ) {
+		$slug = (string) get_post_meta( $page->ID, '_treats_menu_category', true );
+		$term = $slug ? get_term_by( 'slug', $slug, 'treats_menu_category' ) : null;
+
+		$menus[] = array(
+			'title' => get_the_title( $page ),
+			'url'   => (string) get_permalink( $page ),
+			'note'  => isset( $notes[ $slug ] ) ? $notes[ $slug ][0] : '',
+			'icon'  => isset( $notes[ $slug ] ) ? $notes[ $slug ][1] : 'cup',
+			'count' => ( $term instanceof WP_Term ) ? (int) $term->count : 0,
+		);
+	}
+
+	wp_cache_set( 'treats_menu_pages', $menus, 'treats', HOUR_IN_SECONDS );
+
+	return $menus;
+}
+
+/**
+ * URL of the menus overview page, falling back to the first menu.
+ *
+ * @return string
+ */
+function treats_menus_url() {
+	$url = treats_get_template_page_url( 'page-templates/template-menu-index.php' );
+
+	if ( $url && home_url( '/' ) !== $url ) {
+		return $url;
+	}
+
+	$menus = treats_menu_pages();
+
+	return $menus ? $menus[0]['url'] : home_url( '/' );
+}
+
+/**
  * Format a price for display.
  *
  * @param string|float $price Raw price value.

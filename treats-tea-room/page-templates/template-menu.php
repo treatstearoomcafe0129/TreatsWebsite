@@ -71,13 +71,51 @@ while ( have_posts() ) :
 	<?php
 endwhile;
 
+/*
+ * The other menus, on every menu page. Without this the only way from Lunch
+ * to Drinks was back up to the navigation — the five menus were five dead
+ * ends sitting next to each other.
+ */
+$treats_here  = get_permalink();
+$treats_other = array_values(
+	array_filter(
+		treats_menu_pages(),
+		static function ( $menu ) use ( $treats_here ) {
+			return untrailingslashit( $menu['url'] ) !== untrailingslashit( $treats_here );
+		}
+	)
+);
+
+if ( $treats_other ) :
+	?>
+	<section class="section section--sm">
+		<div class="container container--wide">
+			<h2 class="menu-more__heading"><?php esc_html_e( 'The other menus', 'treats' ); ?></h2>
+
+			<ul class="menu-more">
+				<?php foreach ( $treats_other as $treats_menu ) : ?>
+					<li>
+						<a class="menu-more__link" href="<?php echo esc_url( $treats_menu['url'] ); ?>">
+							<?php treats_icon( $treats_menu['icon'], array( 'size' => 20 ) ); ?>
+							<span><?php echo esc_html( $treats_menu['title'] ); ?></span>
+						</a>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+	</section>
+	<?php
+endif;
+
 get_template_part(
 	'template-parts/components/cta-banner',
 	null,
 	array(
 		'eyebrow' => __( 'Hungry now?', 'treats' ),
-		'title'   => __( 'Book a table, or order for collection', 'treats' ),
-		'text'    => __( 'Walk-ins are always welcome. Booking is worth it for afternoon tea and at weekends.', 'treats' ),
+		// The old title promised "or order for collection" while offering a
+		// gift voucher button. Collection is the basket on this page.
+		'title'   => __( 'Come and eat with us', 'treats' ),
+		'text'    => __( 'Walk-ins are always welcome. Booking is worth it for afternoon tea and at weekends. Anything on this page marked “add to order” can be collected.', 'treats' ),
 		'actions' => array(
 			array(
 				'label' => __( 'Book a table', 'treats' ),
@@ -85,8 +123,8 @@ get_template_part(
 				'style' => 'btn--light',
 			),
 			array(
-				'label' => __( 'Gift vouchers', 'treats' ),
-				'url'   => treats_vouchers_url(),
+				'label' => __( 'Find us', 'treats' ),
+				'url'   => treats_get_template_page_url( 'page-templates/template-contact.php' ),
 				'style' => 'btn--outline-light',
 			),
 		),

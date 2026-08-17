@@ -78,7 +78,7 @@ while ( have_posts() ) :
 						<p class="voucher-card__text"><?php echo esc_html( $experience['text'] ); ?></p>
 
 						<a class="btn btn--secondary btn--sm" href="#voucher-form" data-voucher-preset="<?php echo esc_attr( $experience['amount'] ); ?>">
-							<?php esc_html_e( 'Choose this', 'treats' ); ?>
+							<?php esc_html_e( 'Choose this voucher', 'treats' ); ?>
 						</a>
 					</article>
 				<?php endforeach; ?>

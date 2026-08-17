@@ -55,6 +55,12 @@ function treats_page_blueprint() {
 			'template' => 'front-page.php',
 			'content'  => '',
 		),
+		'menus'     => array(
+			'title'    => __( 'Menus', 'treats' ),
+			'template' => 'page-templates/template-menu-index.php',
+			'eyebrow'  => __( 'What we serve', 'treats' ),
+			'intro'    => __( 'Everything is cooked to order and baked here. Five menus, served through the day.', 'treats' ),
+		),
 		'breakfast' => array(
 			'title'    => __( 'Breakfast & Brunch', 'treats' ),
 			'template' => 'page-templates/template-menu.php',
@@ -182,8 +188,97 @@ function treats_sync_new_pages() {
 	$pages = treats_create_pages();
 
 	treats_add_page_to_primary_menu( $pages, 'events' );
+	treats_point_menu_parent_at_overview( $pages );
+	treats_remove_sample_content();
 
 	update_option( 'treats_pages_version', TREATS_VERSION, false );
+}
+
+/**
+ * Repoint the navigation's "Menu" parent at the overview page.
+ *
+ * The scaffold made it a custom link to Breakfast & Brunch, because there was
+ * nowhere better to send it. Clicking a parent called "Menu" and landing on
+ * one particular menu is the kind of thing nobody notices they are annoyed by.
+ *
+ * Only touches an item still pointing where the scaffold left it, so a link
+ * somebody has since edited is left alone.
+ *
+ * @param array<string,int> $pages Blueprint key to page ID.
+ * @return void
+ */
+function treats_point_menu_parent_at_overview( $pages ) {
+	if ( empty( $pages['menus'] ) || empty( $pages['breakfast'] ) ) {
+		return;
+	}
+
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['primary'] ) ) {
+		return;
+	}
+
+	$items = wp_get_nav_menu_items( (int) $locations['primary'] );
+
+	if ( ! is_array( $items ) ) {
+		return;
+	}
+
+	$breakfast_url = untrailingslashit( (string) get_permalink( $pages['breakfast'] ) );
+
+	foreach ( $items as $item ) {
+		if ( 'custom' !== $item->type || untrailingslashit( $item->url ) !== $breakfast_url ) {
+			continue;
+		}
+
+		wp_update_nav_menu_item(
+			(int) $locations['primary'],
+			(int) $item->ID,
+			array(
+				'menu-item-object-id' => (int) $pages['menus'],
+				'menu-item-object'    => 'page',
+				'menu-item-type'      => 'post_type',
+				'menu-item-title'     => $item->title,
+				'menu-item-parent-id' => (int) $item->menu_item_parent,
+				'menu-item-position'  => (int) $item->menu_order,
+				'menu-item-status'    => 'publish',
+			)
+		);
+
+		break;
+	}
+}
+
+/**
+ * Bin the sample post and page WordPress installs itself with.
+ *
+ * "Hello world!" is the only thing in the Journal on a new site, so every
+ * "latest news" link leads to a Lorem-ipsum post about blogging, and it drags
+ * an Uncategorized archive along with it. Only removed if untouched — an
+ * edited post is somebody's content, whatever its slug.
+ *
+ * @return void
+ */
+function treats_remove_sample_content() {
+	foreach ( array( 'hello-world' => 'post', 'sample-page' => 'page' ) as $slug => $type ) {
+		$existing = get_page_by_path( $slug, OBJECT, $type );
+
+		if ( ! $existing instanceof WP_Post ) {
+			continue;
+		}
+
+		// Untouched since install: modified time still equals creation time.
+		if ( $existing->post_modified_gmt !== $existing->post_date_gmt ) {
+			continue;
+		}
+
+		// Never bin something the site is actually using.
+		if ( in_array( (int) $existing->ID, array( (int) get_option( 'page_on_front' ), (int) get_option( 'page_for_posts' ) ), true ) ) {
+			continue;
+		}
+
+		wp_trash_post( $existing->ID );
+	}
 }
 
 /**
