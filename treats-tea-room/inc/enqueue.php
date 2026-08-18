@@ -32,7 +32,9 @@ function treats_asset_version( $relative_path ) {
  * @return bool
  */
 function treats_needs_menu_assets() {
-	return is_page_template( 'page-templates/template-menu.php' )
+	// Any template that prints a menu list needs the list's CSS and its
+	// search, filters and basket — not just the menu template itself.
+	return is_page_template( array( 'page-templates/template-menu.php', 'page-templates/template-afternoon-tea.php' ) )
 		|| is_post_type_archive( 'treats_menu_item' )
 		|| is_tax( 'treats_menu_category' )
 		|| is_singular( 'treats_menu_item' )

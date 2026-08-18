@@ -4643,62 +4643,109 @@ body::before {
 	--btn-border: var(--c-line-strong);
 }
 
-/* --- The menu booklet -------------------------------------------------- */
+/* --- Afternoon tea ----------------------------------------------------- */
 
-.booklet-hint {
+.tea-image {
+	width: 100%;
+	height: auto;
+	border-radius: var(--r-lg);
+	margin-bottom: var(--sp-6);
+	box-shadow: var(--glass-shadow);
+}
+
+.tea-heading {
+	margin-bottom: var(--sp-2);
+}
+
+.tea-stand {
+	list-style: none;
+	margin: var(--sp-5) 0 0;
+	padding: 0;
+	display: grid;
+	gap: var(--sp-3);
+}
+
+.tea-stand li {
+	position: relative;
+	padding-left: 1.6rem;
+	color: var(--c-ink-soft);
+}
+
+.tea-stand li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.62em;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--gold-mid);
+}
+
+.tea-price-card {
 	text-align: center;
+}
+
+.tea-price-card__label {
 	font-size: var(--fs-2xs);
 	letter-spacing: var(--tracking-caps);
 	text-transform: uppercase;
+	color: var(--gold);
+}
+
+.tea-price-card__price {
+	font-family: var(--font-display);
+	font-size: clamp(2.8rem, 6vw, 3.8rem);
+	line-height: 1;
+	margin: var(--sp-3) 0 var(--sp-1);
+}
+
+.tea-price-card__serves {
+	font-size: var(--fs-sm);
 	color: var(--c-ink-mute);
 	margin-bottom: var(--sp-5);
 }
 
-.booklet {
+.tea-price-card__upgrade {
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+	margin-bottom: var(--sp-5);
+	padding-top: var(--sp-4);
+	border-top: 1px solid var(--c-line);
+}
+
+.tea-price-card__phone {
+	font-size: var(--fs-sm);
+	color: var(--c-ink-mute);
+	margin-top: var(--sp-4);
+}
+
+.tea-fillings {
 	list-style: none;
-	margin: 0;
+	margin: var(--sp-6) 0 0;
 	padding: 0;
-	display: grid;
-	gap: var(--sp-5);
-	grid-template-columns: 1fr;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--sp-3);
 }
 
-@media (min-width: 640px) {
-	.booklet {
-		grid-template-columns: repeat(2, 1fr);
-	}
+.tea-filling {
+	padding: 0.7rem 1.35rem;
+	border: 1px solid var(--glass-border);
+	border-radius: var(--r-pill);
+	background: var(--glass-recess);
+	box-shadow: var(--glass-recess-shadow);
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
 }
 
-@media (min-width: 1100px) {
-	.booklet {
-		grid-template-columns: repeat(3, 1fr);
-	}
-}
-
-.booklet__link {
-	display: block;
-	border-radius: var(--r-md);
-	overflow: hidden;
-	box-shadow: var(--glass-shadow);
-	transition: transform var(--dur) var(--ease-out);
-}
-
-.booklet__link:hover {
-	transform: translateY(-3px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.booklet__link { transition: none; }
-	.booklet__link:hover { transform: none; }
-}
-
-/* The artwork is cream; it needs its own ground, not the sage showing
-   through the paper. */
-.booklet__link img {
-	display: block;
-	width: 100%;
-	height: auto;
-	background: #f7f4ec;
+.tea-note {
+	max-width: 44ch;
+	margin: var(--sp-6) auto 0;
+	text-align: center;
+	font-size: var(--fs-sm);
+	color: var(--c-ink-mute);
 }
 
 .booklet-download {

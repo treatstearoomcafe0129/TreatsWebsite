@@ -130,6 +130,7 @@ function treats_customize_register( $wp_customize ) {
 		'treats_hours'      => __( 'Opening Hours', 'treats' ),
 		'treats_social'     => __( 'Social Profiles', 'treats' ),
 		'treats_home'       => __( 'Home Page', 'treats' ),
+		'treats_tea'        => __( 'Afternoon Tea', 'treats' ),
 		'treats_events'     => __( 'Evening Venue Hire', 'treats' ),
 		'treats_booking'    => __( 'Table Booking', 'treats' ),
 		'treats_collect'    => __( 'Click & Collect', 'treats' ),
@@ -481,6 +482,56 @@ function treats_customize_register( $wp_customize ) {
 			'section'  => 'treats_home',
 			'type'     => 'image',
 			'sanitize' => 'esc_url_raw',
+		)
+	);
+
+	/* ------------------------------------------------------- Afternoon tea */
+
+	$tea_fields = array(
+		'treats_tea_price'      => array( __( 'Price', 'treats' ), '44', 'text' ),
+		'treats_tea_serves'     => array( __( 'What the price covers', 'treats' ), 'for two', 'text' ),
+		'treats_tea_includes'   => array( __( 'What arrives on the stand', 'treats' ), '2 afternoon tea dainty sandwiches on white or brown, 2 mini corned beef pies, 2 mini quiches, 2 scones with preserve and clotted cream, 2 cakes from the display, Any 2 hot drinks', 'textarea' ),
+		'treats_tea_sandwiches' => array( __( 'Sandwich choices', 'treats' ), 'Cheese savoury, Smoked salmon cream cheese, Hummus cucumber tomato, Ham, Tuna cucumber, Prawn Marie Rose, Cheese and pickle', 'textarea' ),
+		'treats_tea_upgrade'    => array( __( 'Upgrade line', 'treats' ), 'Upgrade to an alcoholic beverage for £8 extra.', 'text' ),
+		'treats_tea_note'       => array( __( 'Booking note', 'treats' ), 'Booking is recommended, especially at weekends. Vegan and gluten free afternoon teas are available with 24 hours’ notice.', 'textarea' ),
+	);
+
+	foreach ( $tea_fields as $id => $config ) {
+		treats_add_control(
+			$wp_customize,
+			$id,
+			array(
+				'label'       => $config[0],
+				'description' => 'textarea' === $config[2] ? __( 'Separate each item with a comma.', 'treats' ) : '',
+				'default'     => $config[1],
+				'section'     => 'treats_tea',
+				'type'        => $config[2],
+				'sanitize'    => 'textarea' === $config[2] ? 'sanitize_textarea_field' : 'sanitize_text_field',
+			)
+		);
+	}
+
+	treats_add_control(
+		$wp_customize,
+		'treats_tea_image',
+		array(
+			'label'       => __( 'Photograph', 'treats' ),
+			'description' => __( 'The stand, ideally. Landscape, at least 1600px wide.', 'treats' ),
+			'section'     => 'treats_tea',
+			'type'        => 'image',
+			'sanitize'    => 'esc_url_raw',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_menu_pdf',
+		array(
+			'label'       => __( 'Printed menu PDF', 'treats' ),
+			'description' => __( 'Offered as a download on the Menus page. Leave empty to use the copy that ships with the theme.', 'treats' ),
+			'section'     => 'treats_tea',
+			'type'        => 'url',
+			'sanitize'    => 'esc_url_raw',
 		)
 	);
 

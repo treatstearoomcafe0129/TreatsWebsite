@@ -76,6 +76,16 @@ while ( have_posts() ) :
 		</div>
 	</section>
 
+	<?php $treats_pdf = treats_menu_pdf_url(); ?>
+	<?php if ( '' !== $treats_pdf ) : ?>
+		<p class="booklet-download">
+			<a class="btn btn--secondary" href="<?php echo esc_url( $treats_pdf ); ?>" target="_blank" rel="noopener">
+				<?php esc_html_e( 'Download the printed menu as a PDF', 'treats' ); ?>
+				<?php treats_icon( 'arrow-right', array( 'size' => 15 ) ); ?>
+			</a>
+		</p>
+	<?php endif; ?>
+
 	<?php
 	get_template_part(
 		'template-parts/components/cta-banner',

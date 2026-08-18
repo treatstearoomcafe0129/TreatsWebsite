@@ -114,72 +114,14 @@ function treats_color_scheme() {
 }
 
 /**
- * The pages of the printed menu, in order.
+ * URL of the printed menu as a PDF, if there is one.
  *
- * Prefers images attached to the menu page in the media library, so a new
- * season's menu is an upload rather than a theme change. Falls back to the
- * artwork shipped with the theme.
- *
- * @return array<int,array{src:string,full:string,width:int,height:int}>
- */
-function treats_menu_booklet_pages() {
-	$page_id = (int) treats_get_template_page_id( 'page-templates/template-menu-booklet.php' );
-
-	if ( $page_id ) {
-		$attached = get_attached_media( 'image', $page_id );
-
-		if ( $attached ) {
-			$pages = array();
-
-			foreach ( $attached as $image ) {
-				$full = wp_get_attachment_image_src( $image->ID, 'full' );
-				$card = wp_get_attachment_image_src( $image->ID, 'treats-card-tall' );
-
-				if ( ! $full ) {
-					continue;
-				}
-
-				$pages[] = array(
-					'src'    => (string) ( $card[0] ?? $full[0] ),
-					'full'   => (string) $full[0],
-					'width'  => (int) ( $card[1] ?? $full[1] ),
-					'height' => (int) ( $card[2] ?? $full[2] ),
-				);
-			}
-
-			if ( $pages ) {
-				return $pages;
-			}
-		}
-	}
-
-	$pages = array();
-
-	for ( $i = 1; $i <= 8; $i++ ) {
-		$file = 'images/menu/july-' . $i . '.webp';
-
-		if ( ! file_exists( get_theme_file_path( $file ) ) ) {
-			continue;
-		}
-
-		$url     = get_theme_file_uri( $file );
-		$pages[] = array(
-			'src'    => $url,
-			'full'   => $url,
-			'width'  => 1400,
-			'height' => 1979,
-		);
-	}
-
-	return $pages;
-}
-
-/**
- * URL of the downloadable menu PDF, if there is one.
+ * Offered as a download beside the browsable menus — some people would rather
+ * have the designed thing on their phone than scroll a web page.
  *
  * @return string
  */
-function treats_menu_booklet_pdf() {
+function treats_menu_pdf_url() {
 	$custom = (string) get_theme_mod( 'treats_menu_pdf', '' );
 
 	if ( '' !== $custom ) {
@@ -277,14 +219,10 @@ function treats_menu_pages() {
  * @return string
  */
 function treats_menus_url() {
-	// The booklet is the menu when there is one; the itemised pages are the
-	// older arrangement and only answer if the booklet has been removed.
-	foreach ( array( 'page-templates/template-menu-booklet.php', 'page-templates/template-menu-index.php' ) as $template ) {
-		$url = treats_get_template_page_url( $template );
+	$url = treats_get_template_page_url( 'page-templates/template-menu-index.php' );
 
-		if ( $url && home_url( '/' ) !== $url ) {
-			return $url;
-		}
+	if ( $url && home_url( '/' ) !== $url ) {
+		return $url;
 	}
 
 	$menus = treats_menu_pages();
