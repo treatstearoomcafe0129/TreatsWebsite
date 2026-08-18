@@ -4643,6 +4643,69 @@ body::before {
 	--btn-border: var(--c-line-strong);
 }
 
+/* --- The menu booklet -------------------------------------------------- */
+
+.booklet-hint {
+	text-align: center;
+	font-size: var(--fs-2xs);
+	letter-spacing: var(--tracking-caps);
+	text-transform: uppercase;
+	color: var(--c-ink-mute);
+	margin-bottom: var(--sp-5);
+}
+
+.booklet {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: var(--sp-5);
+	grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+	.booklet {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 1100px) {
+	.booklet {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+.booklet__link {
+	display: block;
+	border-radius: var(--r-md);
+	overflow: hidden;
+	box-shadow: var(--glass-shadow);
+	transition: transform var(--dur) var(--ease-out);
+}
+
+.booklet__link:hover {
+	transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.booklet__link { transition: none; }
+	.booklet__link:hover { transform: none; }
+}
+
+/* The artwork is cream; it needs its own ground, not the sage showing
+   through the paper. */
+.booklet__link img {
+	display: block;
+	width: 100%;
+	height: auto;
+	background: #f7f4ec;
+}
+
+.booklet-download {
+	text-align: center;
+	margin-top: var(--sp-7);
+}
+
 /* --- Menus overview, and the cross-links between menus ----------------- */
 
 .menu-index {

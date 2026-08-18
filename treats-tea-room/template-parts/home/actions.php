@@ -10,7 +10,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$afternoon = treats_menu_page_url( 'afternoon-tea' );
+// Both point at the menu itself: the afternoon tea tile used to open the
+// itemised afternoon tea page, which is no longer how the menu is published.
+$afternoon = treats_menus_url();
 
 /*
  * These are the four things a customer actually comes here to do. What was

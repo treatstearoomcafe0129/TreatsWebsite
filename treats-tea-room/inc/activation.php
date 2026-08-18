@@ -56,10 +56,12 @@ function treats_page_blueprint() {
 			'content'  => '',
 		),
 		'menus'     => array(
+			// Titled "Menus" so the slug stays /menus/ on sites scaffolded by
+			// an earlier version; the switchover below renames it to "Menu".
 			'title'    => __( 'Menus', 'treats' ),
-			'template' => 'page-templates/template-menu-index.php',
+			'template' => 'page-templates/template-menu-booklet.php',
 			'eyebrow'  => __( 'What we serve', 'treats' ),
-			'intro'    => __( 'Everything is cooked to order and baked here. Five menus, served through the day.', 'treats' ),
+			'intro'    => __( 'Breakfast and brunch all day, lunch, afternoon tea, cakes and drinks. Everything is cooked to order and baked here.', 'treats' ),
 		),
 		'breakfast' => array(
 			'title'    => __( 'Breakfast & Brunch', 'treats' ),
@@ -189,6 +191,7 @@ function treats_sync_new_pages() {
 
 	treats_add_page_to_primary_menu( $pages, 'events' );
 	treats_point_menu_parent_at_overview( $pages );
+	treats_publish_menu_as_booklet( $pages );
 	treats_remove_sample_content();
 
 	update_option( 'treats_pages_version', TREATS_VERSION, false );
@@ -282,6 +285,147 @@ function treats_point_menu_parent_at_overview( $pages ) {
 		);
 
 		break;
+	}
+}
+
+/**
+ * Publish the menu as the printed booklet rather than as itemised pages.
+ *
+ * The tea room designs a menu; retyping it as five web pages means keeping
+ * two versions in step, and the second one is always the one that goes stale.
+ * So the booklet is the menu, and the itemised pages step aside.
+ *
+ * They are set to draft rather than deleted — every dish, price and dietary
+ * label is still there, and publishing them again is one click each if this
+ * is ever reversed. Their navigation entries have to go, though: a menu item
+ * pointing at a draft is a dead link, which is worse than no item at all.
+ *
+ * @param array<string,int> $pages Blueprint key to page ID.
+ * @return void
+ */
+function treats_publish_menu_as_booklet( $pages ) {
+	if ( empty( $pages['menus'] ) ) {
+		return;
+	}
+
+	// An existing "Menus" page from an earlier version becomes the booklet,
+	// keeping its address so nothing that already links to it breaks.
+	if ( 'page-templates/template-menu-booklet.php' !== get_page_template_slug( $pages['menus'] ) ) {
+		update_post_meta( $pages['menus'], '_wp_page_template', 'page-templates/template-menu-booklet.php' );
+	}
+
+	if ( 'Menus' === get_the_title( $pages['menus'] ) ) {
+		wp_update_post(
+			array(
+				'ID'         => $pages['menus'],
+				'post_title' => __( 'Menu', 'treats' ),
+			)
+		);
+
+		// The old standfirst counted five menu pages that are no longer there.
+		update_post_meta(
+			$pages['menus'],
+			'_treats_intro',
+			__( 'Breakfast and brunch all day, lunch, afternoon tea, cakes and drinks. Everything is cooked to order and baked here.', 'treats' )
+		);
+	}
+
+	$retired = array();
+
+	foreach ( array( 'breakfast', 'lunch', 'afternoon', 'cakes', 'drinks' ) as $key ) {
+		if ( empty( $pages[ $key ] ) ) {
+			continue;
+		}
+
+		$page = get_post( $pages[ $key ] );
+
+		if ( ! $page instanceof WP_Post || 'publish' !== $page->post_status ) {
+			continue;
+		}
+
+		wp_update_post(
+			array(
+				'ID'          => $page->ID,
+				'post_status' => 'draft',
+			)
+		);
+
+		$retired[] = (int) $page->ID;
+	}
+
+	if ( $retired ) {
+		treats_remove_menu_items_for( $retired );
+	}
+
+	// Those five were the whole of the footer's "Explore" list. Put the menu
+	// back in their place rather than leaving a stub.
+	treats_add_page_to_footer_menu( $pages['menus'], __( 'Menu', 'treats' ) );
+}
+
+/**
+ * Add a page to the footer menu if it is not already listed.
+ *
+ * @param int    $page_id Page ID.
+ * @param string $title   Label to use.
+ * @return void
+ */
+function treats_add_page_to_footer_menu( $page_id, $title ) {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['footer'] ) || ! $page_id ) {
+		return;
+	}
+
+	$menu_id = (int) $locations['footer'];
+	$items   = wp_get_nav_menu_items( $menu_id );
+
+	if ( is_array( $items ) ) {
+		foreach ( $items as $item ) {
+			if ( 'post_type' === $item->type && (int) $item->object_id === (int) $page_id ) {
+				return;
+			}
+		}
+	}
+
+	wp_update_nav_menu_item(
+		$menu_id,
+		0,
+		array(
+			'menu-item-object-id' => (int) $page_id,
+			'menu-item-object'    => 'page',
+			'menu-item-type'      => 'post_type',
+			'menu-item-title'     => $title,
+			'menu-item-position'  => 1,
+			'menu-item-status'    => 'publish',
+		)
+	);
+}
+
+/**
+ * Drop navigation entries pointing at given pages.
+ *
+ * @param array<int,int> $page_ids Page IDs.
+ * @return void
+ */
+function treats_remove_menu_items_for( $page_ids ) {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	foreach ( array( 'primary', 'footer' ) as $location ) {
+		if ( empty( $locations[ $location ] ) ) {
+			continue;
+		}
+
+		$items = wp_get_nav_menu_items( (int) $locations[ $location ] );
+
+		if ( ! is_array( $items ) ) {
+			continue;
+		}
+
+		foreach ( $items as $item ) {
+			if ( 'post_type' === $item->type && in_array( (int) $item->object_id, $page_ids, true ) ) {
+				wp_delete_post( (int) $item->ID, true );
+			}
+		}
 	}
 }
 

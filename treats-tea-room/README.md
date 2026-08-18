@@ -65,7 +65,7 @@ zip -r treats-tea-room.zip treats-tea-room -x "*.DS_Store"
 | Page | Template |
 | --- | --- |
 | Home | `front-page.php` |
-| Menus | Menus Overview |
+| Menu | Menu Booklet |
 | Evening Venue Hire | Evening Venue Hire |
 | Breakfast & Brunch | Menu |
 | Lunch | Menu |
@@ -300,7 +300,30 @@ Once the old content has been rewritten, retire the filter:
 add_filter( 'treats_strip_builder_markup', '__return_false' );
 ```
 
-## Loading the printed menu
+## How the menu is published
+
+The menu is the **printed booklet**, shown as artwork: `page-templates/template-menu-booklet.php`
+renders the pages, each one opening full screen, with a PDF to download.
+
+To publish a new season's menu, attach its page images to the Menu page in the
+media library — `treats_menu_booklet_pages()` prefers those over the artwork
+shipped in `images/menu/`, so a new menu is an upload, not a theme change. Set
+a PDF under *Customize → Treats Tea Room* to replace the download.
+
+**Click & Collect is dormant while the menu is a booklet.** It needs
+individual dishes with prices to put in a basket, and a picture of a menu has
+none. The itemised pages and all 171 dishes are still there as drafts —
+republish them and it works again.
+
+## The itemised menu, if you ever want it back
+
+The theme can also publish the menu as five browsable pages with search,
+dietary filters and Click & Collect. That is what `template-menu.php`,
+`template-menu-index.php` and the importer below are for. The pages are set to
+draft, not deleted; publish them under **Pages**, and add them back to the
+navigation.
+
+## Loading the itemised menu
 
 The theme seeds a small starter menu on activation so the site is never empty.
 The real menu — 171 dishes across five pages — lives in `inc/menu-data.php`
