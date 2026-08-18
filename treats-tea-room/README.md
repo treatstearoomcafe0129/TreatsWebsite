@@ -42,6 +42,17 @@ theme, and no dependency on the previous Enfold installation.
 5. Open **Appearance → Customize → Treats Tea Room** and fill in the real phone
    number, opening hours, social links and photography.
 
+### Updating an installed copy
+
+Upload the new zip over the top (*Appearance → Themes → Add New → Upload
+Theme → Replace current with uploaded*). Content and Customizer settings live
+in the database and are untouched.
+
+Anything a new version needs to *add* — a page, a navigation fix, a cleanup —
+runs on the next admin page load, not on upload: replacing the files does not
+fire `after_switch_theme`, because nothing is being switched to. See
+`treats_maybe_upgrade()`.
+
 To zip it for a host that only accepts uploads:
 
 ```bash

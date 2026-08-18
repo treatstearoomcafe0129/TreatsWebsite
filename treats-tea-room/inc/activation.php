@@ -182,7 +182,7 @@ function treats_page_blueprint() {
  */
 function treats_sync_new_pages() {
 	if ( get_option( 'treats_pages_version' ) === TREATS_VERSION ) {
-		return;
+		return false;
 	}
 
 	$pages = treats_create_pages();
@@ -192,7 +192,43 @@ function treats_sync_new_pages() {
 	treats_remove_sample_content();
 
 	update_option( 'treats_pages_version', TREATS_VERSION, false );
+
+	return true;
 }
+
+/**
+ * Catch up after the theme is updated in place.
+ *
+ * Uploading a new version over the active theme does not fire
+ * `after_switch_theme` — nothing is being switched to — so a page, a
+ * navigation fix or a cleanup added in a later version would never arrive on
+ * a site that simply replaced the files. That is the normal way to update
+ * this theme, so it has to be handled here instead.
+ *
+ * Costs one option read on admin requests and short-circuits as soon as the
+ * versions match.
+ *
+ * @return void
+ */
+function treats_maybe_upgrade() {
+	if ( wp_doing_ajax() || wp_doing_cron() ) {
+		return;
+	}
+
+	if ( get_option( 'treats_pages_version' ) === TREATS_VERSION ) {
+		return;
+	}
+
+	// Only ever act for somebody who could have done it by hand anyway.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( treats_sync_new_pages() ) {
+		flush_rewrite_rules();
+	}
+}
+add_action( 'admin_init', 'treats_maybe_upgrade' );
 
 /**
  * Repoint the navigation's "Menu" parent at the overview page.
