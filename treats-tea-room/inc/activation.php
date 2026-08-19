@@ -280,6 +280,15 @@ function treats_point_menu_parent_at_overview( $pages ) {
 			continue;
 		}
 
+		// The item this is meant to fix is the parent *called* Menu that
+		// happened to point at Breakfast & Brunch. Without this check it also
+		// swallowed a genuine "Breakfast & Brunch" link, turning it into a
+		// second item pointing at the overview — a duplicate parent, with the
+		// submenu split across the two of them.
+		if ( ! in_array( strtolower( trim( $item->title ) ), array( 'menu', 'menus' ), true ) ) {
+			continue;
+		}
+
 		wp_update_nav_menu_item(
 			(int) $locations['primary'],
 			(int) $item->ID,
@@ -362,9 +371,16 @@ function treats_restore_menu_navigation( $pages, $restored ) {
 		$items   = is_array( $items ) ? $items : array();
 
 		$listed = array();
+		$urls   = array();
 		$parent = 0;
 
 		foreach ( $items as $item ) {
+			// A page can be in the navigation as a plain link rather than a
+			// page item — a menu carried over from the old site is full of
+			// them. Counting only page items meant this added a second copy
+			// of every menu page alongside the links already there.
+			$urls[ untrailingslashit( (string) $item->url ) ] = true;
+
 			if ( 'post_type' === $item->type ) {
 				$listed[] = (int) $item->object_id;
 
@@ -376,6 +392,10 @@ function treats_restore_menu_navigation( $pages, $restored ) {
 
 		foreach ( $restored as $page_id ) {
 			if ( in_array( (int) $page_id, $listed, true ) ) {
+				continue;
+			}
+
+			if ( ! empty( $urls[ untrailingslashit( (string) get_permalink( (int) $page_id ) ) ] ) ) {
 				continue;
 			}
 
@@ -543,13 +563,33 @@ function treats_nest_menu_pages( $pages ) {
 		return;
 	}
 
-	// Find the item pointing at the Menus overview — that is the parent.
+	// Find the item that stands for the menus overview. Matching only on a
+	// page link was too strict: the same item may equally be a custom link
+	// left over from the old site, in which case nothing matched and the
+	// whole tidy-up did nothing at all, silently.
 	$parent_item = 0;
+	$menus_url   = untrailingslashit( (string) get_permalink( (int) $pages['menus'] ) );
 
 	foreach ( $items as $item ) {
 		if ( 'post_type' === $item->type && (int) $item->object_id === (int) $pages['menus'] ) {
 			$parent_item = (int) $item->ID;
 			break;
+		}
+
+		if ( untrailingslashit( (string) $item->url ) === $menus_url ) {
+			$parent_item = (int) $item->ID;
+			break;
+		}
+	}
+
+	// Last resort: the item actually called Menu. A café's navigation has
+	// exactly one, and it is unambiguous to a human looking at the bar.
+	if ( ! $parent_item ) {
+		foreach ( $items as $item ) {
+			if ( in_array( strtolower( trim( $item->title ) ), array( 'menu', 'menus' ), true ) ) {
+				$parent_item = (int) $item->ID;
+				break;
+			}
 		}
 	}
 
@@ -558,15 +598,24 @@ function treats_nest_menu_pages( $pages ) {
 	}
 
 	$children = array();
+	$child_urls = array();
 
 	foreach ( array( 'breakfast', 'lunch', 'cakes', 'drinks' ) as $key ) {
-		if ( ! empty( $pages[ $key ] ) ) {
-			$children[ (int) $pages[ $key ] ] = true;
+		if ( empty( $pages[ $key ] ) ) {
+			continue;
 		}
+
+		$children[ (int) $pages[ $key ] ] = true;
+		$child_urls[ untrailingslashit( (string) get_permalink( (int) $pages[ $key ] ) ) ] = true;
 	}
 
 	foreach ( $items as $item ) {
-		if ( 'post_type' !== $item->type || empty( $children[ (int) $item->object_id ] ) ) {
+		// Matched by page or by URL, for the same reason as the parent: a
+		// menu carried over from the old site is full of custom links.
+		$is_child = ( 'post_type' === $item->type && ! empty( $children[ (int) $item->object_id ] ) )
+			|| ! empty( $child_urls[ untrailingslashit( (string) $item->url ) ] );
+
+		if ( ! $is_child || (int) $item->ID === $parent_item ) {
 			continue;
 		}
 
@@ -575,13 +624,17 @@ function treats_nest_menu_pages( $pages ) {
 			continue;
 		}
 
+		// Everything is passed straight back except the parent. Rewriting the
+		// type would turn a working custom link into a page link pointing at
+		// the menu item's own ID, which is not a page at all.
 		wp_update_nav_menu_item(
 			$menu_id,
 			(int) $item->ID,
 			array(
 				'menu-item-object-id' => (int) $item->object_id,
 				'menu-item-object'    => $item->object,
-				'menu-item-type'      => 'post_type',
+				'menu-item-type'      => $item->type,
+				'menu-item-url'       => $item->url,
 				'menu-item-title'     => $item->title,
 				'menu-item-parent-id' => $parent_item,
 				// Position is deliberately left alone. Numbering the children
