@@ -124,6 +124,11 @@ function treats_meta_fields() {
 				'label' => __( 'Collection only — cannot be posted', 'treats' ),
 				'type'  => 'checkbox',
 			),
+			'_treats_post_only'    => array(
+				'label' => __( 'Post only — cannot be collected', 'treats' ),
+				'type'  => 'checkbox',
+				'desc'  => __( 'For anything you would rather send than have people call in for. Ticking both leaves it as collection only.', 'treats' ),
+			),
 			'_treats_gallery'      => array(
 				'label' => __( 'More photographs', 'treats' ),
 				'type'  => 'gallery',

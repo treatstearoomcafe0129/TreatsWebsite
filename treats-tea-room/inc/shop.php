@@ -334,6 +334,32 @@ function treats_product_collect_only( $product_id ) {
 }
 
 /**
+ * Whether the product must be posted rather than collected.
+ *
+ * The mirror of collect-only. A product marked both ways is treated as
+ * collection only, because that is the one the café can always honour.
+ *
+ * @param int $product_id Product ID.
+ * @return bool
+ */
+function treats_product_post_only( $product_id ) {
+	if ( treats_product_collect_only( $product_id ) ) {
+		return false;
+	}
+
+	return '1' === (string) get_post_meta( $product_id, '_treats_post_only', true );
+}
+
+/**
+ * Whether the shop offers collection from the café at all.
+ *
+ * @return bool
+ */
+function treats_collection_offered() {
+	return (bool) get_theme_mod( 'treats_shop_collect_enabled', true );
+}
+
+/**
  * Gallery image IDs for a product.
  *
  * @param int $product_id Product ID.

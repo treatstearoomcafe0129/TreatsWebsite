@@ -172,6 +172,18 @@ while ( have_posts() ) :
 							<?php treats_icon( 'bag', array( 'size' => 17 ) ); ?>
 							<?php if ( $treats_collect || ! treats_postage_settings()['offers_post'] ) : ?>
 								<?php esc_html_e( 'Collection from the café only', 'treats' ); ?>
+							<?php elseif ( treats_product_post_only( $treats_id ) || ! treats_collection_offered() ) : ?>
+								<?php
+								echo $treats_postage > 0
+									? esc_html(
+										sprintf(
+											/* translators: %s: postage price. */
+											__( 'Posted out to you, from %s', 'treats' ),
+											treats_money( $treats_postage )
+										)
+									)
+									: esc_html__( 'Posted out to you', 'treats' );
+								?>
 							<?php elseif ( $treats_postage > 0 ) : ?>
 								<?php
 								printf(

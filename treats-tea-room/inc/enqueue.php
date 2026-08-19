@@ -212,7 +212,7 @@ function treats_enqueue_assets() {
 
 		wp_enqueue_script( 'treats-checkout', TREATS_URI . 'js/checkout.js', array( 'treats-main', 'square-web-payments' ), treats_asset_version( 'js/checkout.js' ), true );
 
-		$fulfilment = treats_basket_can_post() ? 'post' : 'collect';
+		$fulfilment = treats_basket_default_fulfilment();
 
 		// Deliberately not wp_localize_script: it casts every value to a
 		// string, so the subtotal came back as "20800" and adding postage to

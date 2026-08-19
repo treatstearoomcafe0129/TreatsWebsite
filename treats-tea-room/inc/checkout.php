@@ -165,6 +165,10 @@ function treats_handle_checkout() {
 		$fail( __( 'Something in your basket can only be collected. Please choose collection.', 'treats' ) );
 	}
 
+	if ( 'collect' === $fulfilment && ! treats_basket_can_collect() ) {
+		$fail( __( 'This order is posted rather than collected. Please give us an address to send it to.', 'treats' ) );
+	}
+
 	if ( 'post' === $fulfilment ) {
 		foreach ( array( 'treats_address1', 'treats_city', 'treats_postcode' ) as $required ) {
 			if ( '' === ( $data[ $required ] ?? '' ) ) {

@@ -876,6 +876,19 @@ function treats_customize_register( $wp_customize ) {
 
 	treats_add_control(
 		$wp_customize,
+		'treats_shop_collect_enabled',
+		array(
+			'label'       => __( 'Offer collection from the café', 'treats' ),
+			'description' => __( 'Turn this off if shop orders are always posted. Individual products can still be marked collection only.', 'treats' ),
+			'section'     => 'treats_shop',
+			'type'        => 'checkbox',
+			'default'     => true,
+			'sanitize'    => 'treats_sanitize_checkbox',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
 		'treats_postage_enabled',
 		array(
 			'label'       => __( 'Offer postage as well as collection', 'treats' ),

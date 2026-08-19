@@ -14,13 +14,14 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 
-$treats_lines    = treats_basket_lines();
-$treats_can_post = treats_basket_can_post();
-$treats_default  = $treats_can_post ? 'post' : 'collect';
-$treats_totals   = treats_basket_totals( $treats_default );
-$treats_lead     = treats_collection_lead_hours();
-$treats_earliest = gmdate( 'Y-m-d', time() + ( $treats_lead * HOUR_IN_SECONDS ) );
-$treats_dispatch = (string) get_theme_mod( 'treats_shop_dispatch_note', '' );
+$treats_lines       = treats_basket_lines();
+$treats_can_post    = treats_basket_can_post();
+$treats_can_collect = treats_basket_can_collect();
+$treats_default     = treats_basket_default_fulfilment();
+$treats_totals      = treats_basket_totals( $treats_default );
+$treats_lead        = treats_collection_lead_hours();
+$treats_earliest    = gmdate( 'Y-m-d', time() + ( $treats_lead * HOUR_IN_SECONDS ) );
+$treats_dispatch    = (string) get_theme_mod( 'treats_shop_dispatch_note', '' );
 
 treats_page_hero(
 	array(
@@ -112,17 +113,19 @@ treats_page_hero(
 						</legend>
 
 						<div class="fulfilment">
-							<label class="fulfilment__option">
-								<input type="radio" name="treats_fulfilment" value="collect" data-fulfilment
-									<?php checked( 'collect', $treats_default ); ?>>
-								<span class="fulfilment__body">
-									<span class="fulfilment__title"><?php esc_html_e( 'Collect from the café', 'treats' ); ?></span>
-									<span class="fulfilment__note">
-										<?php echo esc_html( treats_get_address_line() ); ?>
+							<?php if ( $treats_can_collect ) : ?>
+								<label class="fulfilment__option">
+									<input type="radio" name="treats_fulfilment" value="collect" data-fulfilment
+										<?php checked( 'collect', $treats_default ); ?>>
+									<span class="fulfilment__body">
+										<span class="fulfilment__title"><?php esc_html_e( 'Collect from the café', 'treats' ); ?></span>
+										<span class="fulfilment__note">
+											<?php echo esc_html( treats_get_address_line() ); ?>
+										</span>
+										<span class="fulfilment__price"><?php esc_html_e( 'Free', 'treats' ); ?></span>
 									</span>
-									<span class="fulfilment__price"><?php esc_html_e( 'Free', 'treats' ); ?></span>
-								</span>
-							</label>
+								</label>
+							<?php endif; ?>
 
 							<?php if ( $treats_can_post ) : ?>
 								<label class="fulfilment__option">
@@ -154,6 +157,12 @@ treats_page_hero(
 							<?php else : ?>
 								<p class="checkout__hint">
 									<?php esc_html_e( 'Something in your basket can only be collected, so postage is not available for this order.', 'treats' ); ?>
+								</p>
+							<?php endif; ?>
+
+							<?php if ( ! $treats_can_collect ) : ?>
+								<p class="checkout__hint">
+									<?php esc_html_e( 'This order is posted out rather than collected, so we need an address to send it to.', 'treats' ); ?>
 								</p>
 							<?php endif; ?>
 						</div>

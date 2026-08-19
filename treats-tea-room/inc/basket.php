@@ -304,6 +304,23 @@ function treats_basket_collect_only() {
 }
 
 /**
+ * Whether anything in the basket cannot be collected.
+ *
+ * @return bool
+ */
+function treats_basket_post_only() {
+	foreach ( array_keys( treats_get_basket() ) as $key ) {
+		$parsed = treats_parse_basket_key( $key );
+
+		if ( treats_product_post_only( $parsed['product_id'] ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Whether the customer may choose postage at all.
  *
  * @return bool
@@ -316,6 +333,54 @@ function treats_basket_can_post() {
 	}
 
 	return ! treats_basket_collect_only();
+}
+
+/**
+ * Whether the customer may choose collection at all.
+ *
+ * @return bool
+ */
+function treats_basket_can_collect() {
+	if ( ! treats_collection_offered() ) {
+		return false;
+	}
+
+	return ! treats_basket_post_only();
+}
+
+/**
+ * The fulfilment to select when the checkout first loads.
+ *
+ * @return string
+ */
+function treats_basket_default_fulfilment() {
+	return treats_basket_can_collect() ? 'collect' : 'post';
+}
+
+/**
+ * Whether a product could share a basket with what is already in it.
+ *
+ * Something that can only be collected and something that can only be posted
+ * cannot travel together, and finding that out at the checkout — after
+ * filling in an address — would be a poor way to learn it.
+ *
+ * @param int $product_id Product being added.
+ * @return bool
+ */
+function treats_basket_accepts( $product_id ) {
+	if ( ! treats_get_basket() ) {
+		return true;
+	}
+
+	if ( treats_product_collect_only( $product_id ) && treats_basket_post_only() ) {
+		return false;
+	}
+
+	if ( treats_product_post_only( $product_id ) && treats_basket_collect_only() ) {
+		return false;
+	}
+
+	return true;
 }
 
 /**
@@ -510,6 +575,15 @@ function treats_handle_basket() {
 				treats_basket_respond( false, __( 'Sorry — that item is not available.', 'treats' ), $is_ajax, 409 );
 			}
 
+			if ( ! treats_basket_accepts( $product_id ) ) {
+				treats_basket_respond(
+					false,
+					__( 'That cannot go in the same order as what you already have — one is collection only and the other is posted. Please order them separately.', 'treats' ),
+					$is_ajax,
+					409
+				);
+			}
+
 			// A product sold in several amounts cannot be added without
 			// saying which, or the price would be whichever we guessed.
 			if ( treats_product_has_options( $product_id ) && ! treats_product_option( $product_id, (int) $option ) ) {
@@ -548,8 +622,7 @@ function treats_handle_basket() {
  */
 function treats_basket_respond( $success, $message, $is_ajax, $status = 200 ) {
 	if ( $is_ajax ) {
-		$fulfilment = treats_basket_can_post() ? 'post' : 'collect';
-		$totals     = treats_basket_totals( $fulfilment );
+		$totals = treats_basket_totals( treats_basket_default_fulfilment() );
 
 		$payload = array(
 			'message'  => $message,
