@@ -1,0 +1,9 @@
+# Packaged theme builds. These are produced from treats-tea-room/ whenever a
+# copy is needed for the WordPress uploader, so the repository holds the source
+# and not the zip.
+treats-tea-room-v*.zip
+
+# Editor and OS leftovers.
+.DS_Store
+Thumbs.db
+*.swp
