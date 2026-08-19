@@ -33,6 +33,22 @@ function treats_get_business_name() {
 }
 
 /**
+ * Whether people can order food for collection through the site.
+ *
+ * Off by default: the menus exist to be read. A café that wants to take
+ * collection orders turns it on deliberately, rather than discovering it has
+ * been accepting them all along.
+ *
+ * The default lives here alone — it was repeated across five files, and the
+ * one that disagreed would have been the one still taking orders.
+ *
+ * @return bool
+ */
+function treats_collect_enabled() {
+	return (bool) get_theme_mod( 'treats_collect_enabled', false );
+}
+
+/**
  * Street address parts.
  *
  * @return array<string,string>

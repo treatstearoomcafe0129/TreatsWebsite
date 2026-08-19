@@ -725,11 +725,12 @@ function treats_customize_register( $wp_customize ) {
 		$wp_customize,
 		'treats_collect_enabled',
 		array(
-			'label'    => __( 'Enable Click & Collect', 'treats' ),
-			'section'  => 'treats_collect',
-			'type'     => 'checkbox',
-			'default'  => true,
-			'sanitize' => 'treats_sanitize_checkbox',
+			'label'       => __( 'Let people order food for collection', 'treats' ),
+			'description' => __( 'Turn this off to make the menus read-only: dishes and prices still show, but nothing on them can be added to an order. The shop is separate and is not affected.', 'treats' ),
+			'section'     => 'treats_collect',
+			'type'        => 'checkbox',
+			'default'     => false,
+			'sanitize'    => 'treats_sanitize_checkbox',
 		)
 	);
 

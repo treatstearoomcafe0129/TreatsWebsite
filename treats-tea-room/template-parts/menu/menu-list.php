@@ -35,7 +35,7 @@ if ( ! $items ) {
 
 $parent_id = treats_menu_category_term_id( $config['category'] );
 $groups    = treats_group_menu_items( $items, $parent_id );
-$collect   = (bool) get_theme_mod( 'treats_collect_enabled', true );
+$collect   = treats_collect_enabled();
 
 $dietary_terms = get_terms(
 	array(

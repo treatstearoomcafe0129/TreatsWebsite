@@ -141,7 +141,7 @@ $treats_social  = treats_get_social_links();
 <?php
 // The Click & Collect basket lives outside the page flow so it survives
 // navigation between menu pages.
-if ( get_theme_mod( 'treats_collect_enabled', true ) && treats_needs_menu_assets() ) {
+if ( treats_collect_enabled() && treats_needs_menu_assets() ) {
 	get_template_part( 'template-parts/components/collect-drawer' );
 }
 

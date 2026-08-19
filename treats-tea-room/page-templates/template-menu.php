@@ -115,7 +115,11 @@ get_template_part(
 		// The old title promised "or order for collection" while offering a
 		// gift voucher button. Collection is the basket on this page.
 		'title'   => __( 'Come and eat with us', 'treats' ),
-		'text'    => __( 'Walk-ins are always welcome. Booking is worth it for afternoon tea and at weekends. Anything on this page marked “add to order” can be collected.', 'treats' ),
+		// The second sentence only holds while Click & Collect is on; with it
+		// off the menu is there to be read, not ordered from.
+		'text'    => treats_collect_enabled()
+			? __( 'Walk-ins are always welcome. Booking is worth it for afternoon tea and at weekends. Anything on this page marked “add to order” can be collected.', 'treats' )
+			: __( 'Walk-ins are always welcome. Booking is worth it for afternoon tea and at weekends.', 'treats' ),
 		'actions' => array(
 			array(
 				'label' => __( 'Book a table', 'treats' ),

@@ -69,6 +69,13 @@ function treats_handle_form() {
 		treats_form_respond( false, __( 'Your session expired. Please refresh the page and try again.', 'treats' ), $is_ajax, 403 );
 	}
 
+	// Switching Click & Collect off hides the ordering controls, but the
+	// endpoint would still accept a posted order and file it. Off should
+	// mean off, or the café ends up with orders it never offered to take.
+	if ( 'order' === $raw_action && ! treats_collect_enabled() ) {
+		treats_form_respond( false, __( 'We are not taking collection orders through the website at the moment. Please ring us.', 'treats' ), $is_ajax, 403 );
+	}
+
 	// 2. Honeypot — a field only a bot will fill in.
 	if ( ! empty( $_POST['treats_website'] ) ) {
 		// Report success so bots do not learn they were caught.

@@ -152,7 +152,7 @@ function treats_enqueue_assets() {
 			'treats-menu',
 			'treatsMenuData',
 			array(
-				'collectEnabled' => (bool) get_theme_mod( 'treats_collect_enabled', true ),
+				'collectEnabled' => treats_collect_enabled(),
 				'collectNotice'  => get_theme_mod( 'treats_collect_notice', __( 'Collection orders need 2 hours notice. We will call to confirm.', 'treats' ) ),
 				'currency'       => treats_currency_symbol(),
 				'i18n'           => array(
