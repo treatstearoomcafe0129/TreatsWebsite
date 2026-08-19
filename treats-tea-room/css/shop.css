@@ -1,0 +1,1208 @@
+/* =========================================================================
+   Shop
+   -------------------------------------------------------------------------
+   Loaded only where the shop appears. Panels reuse .card and .info-card so
+   they inherit the feathered glass treatment rather than describing a second,
+   slightly different piece of glass.
+   ====================================================================== */
+
+/* --- Listing ---------------------------------------------------------- */
+
+.shop-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sp-2);
+	margin-bottom: var(--sp-6);
+}
+
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+	gap: var(--sp-5);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.product-card {
+	overflow: hidden;
+}
+
+.product-card__media {
+	position: relative;
+	display: block;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+	background: var(--c-surface-2);
+}
+
+.product-card__media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform var(--dur) var(--ease-out);
+}
+
+.product-card:hover .product-card__media img {
+	transform: scale(1.045);
+}
+
+.product-card__placeholder {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	color: var(--gold-mid);
+	opacity: 0.5;
+}
+
+.product-card__flag {
+	position: absolute;
+	top: var(--sp-3);
+	left: var(--sp-3);
+	z-index: 2;
+	padding: 0.3rem 0.7rem;
+	border-radius: var(--r-pill);
+	background: var(--c-accent-strong);
+	color: var(--c-on-accent);
+	font-size: var(--fs-xs);
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+}
+
+.product-card__flag--out {
+	background: var(--sage-800);
+	color: #fff;
+}
+
+.product-card--sold-out .product-card__media img {
+	filter: grayscale(0.7);
+	opacity: 0.65;
+}
+
+.product-card__body {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: var(--sp-2);
+	padding: var(--sp-5);
+}
+
+.product-card__title {
+	margin: 0;
+	font-size: var(--fs-md);
+	line-height: 1.3;
+}
+
+.product-card__title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.product-card__title a:hover {
+	color: var(--c-accent);
+}
+
+.product-card__summary {
+	margin: 0;
+	color: var(--c-ink-soft);
+	font-size: var(--fs-sm);
+}
+
+.product-card__price {
+	margin: 0;
+	display: flex;
+	align-items: baseline;
+	gap: var(--sp-2);
+	font-family: var(--font-display);
+	font-size: var(--fs-lg);
+	color: var(--c-ink);
+}
+
+.product-card__was,
+.product__was {
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+	text-decoration: line-through;
+}
+
+.product-card__stock {
+	margin: 0;
+	font-size: var(--fs-xs);
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+	color: var(--gold-mid);
+}
+
+.product-card__form {
+	margin-top: auto;
+}
+
+.product-card__cta {
+	margin-top: auto;
+	width: 100%;
+	justify-content: center;
+}
+
+.shop-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--sp-4);
+	padding: var(--sp-8) var(--sp-5);
+	text-align: center;
+	color: var(--c-ink-soft);
+}
+
+.shop-empty svg {
+	color: var(--gold-mid);
+	opacity: 0.6;
+}
+
+/* --- Single product --------------------------------------------------- */
+
+/* Every other template opens with a hero, and the hero is what clears the
+   fixed header. These two do not have one, so they carry the clearance
+   themselves — without it the header sits over the breadcrumb and title. */
+.product,
+.order-confirm-page {
+	padding-top: calc(var(--t-header-h) + clamp(1.5rem, 4vw, 3rem));
+}
+
+.breadcrumb {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sp-2);
+	margin-bottom: var(--sp-5);
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+}
+
+.breadcrumb a {
+	color: inherit;
+}
+
+.product__layout {
+	display: grid;
+	gap: var(--sp-7);
+	grid-template-columns: 1fr;
+	align-items: start;
+}
+
+@media (min-width: 900px) {
+	.product__layout {
+		grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+		gap: var(--sp-8);
+	}
+}
+
+.product__figure {
+	margin: 0;
+	border-radius: var(--r-lg);
+	overflow: hidden;
+	box-shadow: var(--shadow-md);
+	background: var(--c-surface-2);
+	aspect-ratio: 1 / 1;
+}
+
+.product__figure img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.product__placeholder {
+	display: grid;
+	place-items: center;
+	height: 100%;
+	color: var(--gold-mid);
+	opacity: 0.45;
+}
+
+.product__thumbs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sp-2);
+	margin: var(--sp-3) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.product__thumb {
+	display: block;
+	width: 72px;
+	height: 72px;
+	padding: 0;
+	border: 2px solid transparent;
+	border-radius: var(--r-sm);
+	overflow: hidden;
+	background: none;
+	cursor: pointer;
+	transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.product__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.product__thumb:hover,
+.product__thumb:focus-visible {
+	border-color: var(--c-line-strong);
+}
+
+.product__thumb--active {
+	border-color: var(--gold-mid);
+}
+
+.product__title {
+	margin: 0 0 var(--sp-3);
+	font-size: var(--fs-2xl);
+	line-height: 1.15;
+}
+
+.product__price {
+	display: flex;
+	align-items: baseline;
+	gap: var(--sp-3);
+	margin: var(--sp-4) 0 var(--sp-5);
+	font-family: var(--font-display);
+	font-size: var(--fs-xl);
+}
+
+.product__content {
+	margin-bottom: var(--sp-5);
+}
+
+.product__options {
+	flex: 1 1 100%;
+	margin: 0 0 var(--sp-2);
+	padding: 0;
+	border: none;
+}
+
+.product__options legend {
+	padding: 0;
+	margin-bottom: var(--sp-3);
+}
+
+.product__option-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sp-2);
+}
+
+.product__option {
+	position: relative;
+	cursor: pointer;
+}
+
+/* The radio itself is hidden but still focusable, so the visible label picks
+   up the focus ring rather than losing it entirely. */
+.product__option input {
+	position: absolute;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	cursor: pointer;
+}
+
+.product__option span {
+	display: block;
+	padding: 0.55rem 1.1rem;
+	border: 1px solid var(--c-line);
+	border-radius: var(--r-pill);
+	font-size: var(--fs-sm);
+	transition:
+		border-color var(--dur-fast) var(--ease-out),
+		background-color var(--dur-fast) var(--ease-out);
+}
+
+.product__option input:hover + span {
+	border-color: var(--c-line-strong);
+}
+
+.product__option input:focus-visible + span {
+	outline: 2px solid var(--c-accent);
+	outline-offset: 2px;
+}
+
+.product__option input:checked + span {
+	background: var(--c-accent-strong);
+	border-color: transparent;
+	color: var(--c-on-accent);
+}
+
+.basket-line__option,
+.checkout__item-option,
+.order-confirm__option {
+	display: inline-block;
+	margin: var(--sp-1) 0 0;
+	padding: 0.1rem 0.5rem;
+	border-radius: var(--r-pill);
+	background: var(--c-accent-soft);
+	font-size: var(--fs-xs);
+	color: var(--c-ink);
+}
+
+.checkout__item-option,
+.order-confirm__option {
+	margin: 0 0 0 var(--sp-1);
+}
+
+.product__buy {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: var(--sp-3);
+	margin-bottom: var(--sp-5);
+}
+
+.product__qty {
+	width: 6.5rem;
+	flex: 0 0 auto;
+	margin: 0;
+}
+
+.product__notice {
+	padding: var(--sp-4);
+	margin-bottom: var(--sp-5);
+	border-radius: var(--r-md);
+	background: var(--c-accent-soft);
+	font-size: var(--fs-sm);
+}
+
+.product__notice--out {
+	background: rgba(139, 152, 134, 0.18);
+}
+
+.product__facts {
+	margin: 0;
+	padding: var(--sp-5) 0 0;
+	border-top: 1px solid var(--c-line);
+	list-style: none;
+	display: grid;
+	gap: var(--sp-3);
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+}
+
+.product__facts li {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-3);
+}
+
+.product__facts svg {
+	flex: 0 0 auto;
+	color: var(--gold-mid);
+}
+
+/* --- Basket button and drawer ----------------------------------------- */
+
+/* The bottom-right corner is a stack, from the ground up: back-to-top,
+   then Click & Collect on menu pages, then this. Each step is 58px, which is
+   the tallest of them plus a gap. */
+.basket-fab {
+	position: fixed;
+	right: clamp(1rem, 3vw, 2rem);
+	bottom: calc(clamp(1rem, 3vw, 2rem) + 58px);
+	z-index: 140;
+	display: inline-flex;
+	align-items: center;
+	gap: var(--sp-2);
+	padding: 0.8rem 1.2rem;
+	border: none;
+	border-radius: var(--r-pill);
+	background: var(--c-accent-strong);
+	color: var(--c-on-accent);
+	box-shadow: var(--shadow-lg);
+	cursor: pointer;
+	transition:
+		transform var(--dur-fast) var(--ease-out),
+		box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.basket-fab:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-xl);
+}
+
+.basket-fab__count {
+	display: inline-grid;
+	place-items: center;
+	min-width: 1.4rem;
+	height: 1.4rem;
+	padding: 0 0.35rem;
+	border-radius: var(--r-pill);
+	background: rgba(255, 255, 255, 0.22);
+	font-size: var(--fs-xs);
+	font-variant-numeric: tabular-nums;
+}
+
+/* On a menu page the Click & Collect button occupies the middle step, so the
+   basket moves up one. Space is reserved whether or not that button is
+   currently showing, so this one does not hop about as it appears. */
+body:has(.collect-fab) .basket-fab {
+	bottom: calc(clamp(1rem, 3vw, 2rem) + 116px);
+}
+
+/* An empty basket does not need a permanent button in the corner. */
+.basket-fab:not(.basket-fab--full) {
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(8px);
+}
+
+.basket-drawer {
+	position: fixed;
+	inset: 0;
+	z-index: 150;
+	/* Clips the panel while it sits translated off-screen, or a fixed child
+	   escapes the body's overflow and adds a horizontal scrollbar. */
+	overflow: hidden;
+}
+
+/* Between the close and the end of the slide-out the drawer is still in the
+   document; without this it would swallow clicks on the page beneath. */
+.basket-drawer:not(.is-open) {
+	pointer-events: none;
+}
+
+.basket-drawer__scrim {
+	position: absolute;
+	inset: 0;
+	background: var(--c-scrim);
+	opacity: 0;
+	transition: opacity var(--dur) var(--ease-out);
+}
+
+.basket-drawer.is-open .basket-drawer__scrim {
+	opacity: 1;
+}
+
+.basket-drawer__panel {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: min(100%, 440px);
+	display: flex;
+	flex-direction: column;
+	background: var(--c-bg);
+	box-shadow: var(--shadow-xl);
+	transform: translateX(100%);
+	transition: transform var(--dur) var(--ease-out);
+}
+
+.basket-drawer.is-open .basket-drawer__panel {
+	transform: none;
+}
+
+.basket-drawer__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--sp-4);
+	padding: var(--sp-5) var(--sp-5) var(--sp-4);
+	border-bottom: 1px solid var(--c-line);
+}
+
+.basket-drawer__title {
+	margin: 0;
+	font-size: var(--fs-lg);
+}
+
+.basket-drawer__close {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border: 1px solid var(--c-line);
+	border-radius: 50%;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+}
+
+.basket-drawer__body {
+	flex: 1;
+	overflow-y: auto;
+	padding: var(--sp-5);
+	-webkit-overflow-scrolling: touch;
+}
+
+/* --- Basket contents -------------------------------------------------- */
+
+.basket-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--sp-4);
+	padding: var(--sp-7) 0;
+	text-align: center;
+	color: var(--c-ink-soft);
+}
+
+.basket-empty svg {
+	color: var(--gold-mid);
+	opacity: 0.55;
+}
+
+.basket-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: grid;
+	gap: var(--sp-4);
+}
+
+.basket-line {
+	display: grid;
+	grid-template-columns: 64px 1fr auto;
+	gap: var(--sp-3);
+	padding-bottom: var(--sp-4);
+	border-bottom: 1px solid var(--c-line);
+}
+
+.basket-line__media img,
+.basket-line__placeholder {
+	width: 64px;
+	height: 64px;
+	border-radius: var(--r-sm);
+	object-fit: cover;
+}
+
+.basket-line__placeholder {
+	display: grid;
+	place-items: center;
+	background: var(--c-surface-2);
+	color: var(--gold-mid);
+}
+
+.basket-line__title {
+	display: block;
+	color: inherit;
+	font-weight: 600;
+	text-decoration: none;
+	line-height: 1.3;
+}
+
+.basket-line__title:hover {
+	color: var(--c-accent);
+}
+
+.basket-line__price,
+.basket-line__note {
+	margin: var(--sp-1) 0 0;
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+}
+
+.basket-line__note {
+	color: var(--gold-mid);
+	font-size: var(--fs-xs);
+	text-transform: uppercase;
+	letter-spacing: var(--tracking-wide);
+}
+
+.basket-line__qty {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-2);
+	margin-top: var(--sp-2);
+}
+
+.basket-line__input {
+	width: 4.25rem;
+	padding: 0.4rem 0.5rem;
+	text-align: center;
+}
+
+/* With JavaScript the quantity applies on change, so the button is only
+   there for people without it. The theme strips .no-js from <html> on boot,
+   so its absence is what tells us scripts are running. */
+html:not(.no-js) .basket-line__apply {
+	display: none;
+}
+
+.basket-line__remove button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	padding: 0;
+	border: 1px solid var(--c-line);
+	border-radius: 50%;
+	background: none;
+	color: var(--c-ink-soft);
+	cursor: pointer;
+	transition:
+		color var(--dur-fast) var(--ease-out),
+		border-color var(--dur-fast) var(--ease-out);
+}
+
+.basket-line__remove button:hover {
+	color: var(--c-ink);
+	border-color: var(--c-line-strong);
+}
+
+.basket-nudge {
+	margin: var(--sp-4) 0 0;
+	padding: var(--sp-3) var(--sp-4);
+	border-radius: var(--r-md);
+	background: var(--c-accent-soft);
+	font-size: var(--fs-sm);
+}
+
+.basket-totals {
+	margin: var(--sp-5) 0;
+	display: grid;
+	gap: var(--sp-2);
+}
+
+.basket-totals > div,
+.checkout__totals > div {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--sp-4);
+}
+
+.basket-totals dt,
+.basket-totals dd,
+.checkout__totals dt,
+.checkout__totals dd {
+	margin: 0;
+	font-size: var(--fs-sm);
+}
+
+.basket-checkout {
+	width: 100%;
+	justify-content: center;
+}
+
+.basket-reassure {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--sp-2);
+	margin: var(--sp-4) 0 0;
+	font-size: var(--fs-xs);
+	color: var(--c-ink-soft);
+}
+
+.basket-reassure svg {
+	flex: 0 0 auto;
+	margin-top: 2px;
+	color: var(--gold-mid);
+}
+
+.basket-toast {
+	position: fixed;
+	left: 50%;
+	bottom: var(--sp-6);
+	z-index: 160;
+	max-width: min(90vw, 26rem);
+	margin: 0;
+	padding: var(--sp-3) var(--sp-5);
+	border-radius: var(--r-pill);
+	background: var(--sage-900);
+	color: #fff;
+	font-size: var(--fs-sm);
+	text-align: center;
+	box-shadow: var(--shadow-lg);
+	opacity: 0;
+	transform: translate(-50%, 12px);
+	transition:
+		opacity var(--dur) var(--ease-out),
+		transform var(--dur) var(--ease-out);
+}
+
+.basket-toast.is-visible {
+	opacity: 1;
+	transform: translate(-50%, 0);
+}
+
+.basket-toast--error {
+	background: #7c2b2b;
+}
+
+/* --- Checkout --------------------------------------------------------- */
+
+.checkout {
+	display: grid;
+	gap: var(--sp-6);
+	grid-template-columns: 1fr;
+	align-items: start;
+}
+
+@media (min-width: 960px) {
+	.checkout {
+		grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+		gap: var(--sp-8);
+	}
+
+	.checkout__summary {
+		position: sticky;
+		top: calc(var(--t-header-h, 80px) + var(--sp-5));
+	}
+}
+
+.checkout__step {
+	margin: 0 0 var(--sp-7);
+	padding: 0;
+	border: none;
+}
+
+.checkout__legend {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-3);
+	margin-bottom: var(--sp-5);
+	padding: 0;
+	font-family: var(--font-display);
+	font-size: var(--fs-lg);
+	letter-spacing: var(--tracking-wide);
+}
+
+.checkout__number {
+	display: grid;
+	place-items: center;
+	width: 1.9rem;
+	height: 1.9rem;
+	border-radius: 50%;
+	background: var(--c-accent-strong);
+	color: var(--c-on-accent);
+	font-family: var(--font-sans);
+	font-size: var(--fs-sm);
+}
+
+.checkout__alert {
+	margin-bottom: var(--sp-5);
+	padding: var(--sp-4);
+	border-radius: var(--r-md);
+	background: rgba(124, 43, 43, 0.12);
+	border: 1px solid rgba(124, 43, 43, 0.35);
+	color: var(--c-ink);
+	font-size: var(--fs-sm);
+}
+
+.checkout__hint {
+	margin: var(--sp-4) 0 0;
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+}
+
+.fulfilment {
+	display: grid;
+	gap: var(--sp-3);
+	margin-bottom: var(--sp-5);
+}
+
+.fulfilment__option {
+	position: relative;
+	display: flex;
+	gap: var(--sp-3);
+	padding: var(--sp-4);
+	border: 1px solid var(--c-line);
+	border-radius: var(--r-md);
+	cursor: pointer;
+	transition:
+		border-color var(--dur-fast) var(--ease-out),
+		background-color var(--dur-fast) var(--ease-out);
+}
+
+.fulfilment__option:hover {
+	border-color: var(--c-line-strong);
+}
+
+.fulfilment__option:has(input:checked) {
+	border-color: var(--gold-mid);
+	background: var(--c-accent-soft);
+}
+
+.fulfilment__option input {
+	margin-top: 0.25rem;
+	flex: 0 0 auto;
+	accent-color: var(--c-accent-strong);
+}
+
+.fulfilment__body {
+	display: grid;
+	gap: 0.2rem;
+	flex: 1;
+}
+
+.fulfilment__title {
+	font-weight: 600;
+}
+
+.fulfilment__note {
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+}
+
+.fulfilment__price {
+	font-family: var(--font-display);
+	font-size: var(--fs-md);
+}
+
+.checkout__conditional {
+	margin-bottom: var(--sp-5);
+}
+
+.checkout__card {
+	position: relative;
+	min-height: 5.5rem;
+	padding: var(--sp-4);
+	border: 1px solid var(--c-line);
+	border-radius: var(--r-md);
+	background: var(--c-surface-2);
+	margin-bottom: var(--sp-5);
+}
+
+.checkout__loading {
+	margin: 0;
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+}
+
+.checkout__wallets {
+	margin-bottom: var(--sp-5);
+}
+
+.checkout__wallet {
+	margin-bottom: var(--sp-3);
+	min-height: 48px;
+}
+
+.checkout__divider {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-4);
+	margin: var(--sp-5) 0;
+	color: var(--c-ink-soft);
+	font-size: var(--fs-sm);
+}
+
+.checkout__divider::before,
+.checkout__divider::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: var(--c-line);
+}
+
+.checkout__pay {
+	width: 100%;
+	justify-content: center;
+}
+
+.checkout__pay.is-busy {
+	opacity: 0.7;
+	cursor: progress;
+}
+
+.checkout__secure {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--sp-2);
+	margin: var(--sp-4) 0 0;
+	font-size: var(--fs-xs);
+	color: var(--c-ink-soft);
+}
+
+.checkout__secure svg {
+	flex: 0 0 auto;
+	margin-top: 2px;
+	color: var(--gold-mid);
+}
+
+.checkout__card-summary {
+	position: relative;
+	padding: var(--sp-6);
+}
+
+.checkout__summary-title {
+	position: relative;
+	z-index: 2;
+	margin: 0 0 var(--sp-4);
+	font-size: var(--fs-md);
+}
+
+.checkout__items {
+	position: relative;
+	z-index: 2;
+	margin: 0 0 var(--sp-4);
+	padding: 0 0 var(--sp-4);
+	border-bottom: 1px solid var(--c-line);
+	list-style: none;
+	display: grid;
+	gap: var(--sp-3);
+	font-size: var(--fs-sm);
+}
+
+.checkout__items li,
+.order-confirm__items li {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--sp-4);
+}
+
+.checkout__item-qty {
+	color: var(--c-ink-soft);
+}
+
+.checkout__totals {
+	position: relative;
+	z-index: 2;
+	margin: 0;
+	display: grid;
+	gap: var(--sp-2);
+}
+
+.checkout__grand {
+	margin-top: var(--sp-3);
+	padding-top: var(--sp-3);
+	border-top: 1px solid var(--c-line);
+}
+
+.checkout__grand dt,
+.checkout__grand dd {
+	font-family: var(--font-display);
+	font-size: var(--fs-lg) !important;
+}
+
+.checkout__edit {
+	position: relative;
+	z-index: 2;
+	display: inline-block;
+	margin-top: var(--sp-4);
+	font-size: var(--fs-sm);
+}
+
+/* --- Confirmation ----------------------------------------------------- */
+
+.order-confirm {
+	text-align: center;
+	padding: var(--sp-6) 0;
+}
+
+.order-confirm__tick {
+	display: grid;
+	place-items: center;
+	width: 4rem;
+	height: 4rem;
+	margin: 0 auto var(--sp-5);
+	border-radius: 50%;
+	background: var(--c-accent-strong);
+	color: var(--c-on-accent);
+}
+
+.order-confirm__title {
+	margin: 0 0 var(--sp-4);
+	font-size: var(--fs-2xl);
+	line-height: 1.15;
+}
+
+.order-confirm__lead {
+	margin: 0 auto var(--sp-5);
+	max-width: 34rem;
+	color: var(--c-ink-soft);
+}
+
+.order-confirm__reference {
+	display: inline-flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	margin: 0 0 var(--sp-6);
+	padding: var(--sp-3) var(--sp-6);
+	border: 1px dashed var(--c-line-strong);
+	border-radius: var(--r-md);
+}
+
+.order-confirm__reference span {
+	font-size: var(--fs-xs);
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+	color: var(--c-ink-soft);
+}
+
+.order-confirm__reference strong {
+	font-family: var(--font-display);
+	font-size: var(--fs-lg);
+}
+
+.order-confirm__card {
+	position: relative;
+	margin-bottom: var(--sp-6);
+	padding: var(--sp-6);
+	text-align: left;
+}
+
+.order-confirm__heading {
+	position: relative;
+	z-index: 2;
+	margin: 0 0 var(--sp-3);
+	font-size: var(--fs-md);
+}
+
+.order-confirm__address {
+	position: relative;
+	z-index: 2;
+	margin: 0 0 var(--sp-3);
+	font-style: normal;
+	color: var(--c-ink-soft);
+}
+
+.order-confirm__card p {
+	position: relative;
+	z-index: 2;
+	margin: 0;
+	font-size: var(--fs-sm);
+}
+
+.order-confirm__items {
+	margin: 0 0 var(--sp-6);
+	padding: 0;
+	list-style: none;
+	display: grid;
+	gap: var(--sp-3);
+	text-align: left;
+	font-size: var(--fs-sm);
+}
+
+.order-confirm__qty {
+	color: var(--c-ink-soft);
+}
+
+.order-confirm__paid {
+	padding-top: var(--sp-3);
+	border-top: 1px solid var(--c-line);
+	font-family: var(--font-display);
+	font-size: var(--fs-md);
+}
+
+.order-confirm__actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--sp-3);
+}
+
+/* --- A product offered inside another page ---------------------------- */
+
+.buy-panel {
+	position: relative;
+	display: grid;
+	gap: var(--sp-6);
+	grid-template-columns: 1fr;
+	align-items: center;
+	padding: var(--sp-6);
+	overflow: hidden;
+}
+
+@media (min-width: 800px) {
+	.buy-panel {
+		grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+		padding: var(--sp-7);
+	}
+}
+
+.buy-panel__media {
+	position: relative;
+	z-index: 2;
+	border-radius: var(--r-md);
+	overflow: hidden;
+	aspect-ratio: 4 / 3;
+}
+
+.buy-panel__media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.buy-panel__body {
+	position: relative;
+	z-index: 2;
+}
+
+.buy-panel__eyebrow {
+	margin: 0 0 var(--sp-2);
+	font-size: var(--fs-xs);
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+	color: var(--gold-mid);
+}
+
+.buy-panel__title {
+	margin: 0 0 var(--sp-2);
+	font-size: var(--fs-xl);
+	line-height: 1.15;
+}
+
+.buy-panel__text {
+	margin: var(--sp-4) 0 0;
+	color: var(--c-ink-soft);
+}
+
+.buy-panel__price {
+	margin: var(--sp-4) 0 var(--sp-5);
+	font-family: var(--font-display);
+	font-size: var(--fs-xl);
+}
+
+.buy-panel__note {
+	margin: 0 0 var(--sp-4);
+	color: var(--c-ink-soft);
+	font-size: var(--fs-sm);
+}
+
+.buy-panel__form {
+	margin: 0;
+}
+
+.buy-panel__more {
+	margin: var(--sp-4) 0 0;
+	font-size: var(--fs-sm);
+}
+
+.buy-panel__more a {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--sp-2);
+}
+
+/* --- Motion ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.basket-drawer__panel,
+	.basket-drawer__scrim,
+	.basket-toast,
+	.basket-fab,
+	.product-card__media img {
+		transition: none;
+	}
+}
+
+/* --- The shop on the home page ---------------------------------------- */
+
+.home-shop__grid {
+	margin-top: var(--sp-6);
+	/* Three products, and no wider than a comfortable reading measure —
+	   auto-fill would stretch them across the whole page on a big screen. */
+	grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+	max-width: 60rem;
+	margin-inline: auto;
+}
+
+.home-shop__more {
+	margin: var(--sp-6) 0 0;
+	text-align: center;
+}
