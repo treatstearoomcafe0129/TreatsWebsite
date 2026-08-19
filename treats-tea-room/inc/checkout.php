@@ -227,6 +227,7 @@ function treats_handle_checkout() {
 			'fulfilment' => $fulfilment,
 			'source_id'  => $source_id,
 			'email'      => $data['treats_email'],
+			'customer'   => $data,
 			'note'       => treats_checkout_square_note( $data, $fulfilment ),
 		)
 	);

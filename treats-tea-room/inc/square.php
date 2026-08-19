@@ -258,15 +258,98 @@ function treats_square_log( $path, $message ) {
  * ---------------------------------------------------------------------- */
 
 /**
+ * The fulfilment block for a Square order.
+ *
+ * This is what puts the delivery address on the order in Square, rather than
+ * only in the café's email. A posted order becomes a SHIPMENT with the
+ * recipient and their address; a collection becomes a PICKUP with a time.
+ *
+ * @param string $mode     Either 'collect' or 'post'.
+ * @param array  $customer Validated checkout fields.
+ * @return array|null Fulfilment array, or null when it cannot be built.
+ */
+function treats_square_fulfilment( $mode, $customer ) {
+	$recipient = array_filter(
+		array(
+			'display_name'  => (string) ( $customer['treats_name'] ?? '' ),
+			'email_address' => (string) ( $customer['treats_email'] ?? '' ),
+			'phone_number'  => (string) ( $customer['treats_phone'] ?? '' ),
+		)
+	);
+
+	if ( ! $recipient ) {
+		return null;
+	}
+
+	if ( 'post' === $mode ) {
+		$address = array_filter(
+			array(
+				'address_line_1' => (string) ( $customer['treats_address1'] ?? '' ),
+				'address_line_2' => (string) ( $customer['treats_address2'] ?? '' ),
+				'locality'       => (string) ( $customer['treats_city'] ?? '' ),
+				'postal_code'    => (string) ( $customer['treats_postcode'] ?? '' ),
+			)
+		);
+
+		if ( empty( $address['address_line_1'] ) || empty( $address['postal_code'] ) ) {
+			return null;
+		}
+
+		$address['country'] = 'GB';
+		$recipient['address'] = $address;
+
+		$details = array( 'recipient' => $recipient );
+		$note    = trim( (string) ( $customer['treats_notes'] ?? '' ) );
+
+		if ( '' !== $note ) {
+			$details['shipping_note'] = mb_substr( $note, 0, 500 );
+		}
+
+		return array(
+			'type'             => 'SHIPMENT',
+			'state'            => 'PROPOSED',
+			'shipment_details' => $details,
+		);
+	}
+
+	// Square wants a time for a scheduled collection. Use the date the
+	// customer chose, otherwise the earliest we said we could manage.
+	$chosen = trim( (string) ( $customer['treats_collect_date'] ?? '' ) );
+	$when   = '' !== $chosen
+		? strtotime( $chosen . ' 10:00:00' )
+		: time() + ( treats_collection_lead_hours() * HOUR_IN_SECONDS );
+
+	$details = array(
+		'recipient'     => $recipient,
+		'schedule_type' => 'SCHEDULED',
+		'pickup_at'     => gmdate( 'Y-m-d\TH:i:s\Z', $when ),
+	);
+
+	$note = trim( (string) ( $customer['treats_notes'] ?? '' ) );
+
+	if ( '' !== $note ) {
+		$details['note'] = mb_substr( $note, 0, 500 );
+	}
+
+	return array(
+		'type'           => 'PICKUP',
+		'state'          => 'PROPOSED',
+		'pickup_details' => $details,
+	);
+}
+
+/**
  * Build the Square order body for a basket.
  *
- * @param array  $lines      Basket lines from treats_basket_lines().
- * @param int    $postage    Postage in pence.
- * @param string $reference  Our own order reference.
- * @param string $fulfilment Either 'collect' or 'post'.
+ * @param array  $lines       Basket lines from treats_basket_lines().
+ * @param int    $postage     Postage in pence.
+ * @param string $reference   Our own order reference.
+ * @param string $fulfilment  Either 'collect' or 'post'.
+ * @param array  $customer    Validated checkout fields.
+ * @param bool   $with_detail Whether to attach the fulfilment block.
  * @return array
  */
-function treats_square_order_body( $lines, $postage, $reference, $fulfilment ) {
+function treats_square_order_body( $lines, $postage, $reference, $fulfilment, $customer = array(), $with_detail = true ) {
 	$items = array();
 
 	foreach ( $lines as $line ) {
@@ -305,18 +388,28 @@ function treats_square_order_body( $lines, $postage, $reference, $fulfilment ) {
 		);
 	}
 
-	return array(
-		'idempotency_key' => 'order-' . $reference,
-		'order'           => array(
-			'location_id' => treats_square_location_id(),
-			'reference_id' => $reference,
-			'line_items'  => $items,
-			'source'      => array( 'name' => __( 'Website shop', 'treats' ) ),
-			'metadata'    => array(
-				'fulfilment' => $fulfilment,
-				'reference'  => $reference,
-			),
+	$order = array(
+		'location_id'  => treats_square_location_id(),
+		'reference_id' => $reference,
+		'line_items'   => $items,
+		'source'       => array( 'name' => __( 'Website shop', 'treats' ) ),
+		'metadata'     => array(
+			'fulfilment' => $fulfilment,
+			'reference'  => $reference,
 		),
+	);
+
+	if ( $with_detail ) {
+		$detail = treats_square_fulfilment( $fulfilment, $customer );
+
+		if ( $detail ) {
+			$order['fulfillments'] = array( $detail );
+		}
+	}
+
+	return array(
+		'idempotency_key' => ( $with_detail ? 'order-' : 'order-plain-' ) . $reference,
+		'order'           => $order,
 	);
 }
 
@@ -331,15 +424,31 @@ function treats_square_order_body( $lines, $postage, $reference, $fulfilment ) {
  *     @type string $fulfilment 'collect' or 'post'.
  *     @type string $source_id  Card token from the browser.
  *     @type string $email      Customer email.
+ *     @type array  $customer   Validated checkout fields, for the fulfilment.
  *     @type string $note       Note shown in the Square dashboard.
  * }
  * @return array|WP_Error Payment data on success.
  */
 function treats_square_take_payment( $args ) {
+	$customer = $args['customer'] ?? array();
+
 	$order = treats_square_request(
 		'orders',
-		treats_square_order_body( $args['lines'], $args['postage'], $args['reference'], $args['fulfilment'] )
+		treats_square_order_body( $args['lines'], $args['postage'], $args['reference'], $args['fulfilment'], $customer, true )
 	);
+
+	// The delivery address is worth having on the Square order, but not at
+	// the price of the sale. If Square rejects the fulfilment block — a
+	// postcode it dislikes, a schema change — fall back to an order without
+	// it rather than turning a paying customer away.
+	if ( is_wp_error( $order ) && 'treats_square_unreachable' !== $order->get_error_code() ) {
+		treats_square_log( 'orders', 'Retrying without fulfilment: ' . $order->get_error_code() );
+
+		$order = treats_square_request(
+			'orders',
+			treats_square_order_body( $args['lines'], $args['postage'], $args['reference'], $args['fulfilment'], $customer, false )
+		);
+	}
 
 	if ( is_wp_error( $order ) ) {
 		return $order;
