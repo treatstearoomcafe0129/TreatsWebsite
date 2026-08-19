@@ -95,7 +95,20 @@ function treats_sanitize_select( $value, $setting ) {
 }
 
 /**
- * Sanitize a HH:MM time string.
+ * Only ever store one of the two Square environments.
+ *
+ * Anything unrecognised falls back to the sandbox, so a mangled value can
+ * never quietly start taking real money.
+ *
+ * @param string $value Raw value.
+ * @return string
+ */
+function treats_sanitize_square_env( $value ) {
+	return 'production' === $value ? 'production' : 'sandbox';
+}
+
+/**
+ * Validate an HH:MM time string.
  *
  * @param string $value Raw value.
  * @return string
@@ -135,6 +148,7 @@ function treats_customize_register( $wp_customize ) {
 		'treats_booking'    => __( 'Table Booking', 'treats' ),
 		'treats_collect'    => __( 'Click & Collect', 'treats' ),
 		'treats_vouchers'   => __( 'Gift Vouchers', 'treats' ),
+		'treats_shop'       => __( 'Shop & Payments', 'treats' ),
 		'treats_instagram'  => __( 'Instagram Feed', 'treats' ),
 		'treats_newsletter' => __( 'Newsletter', 'treats' ),
 		'treats_seo'        => __( 'SEO & Sharing', 'treats' ),
@@ -739,6 +753,137 @@ function treats_customize_register( $wp_customize ) {
 			'section'     => 'treats_vouchers',
 			'type'        => 'url',
 			'sanitize'    => 'esc_url_raw',
+		)
+	);
+
+	/* ---------------------------------------------------------------- Shop */
+
+	treats_add_control(
+		$wp_customize,
+		'treats_shop_enabled',
+		array(
+			'label'       => __( 'Open the shop', 'treats' ),
+			'description' => __( 'Until this is on — and Square is filled in below — products are visible but cannot be bought.', 'treats' ),
+			'section'     => 'treats_shop',
+			'type'        => 'checkbox',
+			'default'     => false,
+			'sanitize'    => 'treats_sanitize_checkbox',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_square_env',
+		array(
+			'label'       => __( 'Square mode', 'treats' ),
+			'description' => __( 'Test mode uses Square’s sandbox and takes no real money. Switch to live only once a test order has gone through.', 'treats' ),
+			'section'     => 'treats_shop',
+			'type'        => 'select',
+			'default'     => 'sandbox',
+			'choices'     => array(
+				'sandbox'    => __( 'Test mode (sandbox)', 'treats' ),
+				'production' => __( 'Live — take real payments', 'treats' ),
+			),
+			'sanitize'    => 'treats_sanitize_square_env',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_square_app_id',
+		array(
+			'label'       => __( 'Square application ID', 'treats' ),
+			'description' => __( 'From the Square Developer dashboard. Starts sq0idp- when live, sandbox-sq0idb- in test mode.', 'treats' ),
+			'section'     => 'treats_shop',
+			'sanitize'    => 'sanitize_text_field',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_square_location_id',
+		array(
+			'label'       => __( 'Square location ID', 'treats' ),
+			'description' => __( 'The shop the money is taken against.', 'treats' ),
+			'section'     => 'treats_shop',
+			'sanitize'    => 'sanitize_text_field',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_square_token',
+		array(
+			'label'       => __( 'Square access token', 'treats' ),
+			'description' => __( 'Safer in wp-config.php as TREATS_SQUARE_TOKEN. A token stored here is readable by anyone who can edit the site.', 'treats' ),
+			'section'     => 'treats_shop',
+			'sanitize'    => 'sanitize_text_field',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_postage_enabled',
+		array(
+			'label'       => __( 'Offer postage as well as collection', 'treats' ),
+			'description' => __( 'Turn off to make everything collection only.', 'treats' ),
+			'section'     => 'treats_shop',
+			'type'        => 'checkbox',
+			'default'     => true,
+			'sanitize'    => 'treats_sanitize_checkbox',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_postage_extra_item',
+		array(
+			'label'       => __( 'Extra charge per additional item', 'treats' ),
+			'description' => __( 'An order pays the highest postage among its items, plus this for each item after the first. Leave at 0 if everything goes in one box.', 'treats' ),
+			'section'     => 'treats_shop',
+			'default'     => '0',
+			'sanitize'    => 'sanitize_text_field',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_postage_free_over',
+		array(
+			'label'       => __( 'Free postage over', 'treats' ),
+			'description' => __( 'Optional. Leave empty for no free postage threshold.', 'treats' ),
+			'section'     => 'treats_shop',
+			'sanitize'    => 'sanitize_text_field',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_collect_lead_hours',
+		array(
+			'label'       => __( 'Notice needed before collection (hours)', 'treats' ),
+			'section'     => 'treats_shop',
+			'type'        => 'number',
+			'default'     => 24,
+			'sanitize'    => 'absint',
+			'input_attrs' => array(
+				'min'  => 0,
+				'max'  => 336,
+				'step' => 1,
+			),
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_shop_dispatch_note',
+		array(
+			'label'       => __( 'Dispatch note', 'treats' ),
+			'description' => __( 'Shown at checkout and repeated in the confirmation email.', 'treats' ),
+			'section'     => 'treats_shop',
+			'type'        => 'textarea',
+			'default'     => __( 'Posted orders are sent within three working days by tracked delivery.', 'treats' ),
+			'sanitize'    => 'sanitize_textarea_field',
 		)
 	);
 

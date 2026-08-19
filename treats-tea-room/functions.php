@@ -41,6 +41,10 @@ $treats_modules = array(
 	'performance',    // Bloat removal, lazy loading, resource hints.
 	'security',       // Hardening and security headers.
 	'forms',          // AJAX handlers: booking, contact, newsletter, orders.
+	'shop',           // Products, pricing and stock.
+	'basket',         // The basket, kept server side.
+	'square',         // Square orders and card payments.
+	'checkout',       // Taking an order and recording it.
 	'activation',     // First-run page/menu scaffolding.
 	'compat-enfold',  // Strips leftover Avia shortcodes from old content.
 	'menu-data',      // The printed menu, as data.

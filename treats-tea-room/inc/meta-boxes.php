@@ -75,6 +75,56 @@ function treats_meta_fields() {
 				'type'  => 'date',
 			),
 		),
+		'treats_product'   => array(
+			'_treats_summary'      => array(
+				'label' => __( 'Short description', 'treats' ),
+				'type'  => 'textarea',
+				'desc'  => __( 'One line, shown on the shop listing. Falls back to the excerpt.', 'treats' ),
+			),
+			'_treats_price'        => array(
+				'label' => __( 'Price', 'treats' ),
+				'type'  => 'text',
+				'desc'  => __( 'Numbers only, e.g. 24.95. Products without a price cannot be bought.', 'treats' ),
+			),
+			'_treats_sale_price'   => array(
+				'label' => __( 'Sale price', 'treats' ),
+				'type'  => 'text',
+				'desc'  => __( 'Optional. Leave empty unless the item is reduced.', 'treats' ),
+			),
+			'_treats_sku'          => array(
+				'label' => __( 'Product code', 'treats' ),
+				'type'  => 'text',
+				'desc'  => __( 'Optional. Appears on orders so you can find the item on the shelf.', 'treats' ),
+			),
+			'_treats_track_stock'  => array(
+				'label' => __( 'Keep count of stock', 'treats' ),
+				'type'  => 'checkbox',
+				'desc'  => __( 'Leave off for anything you can always make or reorder.', 'treats' ),
+			),
+			'_treats_stock'        => array(
+				'label' => __( 'Number in stock', 'treats' ),
+				'type'  => 'number',
+				'attrs' => array(
+					'min'  => '0',
+					'step' => '1',
+				),
+				'desc'  => __( 'Only used when the count is switched on. Drops automatically as orders come in.', 'treats' ),
+			),
+			'_treats_postage'      => array(
+				'label' => __( 'Postage for this item', 'treats' ),
+				'type'  => 'text',
+				'desc'  => __( 'What it costs to send this one item, e.g. 4.95. An order is charged the highest of these, plus the extra-item charge for each other item.', 'treats' ),
+			),
+			'_treats_collect_only' => array(
+				'label' => __( 'Collection only — cannot be posted', 'treats' ),
+				'type'  => 'checkbox',
+			),
+			'_treats_gallery'      => array(
+				'label' => __( 'More photographs', 'treats' ),
+				'type'  => 'gallery',
+				'desc'  => __( 'Shown alongside the main image on the product page.', 'treats' ),
+			),
+		),
 		'page'             => array(
 			'_treats_eyebrow'      => array(
 				'label' => __( 'Hero eyebrow', 'treats' ),
@@ -111,17 +161,63 @@ function treats_meta_fields() {
  */
 function treats_add_meta_boxes() {
 	foreach ( treats_meta_fields() as $screen => $fields ) {
+		// A product carries prices, stock and postage together; a cramped
+		// sidebar column is the wrong shape for it.
+		$product = 'treats_product' === $screen;
+
 		add_meta_box(
 			'treats-details-' . $screen,
-			__( 'Treats details', 'treats' ),
+			$product ? __( 'Product details', 'treats' ) : __( 'Treats details', 'treats' ),
 			'treats_render_meta_box',
 			$screen,
-			'side',
-			'default'
+			$product ? 'normal' : 'side',
+			$product ? 'high' : 'default'
 		);
 	}
 }
 add_action( 'add_meta_boxes', 'treats_add_meta_boxes' );
+
+/**
+ * Load the media library on screens that have a gallery field.
+ *
+ * @param string $hook Current admin page.
+ * @return void
+ */
+function treats_meta_admin_assets( $hook ) {
+	if ( ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
+		return;
+	}
+
+	$screen = get_current_screen();
+
+	if ( ! $screen || 'treats_product' !== $screen->post_type ) {
+		return;
+	}
+
+	wp_enqueue_media();
+	wp_add_inline_style(
+		'common',
+		'.treats-gallery__list{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 10px;padding:0;list-style:none}
+		.treats-gallery__list:empty{margin:0}
+		.treats-gallery__list li{position:relative;line-height:0}
+		.treats-gallery__list img{width:80px;height:80px;object-fit:cover;border-radius:4px}
+		.treats-gallery__remove{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#b32d2e;color:#fff;text-align:center;line-height:18px;text-decoration:none}
+		.treats-gallery__remove:hover,.treats-gallery__remove:focus{background:#8a2223;color:#fff}
+		.treats-meta{display:grid;gap:0 24px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+		.treats-meta > p:first-child,.treats-meta > p:last-child{grid-column:1/-1}'
+	);
+	wp_enqueue_script( 'treats-admin-product', TREATS_URI . 'js/admin-product.js', array( 'jquery' ), TREATS_VERSION, true );
+	wp_localize_script(
+		'treats-admin-product',
+		'treatsAdminProduct',
+		array(
+			'title'  => __( 'Choose product photographs', 'treats' ),
+			'button' => __( 'Use these photographs', 'treats' ),
+			'remove' => __( 'Remove', 'treats' ),
+		)
+	);
+}
+add_action( 'admin_enqueue_scripts', 'treats_meta_admin_assets' );
 
 /**
  * Render a meta box.
@@ -164,6 +260,36 @@ function treats_render_meta_box( $post ) {
 						'<textarea id="%1$s" name="%1$s" rows="3" class="widefat">%2$s</textarea>',
 						$id,
 						esc_textarea( $value )
+					);
+					break;
+
+				case 'gallery':
+					$ids = array_filter( array_map( 'absint', preg_split( '/[\s,]+/', (string) $value ) ) );
+
+					printf(
+						'<div class="treats-gallery" data-treats-gallery><input type="hidden" id="%1$s" name="%1$s" value="%2$s"><ul class="treats-gallery__list" data-treats-gallery-list>',
+						$id,
+						esc_attr( implode( ',', $ids ) )
+					);
+
+					foreach ( $ids as $attachment_id ) {
+						$thumb = wp_get_attachment_image( $attachment_id, 'thumbnail', false, array( 'alt' => '' ) );
+
+						if ( ! $thumb ) {
+							continue;
+						}
+
+						printf(
+							'<li data-id="%1$d">%2$s<button type="button" class="button-link treats-gallery__remove" data-treats-gallery-remove aria-label="%3$s">&times;</button></li>',
+							(int) $attachment_id,
+							$thumb, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built by core.
+							esc_attr__( 'Remove this photograph', 'treats' )
+						);
+					}
+
+					printf(
+						'</ul><button type="button" class="button" data-treats-gallery-add>%s</button></div>',
+						esc_html__( 'Add photographs', 'treats' )
 					);
 					break;
 
@@ -279,6 +405,11 @@ function treats_save_meta( $post_id ) {
 
 			case 'taxonomy':
 				$value = sanitize_key( $raw );
+				break;
+
+			case 'gallery':
+				$ids   = array_filter( array_map( 'absint', preg_split( '/[\s,]+/', (string) $raw ) ) );
+				$value = implode( ',', array_unique( $ids ) );
 				break;
 
 			default:
