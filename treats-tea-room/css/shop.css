@@ -319,10 +319,13 @@
 
 /* --- Basket button and drawer ----------------------------------------- */
 
+/* The bottom-right corner is a stack, from the ground up: back-to-top,
+   then Click & Collect on menu pages, then this. Each step is 58px, which is
+   the tallest of them plus a gap. */
 .basket-fab {
 	position: fixed;
-	right: var(--sp-5);
-	bottom: var(--sp-5);
+	right: clamp(1rem, 3vw, 2rem);
+	bottom: calc(clamp(1rem, 3vw, 2rem) + 58px);
 	z-index: 140;
 	display: inline-flex;
 	align-items: center;
@@ -354,6 +357,13 @@
 	background: rgba(255, 255, 255, 0.22);
 	font-size: var(--fs-xs);
 	font-variant-numeric: tabular-nums;
+}
+
+/* On a menu page the Click & Collect button occupies the middle step, so the
+   basket moves up one. Space is reserved whether or not that button is
+   currently showing, so this one does not hop about as it appears. */
+body:has(.collect-fab) .basket-fab {
+	bottom: calc(clamp(1rem, 3vw, 2rem) + 116px);
 }
 
 /* An empty basket does not need a permanent button in the corner. */
