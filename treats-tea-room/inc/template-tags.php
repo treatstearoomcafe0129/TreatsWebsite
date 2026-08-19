@@ -21,7 +21,15 @@ defined( 'ABSPATH' ) || exit;
  * @return string
  */
 function treats_get_business_name() {
-	return (string) get_theme_mod( 'treats_business_name', get_bloginfo( 'name' ) );
+	$name = trim( (string) get_theme_mod( 'treats_business_name', '' ) );
+
+	if ( '' === $name ) {
+		$name = trim( (string) get_bloginfo( 'name' ) );
+	}
+
+	// Emails put the name at the front of the subject line, so an empty
+	// setting used to send "— we have your request".
+	return '' !== $name ? $name : 'Treats Tea Room Café';
 }
 
 /**
@@ -85,7 +93,10 @@ function treats_get_phone_link() {
  * @return string
  */
 function treats_get_email() {
-	return (string) get_theme_mod( 'treats_email', 'info@treatstearoom.co.uk' );
+	// Lower cased because transactional providers match the sender address
+	// exactly against the one you verified with them, and a stray capital in
+	// the Customizer is enough to have every notification rejected.
+	return strtolower( trim( (string) get_theme_mod( 'treats_email', 'info@treatstearoom.co.uk' ) ) );
 }
 
 /**

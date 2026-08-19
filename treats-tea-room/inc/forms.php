@@ -534,14 +534,14 @@ function treats_store_submission( $action, $config, $data ) {
  * @return void
  */
 function treats_notify_submission( $action, $config, $data, $post_id ) {
-	$to = get_theme_mod( 'treats_notification_email', '' );
+	$to = strtolower( trim( (string) get_theme_mod( 'treats_notification_email', '' ) ) );
 
 	if ( ! is_email( $to ) ) {
 		$to = treats_get_email();
 	}
 
 	if ( ! is_email( $to ) ) {
-		$to = get_option( 'admin_email' );
+		$to = strtolower( (string) get_option( 'admin_email' ) );
 	}
 
 	$site      = treats_get_business_name();
