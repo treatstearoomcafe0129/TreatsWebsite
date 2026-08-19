@@ -40,9 +40,17 @@ while ( have_posts() ) :
 			<div class="product__layout">
 
 				<div class="product__media"<?php treats_reveal(); ?>>
+					<?php $treats_main_image = treats_product_image_id( $treats_id ); ?>
 					<figure class="product__figure">
-						<?php if ( has_post_thumbnail() ) : ?>
-							<?php the_post_thumbnail( 'large', array( 'id' => 'product-main-image' ) ); ?>
+						<?php if ( $treats_main_image ) : ?>
+							<?php
+							echo wp_get_attachment_image(
+								$treats_main_image,
+								'large',
+								false,
+								array( 'id' => 'product-main-image', 'alt' => '' )
+							);
+							?>
 						<?php else : ?>
 							<span class="product__placeholder">
 								<?php treats_icon( 'teapot', array( 'size' => 64 ) ); ?>
@@ -50,13 +58,13 @@ while ( have_posts() ) :
 						<?php endif; ?>
 					</figure>
 
-					<?php if ( $treats_gallery && has_post_thumbnail() ) : ?>
+					<?php if ( $treats_gallery && $treats_main_image ) : ?>
 						<ul class="product__thumbs" data-product-gallery>
 							<li>
 								<button class="product__thumb product__thumb--active" type="button"
-									data-full="<?php echo esc_url( (string) wp_get_attachment_image_url( get_post_thumbnail_id(), 'large' ) ); ?>"
+									data-full="<?php echo esc_url( (string) wp_get_attachment_image_url( $treats_main_image, 'large' ) ); ?>"
 									aria-label="<?php esc_attr_e( 'Show the main photograph', 'treats' ); ?>">
-									<?php the_post_thumbnail( 'thumbnail', array( 'alt' => '' ) ); ?>
+									<?php echo wp_get_attachment_image( $treats_main_image, 'thumbnail', false, array( 'alt' => '' ) ); ?>
 								</button>
 							</li>
 

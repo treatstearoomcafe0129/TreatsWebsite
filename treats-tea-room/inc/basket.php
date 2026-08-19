@@ -253,7 +253,7 @@ function treats_basket_lines() {
 			'total'        => $price * $quantity,
 			'postage'      => treats_product_postage( $product_id ),
 			'collect_only' => treats_product_collect_only( $product_id ),
-			'image_id'     => (int) get_post_thumbnail_id( $product_id ),
+			'image_id'     => treats_product_image_id( $product_id ),
 			'max'          => treats_basket_line_max( $product_id ),
 		);
 	}

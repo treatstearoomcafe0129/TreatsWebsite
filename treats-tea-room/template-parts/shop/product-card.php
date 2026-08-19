@@ -37,11 +37,13 @@ $has_options = treats_product_has_options( $product_id );
 ?>
 <li class="card product-card<?php echo $sold_out ? ' product-card--sold-out' : ''; ?>"<?php treats_reveal( (int) $config['delay'] ); ?>>
 	<a class="product-card__media" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" tabindex="-1" aria-hidden="true">
-		<?php if ( has_post_thumbnail( $product_id ) ) : ?>
+		<?php $image_id = treats_product_image_id( $product_id ); ?>
+		<?php if ( $image_id ) : ?>
 			<?php
-			echo get_the_post_thumbnail(
-				$product_id,
+			echo wp_get_attachment_image(
+				$image_id,
 				'medium_large',
+				false,
 				array(
 					'loading'  => 'lazy',
 					'decoding' => 'async',

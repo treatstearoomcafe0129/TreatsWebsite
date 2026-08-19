@@ -352,6 +352,41 @@ function treats_product_gallery( $product_id ) {
 }
 
 /**
+ * The picture to show for a product.
+ *
+ * The featured image if there is one, otherwise the first of the extra
+ * photographs, otherwise the first image in the description. A product with a
+ * photograph on its own page but a blank square on the shop listing is the
+ * commonest way for this to look broken, and it is always because the picture
+ * went somewhere other than the featured image box.
+ *
+ * @param int $product_id Product ID.
+ * @return int Attachment ID, or 0.
+ */
+function treats_product_image_id( $product_id ) {
+	$featured = (int) get_post_thumbnail_id( $product_id );
+
+	if ( $featured ) {
+		return $featured;
+	}
+
+	$gallery = treats_product_gallery( $product_id );
+
+	if ( $gallery ) {
+		return (int) $gallery[0];
+	}
+
+	// Last resort: an image dropped straight into the description.
+	$content = get_post_field( 'post_content', $product_id );
+
+	if ( $content && preg_match( '/wp-image-(\d+)/', $content, $found ) ) {
+		return (int) $found[1];
+	}
+
+	return 0;
+}
+
+/**
  * Short one-line description used on product cards.
  *
  * @param int $product_id Product ID.
