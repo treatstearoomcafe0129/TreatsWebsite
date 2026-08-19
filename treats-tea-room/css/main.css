@@ -5065,3 +5065,15 @@ body::before {
 	position: relative;
 	z-index: 2;
 }
+
+/* On a touch screen there is no hover, so a dropdown that only opens on hover
+   cannot be opened at all — tapping the parent just followed its link. Give
+   the disclosure button back its pointer events there, so the first tap opens
+   the list and the second chooses from it. The overview page is reachable as
+   the first entry inside. */
+@media (min-width: 1080px) and (hover: none) {
+	.primary-nav .has-dropdown > .nav__toggle {
+		pointer-events: auto;
+		cursor: pointer;
+	}
+}

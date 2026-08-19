@@ -186,3 +186,115 @@ function treats_nav_menu( $location, $args = array() ) {
 		)
 	);
 }
+
+/* -------------------------------------------------------------------------
+ * Grouping the menu pages under "Menu"
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Fold the individual menu pages into the "Menu" item as it renders.
+ *
+ * This used to be done by rewriting the saved navigation on upgrade, which
+ * depended on the menu being stored in a particular shape and failed silently
+ * when it was not. Doing it here instead means the bar reads correctly
+ * whatever is in the database, and nothing about the saved menu is altered —
+ * dragging the items back out in Appearance → Menus is not undone, because
+ * nothing was written in the first place.
+ *
+ * @param array  $items Menu item objects.
+ * @param object $args  wp_nav_menu arguments.
+ * @return array
+ */
+function treats_group_menu_pages_in_nav( $items, $args ) {
+	if ( empty( $args->theme_location ) || 'primary' !== $args->theme_location ) {
+		return $items;
+	}
+
+	if ( ! get_theme_mod( 'treats_nav_group_menus', true ) ) {
+		return $items;
+	}
+
+	// The pages that make up the menu, by URL — the one identifier that holds
+	// whether an item is a page link or a plain custom link.
+	$targets = array();
+
+	foreach ( treats_menu_pages() as $page ) {
+		$targets[ untrailingslashit( $page['url'] ) ] = true;
+	}
+
+	if ( ! $targets ) {
+		return $items;
+	}
+
+	$overview = untrailingslashit( treats_menus_url() );
+	$parent   = null;
+	$children = array();
+	$rest     = array();
+
+	foreach ( $items as $item ) {
+		$url = untrailingslashit( (string) $item->url );
+
+		if ( null === $parent && ( $url === $overview || in_array( strtolower( trim( $item->title ) ), array( 'menu', 'menus' ), true ) ) ) {
+			$parent = $item;
+			continue;
+		}
+
+		// Only top-level items are folded in; anything already arranged into
+		// a submenu is somebody's decision and is left alone.
+		if ( ! (int) $item->menu_item_parent && isset( $targets[ $url ] ) ) {
+			$children[] = $item;
+			continue;
+		}
+
+		$rest[] = $item;
+	}
+
+	if ( ! $parent || ! $children ) {
+		return $items;
+	}
+
+	foreach ( $children as $child ) {
+		$child->menu_item_parent = (string) $parent->ID;
+	}
+
+	if ( ! in_array( 'menu-item-has-children', (array) $parent->classes, true ) ) {
+		$parent->classes[] = 'menu-item-has-children';
+	}
+
+	// On a touch screen the parent opens the dropdown rather than following
+	// its own link, so the overview page would otherwise have nowhere to be
+	// reached from. It goes in as the first entry in the list it heads.
+	$overview_item = clone $parent;
+
+	$overview_item->ID               = $parent->ID * -1;
+	$overview_item->db_id            = $overview_item->ID;
+	$overview_item->menu_item_parent = (string) $parent->ID;
+	$overview_item->title            = __( 'All menus', 'treats' );
+	$overview_item->classes          = array( 'menu-item' );
+
+	array_unshift( $children, $overview_item );
+
+	// Rebuild in order, with the children immediately behind their parent.
+	$ordered = array();
+
+	foreach ( $items as $item ) {
+		if ( $item === $parent ) {
+			$ordered[] = $parent;
+
+			foreach ( $children as $child ) {
+				$ordered[] = $child;
+			}
+
+			continue;
+		}
+
+		if ( in_array( $item, $children, true ) ) {
+			continue;
+		}
+
+		$ordered[] = $item;
+	}
+
+	return $ordered;
+}
+add_filter( 'wp_nav_menu_objects', 'treats_group_menu_pages_in_nav', 10, 2 );

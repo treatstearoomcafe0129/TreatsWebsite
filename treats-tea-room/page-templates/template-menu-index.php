@@ -76,15 +76,11 @@ while ( have_posts() ) :
 		</div>
 	</section>
 
-	<?php $treats_pdf = treats_menu_pdf_url(); ?>
-	<?php if ( '' !== $treats_pdf ) : ?>
-		<p class="booklet-download">
-			<a class="btn btn--secondary" href="<?php echo esc_url( $treats_pdf ); ?>" target="_blank" rel="noopener">
-				<?php esc_html_e( 'Download the printed menu as a PDF', 'treats' ); ?>
-				<?php treats_icon( 'arrow-right', array( 'size' => 15 ) ); ?>
-			</a>
-		</p>
-	<?php endif; ?>
+	<?php
+	// The PDF download has gone. The menu is published as pages the customer
+	// can read on a phone; offering a printed booklet alongside it split the
+	// same information across two places and neither was clearly the real one.
+	?>
 
 	<?php
 	get_template_part(

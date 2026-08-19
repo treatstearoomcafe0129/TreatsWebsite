@@ -259,6 +259,19 @@ function treats_customize_register( $wp_customize ) {
 
 	treats_add_control(
 		$wp_customize,
+		'treats_nav_group_menus',
+		array(
+			'label'       => __( 'Group the menu pages under “Menu”', 'treats' ),
+			'description' => __( 'Breakfast, Lunch, Cakes and Drinks appear as a dropdown under Menu rather than as separate items in the bar. Turn this off to list them all across the top.', 'treats' ),
+			'section'     => 'treats_brand',
+			'type'        => 'checkbox',
+			'default'     => true,
+			'sanitize'    => 'treats_sanitize_checkbox',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
 		'treats_accent_color',
 		array(
 			'label'     => __( 'Accent colour', 'treats' ),
