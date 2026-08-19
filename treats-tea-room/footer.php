@@ -145,6 +145,12 @@ if ( get_theme_mod( 'treats_collect_enabled', true ) && treats_needs_menu_assets
 	get_template_part( 'template-parts/components/collect-drawer' );
 }
 
+// The shop basket, likewise. Hidden on the checkout itself, where the order
+// summary already says what is being bought.
+if ( treats_needs_shop_assets() && ! treats_is_checkout() ) {
+	get_template_part( 'template-parts/shop/basket-drawer' );
+}
+
 wp_footer();
 ?>
 </body>

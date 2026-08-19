@@ -5013,7 +5013,9 @@ body::before {
 .icon-badge::before,
 .site-header__inner::before,
 .site-footer__grid::before,
-.page-hero__inner::before {
+.page-hero__inner::before,
+.fulfilment__option::before,
+.checkout__card::before {
 	content: "";
 	position: absolute;
 	inset: 0;

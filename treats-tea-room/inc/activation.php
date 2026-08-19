@@ -122,6 +122,16 @@ function treats_page_blueprint() {
 				'treats'
 			),
 		),
+		'checkout'  => array(
+			'title'    => __( 'Checkout', 'treats' ),
+			'template' => 'page-templates/template-checkout.php',
+			'content'  => '',
+		),
+		'order'     => array(
+			'title'    => __( 'Order Confirmation', 'treats' ),
+			'template' => 'page-templates/template-order.php',
+			'content'  => '',
+		),
 		'vouchers'  => array(
 			'title'    => __( 'Gift Vouchers', 'treats' ),
 			'template' => 'page-templates/template-vouchers.php',
@@ -188,6 +198,7 @@ function treats_sync_new_pages() {
 	$pages = treats_create_pages();
 
 	treats_add_page_to_primary_menu( $pages, 'events' );
+	treats_add_shop_to_primary_menu();
 	treats_point_menu_parent_at_overview( $pages );
 	treats_restore_itemised_menu( $pages );
 	treats_remove_sample_content();
@@ -499,6 +510,46 @@ function treats_add_page_to_primary_menu( $pages, $key ) {
 			'menu-item-type'      => 'post_type',
 			'menu-item-title'     => __( 'Events', 'treats' ),
 			'menu-item-status'    => 'publish',
+		)
+	);
+}
+
+/**
+ * Put the shop in the primary navigation.
+ *
+ * The shop is a post type archive rather than a page, so it goes in as a
+ * custom link. Matched on URL so it is only ever added once, and left alone
+ * afterwards however it gets renamed or moved.
+ *
+ * @return void
+ */
+function treats_add_shop_to_primary_menu() {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['primary'] ) ) {
+		return;
+	}
+
+	$menu_id = (int) $locations['primary'];
+	$url     = treats_shop_url();
+	$items   = wp_get_nav_menu_items( $menu_id );
+
+	if ( is_array( $items ) ) {
+		foreach ( $items as $item ) {
+			if ( untrailingslashit( $item->url ) === untrailingslashit( $url ) ) {
+				return;
+			}
+		}
+	}
+
+	wp_update_nav_menu_item(
+		$menu_id,
+		0,
+		array(
+			'menu-item-url'    => $url,
+			'menu-item-type'   => 'custom',
+			'menu-item-title'  => __( 'Shop', 'treats' ),
+			'menu-item-status' => 'publish',
 		)
 	);
 }

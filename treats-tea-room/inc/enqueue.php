@@ -42,6 +42,36 @@ function treats_needs_menu_assets() {
 }
 
 /**
+ * Is this the checkout?
+ *
+ * @return bool
+ */
+function treats_is_checkout() {
+	return is_page_template( 'page-templates/template-checkout.php' );
+}
+
+/**
+ * Does the current view need the shop bundle?
+ *
+ * The basket drawer sits in the footer of every page once the shop is open,
+ * so anything that can show it needs the styles.
+ *
+ * @return bool
+ */
+function treats_needs_shop_assets() {
+	if ( ! post_type_exists( 'treats_product' ) ) {
+		return false;
+	}
+
+	return treats_shop_enabled()
+		|| is_post_type_archive( 'treats_product' )
+		|| is_tax( 'treats_product_cat' )
+		|| is_singular( 'treats_product' )
+		|| treats_is_checkout()
+		|| is_page_template( 'page-templates/template-order.php' );
+}
+
+/**
  * Does the current view need the form bundle?
  *
  * The newsletter sign-up is in the footer of every page, so in practice this
@@ -147,6 +177,64 @@ function treats_enqueue_assets() {
 				'slots'         => treats_booking_slots(),
 				'phone'         => treats_get_phone(),
 			)
+		);
+	}
+
+	if ( treats_needs_shop_assets() ) {
+		wp_enqueue_style( 'treats-shop', TREATS_URI . 'css/shop.css', array( 'treats-main' ), treats_asset_version( 'css/shop.css' ) );
+
+		wp_enqueue_script( 'treats-shop', TREATS_URI . 'js/shop.js', array( 'treats-main' ), treats_asset_version( 'js/shop.js' ), true );
+		wp_script_add_data( 'treats-shop', 'defer', true );
+
+		wp_localize_script(
+			'treats-shop',
+			'treatsShopData',
+			array(
+				'i18n' => array(
+					'error' => __( 'Something went wrong. Please try again.', 'treats' ),
+				),
+			)
+		);
+	}
+
+	if ( treats_is_checkout() && treats_shop_enabled() ) {
+		// Square's SDK has to come from Square: the card fields live in an
+		// iframe they serve, which is the whole point of the arrangement.
+		wp_enqueue_script( 'square-web-payments', treats_square_sdk_url(), array(), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Versioned by Square.
+
+		wp_enqueue_script( 'treats-checkout', TREATS_URI . 'js/checkout.js', array( 'treats-main', 'square-web-payments' ), treats_asset_version( 'js/checkout.js' ), true );
+
+		$fulfilment = treats_basket_can_post() ? 'post' : 'collect';
+
+		// Deliberately not wp_localize_script: it casts every value to a
+		// string, so the subtotal came back as "20800" and adding postage to
+		// it concatenated instead of summing — a £208 basket displayed as
+		// £2080. JSON keeps the numbers numbers.
+		wp_add_inline_script(
+			'treats-checkout',
+			'window.treatsCheckoutData = ' . wp_json_encode(
+				array(
+					'appId'        => treats_square_app_id(),
+					'locationId'   => treats_square_location_id(),
+					'currency'     => treats_currency_symbol(),
+					'businessName' => treats_get_business_name(),
+					'subtotal'     => treats_basket_subtotal(),
+					'postage'      => array(
+						'collect' => 0,
+						'post'    => treats_basket_postage( 'post' ),
+					),
+					'default'      => $fulfilment,
+					'i18n'         => array(
+						'free'        => __( 'Free', 'treats' ),
+						'required'    => __( 'Please complete this field.', 'treats' ),
+						'checkFields' => __( 'Please check the highlighted fields.', 'treats' ),
+						'cardFailed'  => __( 'Please check your card details.', 'treats' ),
+						'sdkFailed'   => __( 'The payment form could not be loaded. Please ring us and we will take your order over the phone.', 'treats' ),
+						'generic'     => __( 'We could not take that payment. Please try again.', 'treats' ),
+					),
+				)
+			) . ';',
+			'before'
 		);
 	}
 

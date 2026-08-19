@@ -131,6 +131,11 @@ function treats_handle_checkout() {
 		$raw   = isset( $_POST[ $field ] ) ? wp_unslash( $_POST[ $field ] ) : '';
 		$value = treats_sanitize_field( $raw, $rules['type'] );
 
+		if ( '' === $value && treats_field_was_filled( $raw ) ) {
+			$errors[ $field ] = $rules['label'] . ': ' . __( 'please check this value.', 'treats' );
+			continue;
+		}
+
 		if ( ! empty( $rules['required'] ) && '' === $value ) {
 			$errors[ $field ] = $rules['label'] . ': ' . __( 'this field is required.', 'treats' );
 			continue;
@@ -295,7 +300,11 @@ function treats_create_shop_order( $reference, $data, $fulfilment, $lines, $tota
 		'_treats_reference'   => $reference,
 		'_treats_status'      => 'paid',
 		'_treats_fulfilment'  => $fulfilment,
-		'_treats_items'       => wp_json_encode( $lines ),
+		// Stored as an array, not JSON. update_post_meta() unslashes what it
+		// is given, which strips the backslash out of every "—" that
+		// wp_json_encode() produces — an em dash in a product name came back
+		// as the literal text "u2014" on the order and in the email.
+		'_treats_items'       => $lines,
 		'_treats_subtotal'    => $totals['subtotal'],
 		'_treats_postage'     => $totals['postage'],
 		'_treats_total'       => $totals['total'],
@@ -408,9 +417,16 @@ function treats_order_from_request() {
  * @return array<int,array<string,mixed>>
  */
 function treats_order_items( $order_id ) {
-	$items = json_decode( (string) get_post_meta( $order_id, '_treats_items', true ), true );
+	$items = get_post_meta( $order_id, '_treats_items', true );
 
-	return is_array( $items ) ? $items : array();
+	if ( is_array( $items ) ) {
+		return $items;
+	}
+
+	// Orders written before the storage changed hold a JSON string.
+	$decoded = json_decode( (string) $items, true );
+
+	return is_array( $decoded ) ? $decoded : array();
 }
 
 /* -------------------------------------------------------------------------
@@ -471,12 +487,16 @@ function treats_send_order_emails( $order_id ) {
 	}
 
 	$delivery = 'post' === $fulfilment
-		? sprintf(
-			"%s\n%s\n%s\n%s",
-			(string) get_post_meta( $order_id, '_treats_address1', true ),
-			(string) get_post_meta( $order_id, '_treats_address2', true ),
-			(string) get_post_meta( $order_id, '_treats_city', true ),
-			(string) get_post_meta( $order_id, '_treats_postcode', true )
+		? implode(
+			"\n",
+			array_filter(
+				array(
+					(string) get_post_meta( $order_id, '_treats_address1', true ),
+					(string) get_post_meta( $order_id, '_treats_address2', true ),
+					(string) get_post_meta( $order_id, '_treats_city', true ),
+					(string) get_post_meta( $order_id, '_treats_postcode', true ),
+				)
+			)
 		)
 		: sprintf(
 			/* translators: %s: collection date. */

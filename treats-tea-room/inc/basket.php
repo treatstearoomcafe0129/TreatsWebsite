@@ -64,9 +64,13 @@ function treats_get_basket() {
 
 	foreach ( $raw as $product_id => $quantity ) {
 		$product_id = absint( $product_id );
-		$quantity   = absint( $quantity );
 
-		if ( ! $product_id || ! $quantity ) {
+		// Deliberately not absint(): that turns -5 into 5, so a mangled
+		// cookie would quietly order five of something. A quantity that is
+		// not a positive whole number is not a quantity.
+		$quantity = is_scalar( $quantity ) ? (int) $quantity : 0;
+
+		if ( ! $product_id || $quantity < 1 ) {
 			continue;
 		}
 
@@ -397,7 +401,9 @@ function treats_handle_basket() {
 
 	$basket     = treats_get_basket();
 	$product_id = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;
-	$quantity   = isset( $_POST['quantity'] ) ? absint( $_POST['quantity'] ) : 1;
+	// Signed, so that "update" can read zero or below as "take it out" and
+	// "add" can reject it, rather than both seeing a positive number.
+	$quantity = isset( $_POST['quantity'] ) ? (int) $_POST['quantity'] : 1; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cast to int.
 
 	switch ( $operation ) {
 		case 'empty':

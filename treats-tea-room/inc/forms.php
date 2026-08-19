@@ -96,6 +96,14 @@ function treats_handle_form() {
 		$raw   = isset( $_POST[ $field ] ) ? wp_unslash( $_POST[ $field ] ) : '';
 		$value = treats_sanitize_field( $raw, $rules['type'] );
 
+		// Sanitising an invalid value can empty it — "not-an-email" comes back
+		// as "". Telling somebody who typed something that the field is
+		// required sends them looking for a field they already filled in.
+		if ( '' === $value && treats_field_was_filled( $raw ) ) {
+			$errors[ $field ] = $rules['label'] . ': ' . __( 'please check this value.', 'treats' );
+			continue;
+		}
+
 		if ( ! empty( $rules['required'] ) && '' === $value ) {
 			$errors[ $field ] = $rules['label'] . ': ' . __( 'this field is required.', 'treats' );
 			continue;
@@ -389,7 +397,24 @@ function treats_form_config( $action ) {
 }
 
 /**
- * Sanitize a submitted value by type.
+ * Did the visitor actually put something in this field?
+ *
+ * Asked of the raw submission, before sanitising, so an invalid value can be
+ * told apart from a blank one.
+ *
+ * @param mixed $raw Raw submitted value.
+ * @return bool
+ */
+function treats_field_was_filled( $raw ) {
+	if ( is_array( $raw ) ) {
+		$raw = implode( '', $raw );
+	}
+
+	return '' !== trim( (string) $raw );
+}
+
+/**
+ * Sanitize a submitted value by its declared type.
  *
  * @param mixed  $value Raw value.
  * @param string $type  Field type.

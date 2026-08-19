@@ -145,7 +145,16 @@ function treats_seo_meta() {
 	printf( '<meta name="description" content="%s">' . "\n", esc_attr( $description ) );
 	printf( '<link rel="canonical" href="%s">' . "\n", esc_url( $canonical ) );
 
-	if ( is_search() || is_404() || is_paged() && is_search() ) {
+	// The checkout and the confirmation page are steps in a transaction, not
+	// pages anybody should arrive at from a search result.
+	$transactional = is_page_template(
+		array(
+			'page-templates/template-checkout.php',
+			'page-templates/template-order.php',
+		)
+	);
+
+	if ( is_search() || is_404() || $transactional || is_paged() && is_search() ) {
 		echo '<meta name="robots" content="noindex, follow">' . "\n";
 	} else {
 		echo '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">' . "\n";

@@ -10,7 +10,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'TREATS_VERSION', '1.4.0' );
+define( 'TREATS_VERSION', '1.5.0' );
 define( 'TREATS_DIR', trailingslashit( get_template_directory() ) );
 define( 'TREATS_URI', trailingslashit( get_template_directory_uri() ) );
 
@@ -45,6 +45,7 @@ $treats_modules = array(
 	'basket',         // The basket, kept server side.
 	'square',         // Square orders and card payments.
 	'checkout',       // Taking an order and recording it.
+	'shop-admin',     // Order and product screens in the dashboard.
 	'activation',     // First-run page/menu scaffolding.
 	'compat-enfold',  // Strips leftover Avia shortcodes from old content.
 	'menu-data',      // The printed menu, as data.
