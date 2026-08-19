@@ -181,8 +181,16 @@ function treats_handle_checkout() {
 		$fail( __( 'Your basket is empty.', 'treats' ), 409 );
 	}
 
+	// Summed per product, not per line: two amounts of the same voucher, or
+	// two sizes of one teapot, come off the same shelf.
+	$wanted = array();
+
 	foreach ( $lines as $line ) {
-		if ( ! treats_product_in_stock( $line['product_id'], $line['quantity'] ) ) {
+		$wanted[ $line['product_id'] ] = ( $wanted[ $line['product_id'] ] ?? 0 ) + $line['quantity'];
+	}
+
+	foreach ( $lines as $line ) {
+		if ( ! treats_product_in_stock( $line['product_id'], $wanted[ $line['product_id'] ] ) ) {
 			$fail(
 				sprintf(
 					/* translators: %s: product name. */
@@ -333,14 +341,20 @@ function treats_create_shop_order( $reference, $data, $fulfilment, $lines, $tota
  * @return void
  */
 function treats_reduce_stock( $lines ) {
+	$sold = array();
+
 	foreach ( $lines as $line ) {
-		$stock = treats_product_stock( $line['product_id'] );
+		$sold[ $line['product_id'] ] = ( $sold[ $line['product_id'] ] ?? 0 ) + $line['quantity'];
+	}
+
+	foreach ( $sold as $product_id => $quantity ) {
+		$stock = treats_product_stock( $product_id );
 
 		if ( null === $stock ) {
 			continue;
 		}
 
-		update_post_meta( $line['product_id'], '_treats_stock', max( 0, $stock - $line['quantity'] ) );
+		update_post_meta( $product_id, '_treats_stock', max( 0, $stock - $quantity ) );
 	}
 }
 
@@ -453,10 +467,14 @@ function treats_send_order_emails( $order_id ) {
 	$summary = array();
 
 	foreach ( $items as $item ) {
+		$name = empty( $item['option_label'] )
+			? $item['title']
+			: $item['title'] . ' (' . $item['option_label'] . ')';
+
 		$summary[] = sprintf(
 			'%1$d × %2$s — %3$s',
 			(int) $item['quantity'],
-			$item['title'],
+			$name,
 			treats_money( (int) $item['total'] )
 		);
 	}

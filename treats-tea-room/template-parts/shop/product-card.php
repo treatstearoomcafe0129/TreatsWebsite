@@ -33,6 +33,7 @@ $on_sale    = treats_product_on_sale( $product_id );
 $summary    = treats_product_summary( $product_id );
 $collect    = treats_product_collect_only( $product_id );
 $low_stock  = null !== $stock && $stock > 0 && $stock <= 3;
+$has_options = treats_product_has_options( $product_id );
 ?>
 <li class="card product-card<?php echo $sold_out ? ' product-card--sold-out' : ''; ?>"<?php treats_reveal( (int) $config['delay'] ); ?>>
 	<a class="product-card__media" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" tabindex="-1" aria-hidden="true">
@@ -71,10 +72,22 @@ $low_stock  = null !== $stock && $stock > 0 && $stock <= 3;
 		<?php endif; ?>
 
 		<p class="product-card__price">
-			<?php if ( $on_sale ) : ?>
+			<?php if ( $on_sale && ! $has_options ) : ?>
 				<span class="product-card__was"><?php echo esc_html( treats_money( treats_product_regular_price( $product_id ) ) ); ?></span>
 			<?php endif; ?>
-			<span class="product-card__now"><?php echo esc_html( treats_money( $price ) ); ?></span>
+			<span class="product-card__now">
+				<?php
+				if ( $has_options ) {
+					printf(
+						/* translators: %s: the cheapest price. */
+						esc_html__( 'from %s', 'treats' ),
+						esc_html( treats_money( $price ) )
+					);
+				} else {
+					echo esc_html( treats_money( $price ) );
+				}
+				?>
+			</span>
 		</p>
 
 		<?php if ( $low_stock ) : ?>
@@ -93,6 +106,11 @@ $low_stock  = null !== $stock && $stock > 0 && $stock <= 3;
 
 		<?php if ( $sold_out ) : ?>
 			<span class="btn btn--secondary btn--sm product-card__cta" aria-disabled="true"><?php esc_html_e( 'Sold out', 'treats' ); ?></span>
+		<?php elseif ( $has_options ) : ?>
+			<?php /* An amount has to be picked before there is a price to charge. */ ?>
+			<a class="btn btn--primary btn--sm product-card__cta" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
+				<?php esc_html_e( 'Choose an amount', 'treats' ); ?>
+			</a>
 		<?php elseif ( treats_shop_enabled() ) : ?>
 			<form class="product-card__form" method="post" action="<?php echo esc_url( treats_form_action() ); ?>" data-treats-basket="add">
 				<input type="hidden" name="treats_basket_action" value="add">

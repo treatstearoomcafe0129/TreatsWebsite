@@ -16,7 +16,7 @@ get_header();
 $treats_order = treats_order_from_request();
 ?>
 
-<section class="section">
+<section class="section order-confirm-page">
 	<div class="container container--content">
 
 		<?php if ( ! $treats_order ) : ?>
@@ -119,6 +119,9 @@ $treats_order = treats_order_from_request();
 						<li>
 							<span>
 								<?php echo esc_html( $treats_item['title'] ); ?>
+								<?php if ( ! empty( $treats_item['option_label'] ) ) : ?>
+									<span class="order-confirm__option"><?php echo esc_html( $treats_item['option_label'] ); ?></span>
+								<?php endif; ?>
 								<span class="order-confirm__qty">&times;<?php echo esc_html( (string) $treats_item['quantity'] ); ?></span>
 							</span>
 							<span><?php echo esc_html( treats_money( (int) $treats_item['total'] ) ); ?></span>

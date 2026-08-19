@@ -270,8 +270,14 @@ function treats_square_order_body( $lines, $postage, $reference, $fulfilment ) {
 	$items = array();
 
 	foreach ( $lines as $line ) {
+		// The option belongs in the name: a Square receipt reading
+		// "Gift Voucher" tells nobody which amount was bought.
+		$name = empty( $line['option_label'] )
+			? $line['title']
+			: $line['title'] . ' — ' . $line['option_label'];
+
 		$item = array(
-			'name'             => $line['title'],
+			'name'             => $name,
 			'quantity'         => (string) $line['quantity'],
 			'base_price_money' => array(
 				'amount'   => $line['price'],

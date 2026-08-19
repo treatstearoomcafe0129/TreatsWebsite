@@ -91,6 +91,11 @@ function treats_meta_fields() {
 				'type'  => 'text',
 				'desc'  => __( 'Optional. Leave empty unless the item is reduced.', 'treats' ),
 			),
+			'_treats_options'      => array(
+				'label' => __( 'Options', 'treats' ),
+				'type'  => 'options',
+				'desc'  => __( 'For anything sold in several amounts or sizes — a gift voucher at £10, £20 and so on. Each option carries its own price, and the customer picks one before adding it to their basket. Leave empty for an ordinary product.', 'treats' ),
+			),
 			'_treats_sku'          => array(
 				'label' => __( 'Product code', 'treats' ),
 				'type'  => 'text',
@@ -204,16 +209,25 @@ function treats_meta_admin_assets( $hook ) {
 		.treats-gallery__remove{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#b32d2e;color:#fff;text-align:center;line-height:18px;text-decoration:none}
 		.treats-gallery__remove:hover,.treats-gallery__remove:focus{background:#8a2223;color:#fff}
 		.treats-meta{display:grid;gap:0 24px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-		.treats-meta > p:first-child,.treats-meta > p:last-child{grid-column:1/-1}'
+		.treats-meta > p:first-child,.treats-meta > p:last-child{grid-column:1/-1}
+		.treats-options__list{margin:0 0 10px;padding:0;list-style:none;display:grid;gap:8px}
+		.treats-options__list:empty{margin:0}
+		.treats-options__row{display:flex;gap:8px;align-items:center}
+		.treats-options__label{flex:1 1 60%}
+		.treats-options__price{flex:0 0 7em}
+		.treats-options__remove{flex:0 0 auto;width:24px;height:24px;border-radius:50%;background:#b32d2e;color:#fff;text-align:center;line-height:22px;text-decoration:none}
+		.treats-options__remove:hover,.treats-options__remove:focus{background:#8a2223;color:#fff}'
 	);
 	wp_enqueue_script( 'treats-admin-product', TREATS_URI . 'js/admin-product.js', array( 'jquery' ), TREATS_VERSION, true );
 	wp_localize_script(
 		'treats-admin-product',
 		'treatsAdminProduct',
 		array(
-			'title'  => __( 'Choose product photographs', 'treats' ),
-			'button' => __( 'Use these photographs', 'treats' ),
-			'remove' => __( 'Remove', 'treats' ),
+			'title'       => __( 'Choose product photographs', 'treats' ),
+			'button'      => __( 'Use these photographs', 'treats' ),
+			'remove'      => __( 'Remove', 'treats' ),
+			'optionLabel' => __( 'Name, e.g. £20', 'treats' ),
+			'optionPrice' => __( 'Price', 'treats' ),
 		)
 	);
 }
@@ -261,6 +275,39 @@ function treats_render_meta_box( $post ) {
 						$id,
 						esc_textarea( $value )
 					);
+					break;
+
+				case 'options':
+					$rows = is_array( $value ) ? $value : array();
+
+					echo '<div class="treats-options" data-treats-options>';
+					echo '<ul class="treats-options__list" data-treats-options-list>';
+
+					foreach ( $rows as $row ) {
+						printf(
+							'<li class="treats-options__row">
+								<input type="text" name="%1$s[label][]" value="%2$s" placeholder="%3$s" class="treats-options__label">
+								<input type="text" name="%1$s[price][]" value="%4$s" placeholder="%5$s" class="treats-options__price" inputmode="decimal">
+								<button type="button" class="button-link treats-options__remove" data-treats-options-remove aria-label="%6$s">&times;</button>
+							</li>',
+							$id,
+							esc_attr( (string) ( $row['label'] ?? '' ) ),
+							esc_attr__( 'Name, e.g. £20', 'treats' ),
+							esc_attr( (string) ( $row['price'] ?? '' ) ),
+							esc_attr__( 'Price', 'treats' ),
+							esc_attr__( 'Remove this option', 'treats' )
+						);
+					}
+
+					echo '</ul>';
+
+					printf(
+						'<button type="button" class="button" data-treats-options-add data-name="%1$s">%2$s</button>',
+						esc_attr( $id ),
+						esc_html__( 'Add an option', 'treats' )
+					);
+
+					echo '</div>';
 					break;
 
 				case 'gallery':
@@ -384,11 +431,13 @@ function treats_save_meta( $post_id ) {
 			continue;
 		}
 
-		if ( ! isset( $_POST[ $key ] ) ) {
+		// Removing the last option row leaves nothing in the POST at all, so
+		// a missing repeatable field has to mean "empty", not "unchanged".
+		if ( ! isset( $_POST[ $key ] ) && 'options' !== $field['type'] ) {
 			continue;
 		}
 
-		$raw = wp_unslash( $_POST[ $key ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized per type below.
+		$raw = isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized per type below.
 
 		switch ( $field['type'] ) {
 			case 'textarea':
@@ -412,11 +461,35 @@ function treats_save_meta( $post_id ) {
 				$value = implode( ',', array_unique( $ids ) );
 				break;
 
+			case 'options':
+				$labels = isset( $raw['label'] ) ? (array) $raw['label'] : array();
+				$prices = isset( $raw['price'] ) ? (array) $raw['price'] : array();
+				$rows   = array();
+
+				foreach ( $labels as $index => $label ) {
+					$label = sanitize_text_field( $label );
+					$price = sanitize_text_field( $prices[ $index ] ?? '' );
+
+					// A row needs both halves to mean anything; a name with no
+					// price would be an option nobody could be charged for.
+					if ( '' === trim( $label ) || '' === trim( $price ) ) {
+						continue;
+					}
+
+					$rows[] = array(
+						'label' => $label,
+						'price' => $price,
+					);
+				}
+
+				$value = $rows;
+				break;
+
 			default:
 				$value = sanitize_text_field( $raw );
 		}
 
-		if ( '' === $value ) {
+		if ( '' === $value || array() === $value ) {
 			delete_post_meta( $post_id, $key );
 		} else {
 			update_post_meta( $post_id, $key, $value );

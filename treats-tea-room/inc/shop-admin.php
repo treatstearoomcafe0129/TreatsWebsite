@@ -162,10 +162,20 @@ function treats_render_order_detail( $post ) {
 	echo '</tr></thead><tbody>';
 
 	foreach ( $items as $item ) {
+		$detail = array();
+
+		if ( ! empty( $item['option_label'] ) ) {
+			$detail[] = esc_html( $item['option_label'] );
+		}
+
+		if ( ! empty( $item['sku'] ) ) {
+			$detail[] = esc_html( $item['sku'] );
+		}
+
 		printf(
 			'<tr><td><strong>%1$s</strong>%2$s</td><td>%3$d</td><td>%4$s</td></tr>',
 			esc_html( $item['title'] ),
-			empty( $item['sku'] ) ? '' : '<br><span class="description">' . esc_html( $item['sku'] ) . '</span>',
+			$detail ? '<br><span class="description">' . implode( ' &middot; ', $detail ) . '</span>' : '',
 			(int) $item['quantity'],
 			esc_html( treats_money( (int) $item['total'] ) )
 		);

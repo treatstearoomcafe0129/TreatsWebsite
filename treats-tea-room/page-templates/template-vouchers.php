@@ -86,6 +86,23 @@ while ( have_posts() ) :
 		</div>
 	</section>
 
+	<?php
+	// Buying outright, above the enquiry form: paying now is the shorter road
+	// for anyone who already knows what they want.
+	$treats_voucher_product = (int) get_theme_mod( 'treats_voucher_product', 0 );
+
+	if ( $treats_voucher_product ) {
+		get_template_part(
+			'template-parts/shop/buy-panel',
+			null,
+			array(
+				'product_id' => $treats_voucher_product,
+				'eyebrow'    => __( 'Buy one now', 'treats' ),
+			)
+		);
+	}
+	?>
+
 	<section class="section section--tint" id="voucher-form">
 		<div class="container container--wide">
 			<div class="split split--wide-left" style="align-items:start">

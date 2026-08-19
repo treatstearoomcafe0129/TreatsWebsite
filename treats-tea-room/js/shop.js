@@ -262,6 +262,27 @@
 	});
 
 	/* ---------------------------------------------------------------------
+	 * Product options
+	 * ------------------------------------------------------------------ */
+
+	// The headline price follows the chosen amount. Without this the page
+	// says one figure while the basket charges another.
+	document.addEventListener('change', function (event) {
+		var option = event.target.closest('.product__option input');
+
+		if (!option) {
+			return;
+		}
+
+		var target = $('[data-product-price]');
+		var pence = Number(option.getAttribute('data-price'));
+
+		if (target && !isNaN(pence)) {
+			target.textContent = (shop.currency || '£') + (pence / 100).toFixed(2);
+		}
+	});
+
+	/* ---------------------------------------------------------------------
 	 * Product gallery
 	 * ------------------------------------------------------------------ */
 

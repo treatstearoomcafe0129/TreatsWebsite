@@ -143,19 +143,90 @@ function treats_money( $pence ) {
  * ---------------------------------------------------------------------- */
 
 /**
- * The price a customer actually pays, in pence.
+ * The choices a product is sold in, if any.
+ *
+ * A gift voucher is one thing on the shelf sold at six amounts, not six
+ * things. Options carry their own price and nothing else — stock stays at
+ * product level, which is right for vouchers and honest about the fact that
+ * this is not a full inventory system.
  *
  * @param int $product_id Product ID.
+ * @return array<int,array{label:string,price:int}>
+ */
+function treats_product_options( $product_id ) {
+	$rows = get_post_meta( $product_id, '_treats_options', true );
+
+	if ( ! is_array( $rows ) ) {
+		return array();
+	}
+
+	$options = array();
+
+	foreach ( $rows as $row ) {
+		$label = trim( (string) ( $row['label'] ?? '' ) );
+		$price = treats_to_pence( $row['price'] ?? '' );
+
+		if ( '' === $label || $price < 1 ) {
+			continue;
+		}
+
+		$options[] = array(
+			'label' => $label,
+			'price' => $price,
+		);
+	}
+
+	return $options;
+}
+
+/**
+ * One option, by position.
+ *
+ * @param int $product_id Product ID.
+ * @param int $index      Zero-based position.
+ * @return array{label:string,price:int}|null
+ */
+function treats_product_option( $product_id, $index ) {
+	$options = treats_product_options( $product_id );
+
+	return $options[ (int) $index ] ?? null;
+}
+
+/**
+ * The price a customer actually pays, in pence.
+ *
+ * @param int      $product_id Product ID.
+ * @param int|null $option     Option position, when the product has options.
  * @return int
  */
-function treats_product_price( $product_id ) {
+function treats_product_price( $product_id, $option = null ) {
+	if ( null !== $option ) {
+		$chosen = treats_product_option( $product_id, $option );
+
+		if ( $chosen ) {
+			return $chosen['price'];
+		}
+	}
+
 	$sale = treats_to_pence( get_post_meta( $product_id, '_treats_sale_price', true ) );
 
 	if ( $sale > 0 ) {
 		return $sale;
 	}
 
-	return treats_to_pence( get_post_meta( $product_id, '_treats_price', true ) );
+	$price = treats_to_pence( get_post_meta( $product_id, '_treats_price', true ) );
+
+	// A product priced only through its options still needs a figure to show
+	// on the shop listing: the cheapest way in.
+	if ( $price < 1 ) {
+		$options = treats_product_options( $product_id );
+
+		if ( $options ) {
+			return min( wp_list_pluck( $options, 'price' ) );
+		}
+	}
+
+	return $price;
 }
 
 /**
@@ -230,6 +301,16 @@ function treats_product_purchasable( $product_id ) {
 	}
 
 	return treats_product_price( $product_id ) > 0 && treats_product_in_stock( $product_id );
+}
+
+/**
+ * Whether the customer has to pick something before they can buy.
+ *
+ * @param int $product_id Product ID.
+ * @return bool
+ */
+function treats_product_has_options( $product_id ) {
+	return (bool) treats_product_options( $product_id );
 }
 
 /**

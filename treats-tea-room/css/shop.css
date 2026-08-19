@@ -163,6 +163,14 @@
 
 /* --- Single product --------------------------------------------------- */
 
+/* Every other template opens with a hero, and the hero is what clears the
+   fixed header. These two do not have one, so they carry the clearance
+   themselves — without it the header sits over the breadcrumb and title. */
+.product,
+.order-confirm-page {
+	padding-top: calc(var(--t-header-h) + clamp(1.5rem, 4vw, 3rem));
+}
+
 .breadcrumb {
 	display: flex;
 	flex-wrap: wrap;
@@ -267,6 +275,83 @@
 
 .product__content {
 	margin-bottom: var(--sp-5);
+}
+
+.product__options {
+	flex: 1 1 100%;
+	margin: 0 0 var(--sp-2);
+	padding: 0;
+	border: none;
+}
+
+.product__options legend {
+	padding: 0;
+	margin-bottom: var(--sp-3);
+}
+
+.product__option-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sp-2);
+}
+
+.product__option {
+	position: relative;
+	cursor: pointer;
+}
+
+/* The radio itself is hidden but still focusable, so the visible label picks
+   up the focus ring rather than losing it entirely. */
+.product__option input {
+	position: absolute;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	cursor: pointer;
+}
+
+.product__option span {
+	display: block;
+	padding: 0.55rem 1.1rem;
+	border: 1px solid var(--c-line);
+	border-radius: var(--r-pill);
+	font-size: var(--fs-sm);
+	transition:
+		border-color var(--dur-fast) var(--ease-out),
+		background-color var(--dur-fast) var(--ease-out);
+}
+
+.product__option input:hover + span {
+	border-color: var(--c-line-strong);
+}
+
+.product__option input:focus-visible + span {
+	outline: 2px solid var(--c-accent);
+	outline-offset: 2px;
+}
+
+.product__option input:checked + span {
+	background: var(--c-accent-strong);
+	border-color: transparent;
+	color: var(--c-on-accent);
+}
+
+.basket-line__option,
+.checkout__item-option,
+.order-confirm__option {
+	display: inline-block;
+	margin: var(--sp-1) 0 0;
+	padding: 0.1rem 0.5rem;
+	border-radius: var(--r-pill);
+	background: var(--c-accent-soft);
+	font-size: var(--fs-xs);
+	color: var(--c-ink);
+}
+
+.checkout__item-option,
+.order-confirm__option {
+	margin: 0 0 0 var(--sp-1);
 }
 
 .product__buy {
@@ -1008,6 +1093,90 @@ html:not(.no-js) .basket-line__apply {
 	flex-wrap: wrap;
 	justify-content: center;
 	gap: var(--sp-3);
+}
+
+/* --- A product offered inside another page ---------------------------- */
+
+.buy-panel {
+	position: relative;
+	display: grid;
+	gap: var(--sp-6);
+	grid-template-columns: 1fr;
+	align-items: center;
+	padding: var(--sp-6);
+	overflow: hidden;
+}
+
+@media (min-width: 800px) {
+	.buy-panel {
+		grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+		padding: var(--sp-7);
+	}
+}
+
+.buy-panel__media {
+	position: relative;
+	z-index: 2;
+	border-radius: var(--r-md);
+	overflow: hidden;
+	aspect-ratio: 4 / 3;
+}
+
+.buy-panel__media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.buy-panel__body {
+	position: relative;
+	z-index: 2;
+}
+
+.buy-panel__eyebrow {
+	margin: 0 0 var(--sp-2);
+	font-size: var(--fs-xs);
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+	color: var(--gold-mid);
+}
+
+.buy-panel__title {
+	margin: 0 0 var(--sp-2);
+	font-size: var(--fs-xl);
+	line-height: 1.15;
+}
+
+.buy-panel__text {
+	margin: var(--sp-4) 0 0;
+	color: var(--c-ink-soft);
+}
+
+.buy-panel__price {
+	margin: var(--sp-4) 0 var(--sp-5);
+	font-family: var(--font-display);
+	font-size: var(--fs-xl);
+}
+
+.buy-panel__note {
+	margin: 0 0 var(--sp-4);
+	color: var(--c-ink-soft);
+	font-size: var(--fs-sm);
+}
+
+.buy-panel__form {
+	margin: 0;
+}
+
+.buy-panel__more {
+	margin: var(--sp-4) 0 0;
+	font-size: var(--fs-sm);
+}
+
+.buy-panel__more a {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--sp-2);
 }
 
 /* --- Motion ----------------------------------------------------------- */

@@ -78,10 +78,22 @@ while ( have_posts() ) :
 					<span class="gold-rule" aria-hidden="true"></span>
 
 					<p class="product__price">
-						<?php if ( $treats_sale ) : ?>
+						<?php if ( $treats_sale && ! treats_product_has_options( $treats_id ) ) : ?>
 							<span class="product__was"><?php echo esc_html( treats_money( treats_product_regular_price( $treats_id ) ) ); ?></span>
 						<?php endif; ?>
-						<span class="product__now"><?php echo esc_html( treats_money( $treats_price ) ); ?></span>
+						<span class="product__now" data-product-price>
+							<?php
+							// With options the figure follows whichever is
+							// selected, starting at the first.
+							echo esc_html(
+								treats_money(
+									treats_product_has_options( $treats_id )
+										? treats_product_price( $treats_id, 0 )
+										: $treats_price
+								)
+							);
+							?>
+						</span>
 					</p>
 
 					<div class="product__content entry-content">
@@ -102,6 +114,25 @@ while ( have_posts() ) :
 							<input type="hidden" name="action" value="treats_basket_add">
 							<input type="hidden" name="treats_nonce" value="<?php echo esc_attr( wp_create_nonce( 'treats_public' ) ); ?>">
 							<input type="hidden" name="product_id" value="<?php echo esc_attr( $treats_id ); ?>">
+
+							<?php $treats_options = treats_product_options( $treats_id ); ?>
+							<?php if ( $treats_options ) : ?>
+								<fieldset class="product__options">
+									<legend class="field__label"><?php esc_html_e( 'Choose an amount', 'treats' ); ?></legend>
+
+									<div class="product__option-row">
+										<?php foreach ( $treats_options as $treats_index => $treats_option ) : ?>
+											<label class="product__option">
+												<input type="radio" name="option"
+													value="<?php echo esc_attr( (string) $treats_index ); ?>"
+													data-price="<?php echo esc_attr( (string) $treats_option['price'] ); ?>"
+													<?php checked( 0, $treats_index ); ?>>
+												<span><?php echo esc_html( $treats_option['label'] ); ?></span>
+											</label>
+										<?php endforeach; ?>
+									</div>
+								</fieldset>
+							<?php endif; ?>
 
 							<div class="field product__qty">
 								<label class="field__label" for="product-qty"><?php esc_html_e( 'Quantity', 'treats' ); ?></label>

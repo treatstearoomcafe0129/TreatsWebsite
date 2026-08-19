@@ -95,6 +95,32 @@ function treats_sanitize_select( $value, $setting ) {
 }
 
 /**
+ * Products, as Customizer dropdown choices.
+ *
+ * @return array<string,string>
+ */
+function treats_product_choices() {
+	$choices = array( '' => __( '— None —', 'treats' ) );
+
+	$products = get_posts(
+		array(
+			'post_type'      => 'treats_product',
+			'post_status'    => 'publish',
+			'posts_per_page' => 100,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+			'no_found_rows'  => true,
+		)
+	);
+
+	foreach ( $products as $product ) {
+		$choices[ (string) $product->ID ] = $product->post_title;
+	}
+
+	return $choices;
+}
+
+/**
  * Only ever store one of the two Square environments.
  *
  * Anything unrecognised falls back to the sandbox, so a mangled value can
@@ -527,6 +553,19 @@ function treats_customize_register( $wp_customize ) {
 
 	treats_add_control(
 		$wp_customize,
+		'treats_tea_gift_product',
+		array(
+			'label'       => __( 'Sell as a gift', 'treats' ),
+			'description' => __( 'Pick a shop product and the Afternoon Tea page will offer it for sale — an afternoon tea bought as a present rather than booked for yourself.', 'treats' ),
+			'section'     => 'treats_tea',
+			'type'        => 'select',
+			'choices'     => treats_product_choices(),
+			'sanitize'    => 'absint',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
 		'treats_tea_image',
 		array(
 			'label'       => __( 'Photograph', 'treats' ),
@@ -707,6 +746,19 @@ function treats_customize_register( $wp_customize ) {
 	);
 
 	/* ------------------------------------------------------------ Vouchers */
+
+	treats_add_control(
+		$wp_customize,
+		'treats_voucher_product',
+		array(
+			'label'       => __( 'Voucher people can buy online', 'treats' ),
+			'description' => __( 'Pick the shop product for your printed voucher card. The page will take payment for it instead of only taking enquiries.', 'treats' ),
+			'section'     => 'treats_vouchers',
+			'type'        => 'select',
+			'choices'     => treats_product_choices(),
+			'sanitize'    => 'absint',
+		)
+	);
 
 	treats_add_control(
 		$wp_customize,

@@ -257,6 +257,9 @@ treats_page_hero(
 								<li>
 									<span class="checkout__item-name">
 										<?php echo esc_html( $treats_line['title'] ); ?>
+										<?php if ( '' !== $treats_line['option_label'] ) : ?>
+											<span class="checkout__item-option"><?php echo esc_html( $treats_line['option_label'] ); ?></span>
+										<?php endif; ?>
 										<span class="checkout__item-qty">&times;<?php echo esc_html( (string) $treats_line['quantity'] ); ?></span>
 									</span>
 									<span class="checkout__item-price"><?php echo esc_html( treats_money( $treats_line['total'] ) ); ?></span>

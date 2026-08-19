@@ -5015,7 +5015,8 @@ body::before {
 .site-footer__grid::before,
 .page-hero__inner::before,
 .fulfilment__option::before,
-.checkout__card::before {
+.checkout__card::before,
+.buy-panel::before {
 	content: "";
 	position: absolute;
 	inset: 0;

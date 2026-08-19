@@ -43,6 +43,10 @@ $nonce      = wp_create_nonce( 'treats_public' );
 							<?php echo esc_html( $line['title'] ); ?>
 						</a>
 
+						<?php if ( '' !== $line['option_label'] ) : ?>
+							<p class="basket-line__option"><?php echo esc_html( $line['option_label'] ); ?></p>
+						<?php endif; ?>
+
 						<p class="basket-line__price">
 							<?php
 							printf(
@@ -62,9 +66,9 @@ $nonce      = wp_create_nonce( 'treats_public' );
 							<input type="hidden" name="treats_basket_action" value="update">
 							<input type="hidden" name="action" value="treats_basket_update">
 							<input type="hidden" name="treats_nonce" value="<?php echo esc_attr( $nonce ); ?>">
-							<input type="hidden" name="product_id" value="<?php echo esc_attr( $line['product_id'] ); ?>">
+							<input type="hidden" name="line" value="<?php echo esc_attr( $line['key'] ); ?>">
 
-							<label class="screen-reader-text" for="basket-qty-<?php echo esc_attr( $line['product_id'] ); ?>">
+							<label class="screen-reader-text" for="basket-qty-<?php echo esc_attr( $line['key'] ); ?>">
 								<?php
 								printf(
 									/* translators: %s: product name. */
@@ -75,7 +79,7 @@ $nonce      = wp_create_nonce( 'treats_public' );
 							</label>
 
 							<input class="input basket-line__input" type="number"
-								id="basket-qty-<?php echo esc_attr( $line['product_id'] ); ?>"
+								id="basket-qty-<?php echo esc_attr( $line['key'] ); ?>"
 								name="quantity"
 								value="<?php echo esc_attr( $line['quantity'] ); ?>"
 								min="1" max="<?php echo esc_attr( $line['max'] ); ?>" step="1" inputmode="numeric">
@@ -90,7 +94,7 @@ $nonce      = wp_create_nonce( 'treats_public' );
 						<input type="hidden" name="treats_basket_action" value="remove">
 						<input type="hidden" name="action" value="treats_basket_remove">
 						<input type="hidden" name="treats_nonce" value="<?php echo esc_attr( $nonce ); ?>">
-						<input type="hidden" name="product_id" value="<?php echo esc_attr( $line['product_id'] ); ?>">
+						<input type="hidden" name="line" value="<?php echo esc_attr( $line['key'] ); ?>">
 
 						<?php
 						$remove_label = sprintf(

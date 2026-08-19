@@ -28,11 +28,56 @@ const TREATS_BASKET_COOKIE = 'treats_basket';
 const TREATS_BASKET_MAX_QTY = 20;
 
 /* -------------------------------------------------------------------------
+ * Basket keys
+ *
+ * A line is identified by the product, plus the chosen option where there is
+ * one: "84" or "84:2". Two amounts of the same gift voucher are two lines,
+ * and adding the £20 one twice still adds up to one line of two.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Build a basket key.
+ *
+ * @param int      $product_id Product ID.
+ * @param int|null $option     Option position, or null.
+ * @return string
+ */
+function treats_basket_key( $product_id, $option = null ) {
+	return null === $option
+		? (string) (int) $product_id
+		: (int) $product_id . ':' . (int) $option;
+}
+
+/**
+ * Split a basket key back into a product and an option.
+ *
+ * @param string $key Basket key.
+ * @return array{product_id:int,option:int|null}
+ */
+function treats_parse_basket_key( $key ) {
+	// Strict on purpose. Casting loosely, "12:abc" and "12:0:999" both came
+	// out as option zero — no money was at risk, since the price still came
+	// from that option, but a key we cannot read should be dropped rather
+	// than quietly turned into a different one.
+	if ( ! preg_match( '/^(\d+)(?::(\d+))?$/', (string) $key, $matches ) ) {
+		return array(
+			'product_id' => 0,
+			'option'     => null,
+		);
+	}
+
+	return array(
+		'product_id' => (int) $matches[1],
+		'option'     => isset( $matches[2] ) ? (int) $matches[2] : null,
+	);
+}
+
+/* -------------------------------------------------------------------------
  * Reading and writing
  * ---------------------------------------------------------------------- */
 
 /**
- * Current basket as a map of product ID to quantity.
+ * Current basket as a map of basket key to quantity.
  *
  * Lines pointing at products that have been deleted, unpublished or sold out
  * are dropped silently — the customer sees the basket they can actually buy.
@@ -62,8 +107,9 @@ function treats_get_basket() {
 		return $store;
 	}
 
-	foreach ( $raw as $product_id => $quantity ) {
-		$product_id = absint( $product_id );
+	foreach ( $raw as $key => $quantity ) {
+		$line       = treats_parse_basket_key( $key );
+		$product_id = $line['product_id'];
 
 		// Deliberately not absint(): that turns -5 into 5, so a mangled
 		// cookie would quietly order five of something. A quantity that is
@@ -78,7 +124,19 @@ function treats_get_basket() {
 			continue;
 		}
 
-		$basket[ $product_id ] = treats_clamp_quantity( $product_id, $quantity );
+		// A line must name an option if the product has them, and must not
+		// if it does not — otherwise the price it resolves to is a guess.
+		$has_options = treats_product_has_options( $product_id );
+
+		if ( $has_options && ( null === $line['option'] || ! treats_product_option( $product_id, $line['option'] ) ) ) {
+			continue;
+		}
+
+		if ( ! $has_options && null !== $line['option'] ) {
+			continue;
+		}
+
+		$basket[ treats_basket_key( $product_id, $line['option'] ) ] = treats_clamp_quantity( $product_id, $quantity );
 	}
 
 	$store = $basket;
@@ -121,7 +179,7 @@ function treats_clamp_quantity( $product_id, $quantity ) {
 /**
  * Persist the basket.
  *
- * @param array<int,int> $basket Product ID to quantity.
+ * @param array<string,int> $basket Basket key to quantity.
  * @return void
  */
 function treats_set_basket( $basket ) {
@@ -175,11 +233,18 @@ function treats_clear_basket() {
 function treats_basket_lines() {
 	$lines = array();
 
-	foreach ( treats_get_basket() as $product_id => $quantity ) {
-		$price = treats_product_price( $product_id );
+	foreach ( treats_get_basket() as $key => $quantity ) {
+		$parsed     = treats_parse_basket_key( $key );
+		$product_id = $parsed['product_id'];
+		$option     = $parsed['option'];
+		$chosen     = null === $option ? null : treats_product_option( $product_id, $option );
+		$price      = treats_product_price( $product_id, $option );
 
 		$lines[] = array(
+			'key'          => (string) $key,
 			'product_id'   => $product_id,
+			'option'       => $option,
+			'option_label' => $chosen ? $chosen['label'] : '',
 			'title'        => get_the_title( $product_id ),
 			'url'          => get_permalink( $product_id ),
 			'sku'          => (string) get_post_meta( $product_id, '_treats_sku', true ),
@@ -227,8 +292,10 @@ function treats_basket_count() {
  * @return bool
  */
 function treats_basket_collect_only() {
-	foreach ( array_keys( treats_get_basket() ) as $product_id ) {
-		if ( treats_product_collect_only( $product_id ) ) {
+	foreach ( array_keys( treats_get_basket() ) as $key ) {
+		$parsed = treats_parse_basket_key( $key );
+
+		if ( treats_product_collect_only( $parsed['product_id'] ) ) {
 			return true;
 		}
 	}
@@ -282,8 +349,9 @@ function treats_basket_postage( $fulfilment ) {
 	$dearest = 0;
 	$units   = 0;
 
-	foreach ( $basket as $product_id => $quantity ) {
-		$dearest = max( $dearest, treats_product_postage( $product_id ) );
+	foreach ( $basket as $key => $quantity ) {
+		$parsed  = treats_parse_basket_key( $key );
+		$dearest = max( $dearest, treats_product_postage( $parsed['product_id'] ) );
 		$units  += $quantity;
 	}
 
@@ -298,8 +366,9 @@ function treats_basket_postage( $fulfilment ) {
 function treats_basket_subtotal() {
 	$subtotal = 0;
 
-	foreach ( treats_get_basket() as $product_id => $quantity ) {
-		$subtotal += treats_product_price( $product_id ) * $quantity;
+	foreach ( treats_get_basket() as $key => $quantity ) {
+		$parsed    = treats_parse_basket_key( $key );
+		$subtotal += treats_product_price( $parsed['product_id'], $parsed['option'] ) * $quantity;
 	}
 
 	return $subtotal;
@@ -405,6 +474,12 @@ function treats_handle_basket() {
 	// "add" can reject it, rather than both seeing a positive number.
 	$quantity = isset( $_POST['quantity'] ) ? (int) $_POST['quantity'] : 1; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cast to int.
 
+	// Which line is being changed. "add" names a product and an option;
+	// "update" and "remove" name an existing line outright.
+	$option = isset( $_POST['option'] ) && '' !== $_POST['option'] ? absint( $_POST['option'] ) : null;
+	$line   = isset( $_POST['line'] ) ? sanitize_text_field( wp_unslash( $_POST['line'] ) ) : '';
+	$key    = '' !== $line ? $line : treats_basket_key( $product_id, $option );
+
 	switch ( $operation ) {
 		case 'empty':
 			$basket = array();
@@ -412,19 +487,19 @@ function treats_handle_basket() {
 			break;
 
 		case 'remove':
-			unset( $basket[ $product_id ] );
+			unset( $basket[ $key ] );
 			$message = __( 'Removed from your basket.', 'treats' );
 			break;
 
 		case 'update':
-			if ( ! isset( $basket[ $product_id ] ) ) {
+			if ( ! isset( $basket[ $key ] ) ) {
 				treats_basket_respond( false, __( 'That item is not in your basket.', 'treats' ), $is_ajax, 404 );
 			}
 
 			if ( $quantity < 1 ) {
-				unset( $basket[ $product_id ] );
+				unset( $basket[ $key ] );
 			} else {
-				$basket[ $product_id ] = treats_clamp_quantity( $product_id, $quantity );
+				$basket[ $key ] = treats_clamp_quantity( treats_parse_basket_key( $key )['product_id'], $quantity );
 			}
 
 			$message = __( 'Basket updated.', 'treats' );
@@ -435,10 +510,21 @@ function treats_handle_basket() {
 				treats_basket_respond( false, __( 'Sorry — that item is not available.', 'treats' ), $is_ajax, 409 );
 			}
 
-			$wanted = ( $basket[ $product_id ] ?? 0 ) + max( 1, $quantity );
+			// A product sold in several amounts cannot be added without
+			// saying which, or the price would be whichever we guessed.
+			if ( treats_product_has_options( $product_id ) && ! treats_product_option( $product_id, (int) $option ) ) {
+				treats_basket_respond( false, __( 'Please choose an option first.', 'treats' ), $is_ajax, 422 );
+			}
+
+			if ( ! treats_product_has_options( $product_id ) ) {
+				$option = null;
+			}
+
+			$key    = treats_basket_key( $product_id, $option );
+			$wanted = ( $basket[ $key ] ?? 0 ) + max( 1, $quantity );
 			$given  = treats_clamp_quantity( $product_id, $wanted );
 
-			$basket[ $product_id ] = $given;
+			$basket[ $key ] = $given;
 
 			$message = $given < $wanted
 				/* translators: %d: quantity available. */

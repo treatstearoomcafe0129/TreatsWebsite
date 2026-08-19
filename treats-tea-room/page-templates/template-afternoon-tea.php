@@ -108,6 +108,23 @@ while ( have_posts() ) :
 		</div>
 	</section>
 
+	<?php
+	// Booking a table is for yourself; this is the same thing bought for
+	// somebody else, so it sits between the pitch and the menu.
+	$treats_tea_gift = (int) get_theme_mod( 'treats_tea_gift_product', 0 );
+
+	if ( $treats_tea_gift ) {
+		get_template_part(
+			'template-parts/shop/buy-panel',
+			null,
+			array(
+				'product_id' => $treats_tea_gift,
+				'eyebrow'    => __( 'Buying it for someone else?', 'treats' ),
+			)
+		);
+	}
+	?>
+
 	<?php if ( $treats_tea_fillings ) : ?>
 		<section class="section section--sm">
 			<div class="container container--wide">

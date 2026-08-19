@@ -68,7 +68,14 @@ function treats_needs_shop_assets() {
 		|| is_tax( 'treats_product_cat' )
 		|| is_singular( 'treats_product' )
 		|| treats_is_checkout()
-		|| is_page_template( 'page-templates/template-order.php' );
+		// These two can carry a product for sale inside an ordinary page.
+		|| is_page_template(
+			array(
+				'page-templates/template-order.php',
+				'page-templates/template-vouchers.php',
+				'page-templates/template-afternoon-tea.php',
+			)
+		);
 }
 
 /**
@@ -190,7 +197,8 @@ function treats_enqueue_assets() {
 			'treats-shop',
 			'treatsShopData',
 			array(
-				'i18n' => array(
+				'currency' => treats_currency_symbol(),
+				'i18n'     => array(
 					'error' => __( 'Something went wrong. Please try again.', 'treats' ),
 				),
 			)
