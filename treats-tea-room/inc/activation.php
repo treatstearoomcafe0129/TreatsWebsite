@@ -200,6 +200,7 @@ function treats_sync_new_pages() {
 	treats_add_page_to_primary_menu( $pages, 'events' );
 	treats_add_shop_to_primary_menu();
 	treats_point_menu_parent_at_overview( $pages );
+	treats_nest_menu_pages( $pages );
 	treats_restore_itemised_menu( $pages );
 	treats_remove_sample_content();
 
@@ -512,6 +513,85 @@ function treats_add_page_to_primary_menu( $pages, $key ) {
 			'menu-item-status'    => 'publish',
 		)
 	);
+}
+
+/**
+ * Tuck the individual menu pages under the "Menu" item.
+ *
+ * Breakfast, Lunch, Cakes and Drinks were sitting alongside Menu rather than
+ * inside it, which pushed the rest of the navigation — Shop included — off
+ * the right-hand edge of the bar. They belong under the parent that names
+ * them.
+ *
+ * Only moves an item that is still top level, so a menu somebody has already
+ * arranged by hand is left exactly as they arranged it.
+ *
+ * @param array<string,int> $pages Blueprint key to page ID.
+ * @return void
+ */
+function treats_nest_menu_pages( $pages ) {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['primary'] ) || empty( $pages['menus'] ) ) {
+		return;
+	}
+
+	$menu_id = (int) $locations['primary'];
+	$items   = wp_get_nav_menu_items( $menu_id );
+
+	if ( ! is_array( $items ) ) {
+		return;
+	}
+
+	// Find the item pointing at the Menus overview — that is the parent.
+	$parent_item = 0;
+
+	foreach ( $items as $item ) {
+		if ( 'post_type' === $item->type && (int) $item->object_id === (int) $pages['menus'] ) {
+			$parent_item = (int) $item->ID;
+			break;
+		}
+	}
+
+	if ( ! $parent_item ) {
+		return;
+	}
+
+	$children = array();
+
+	foreach ( array( 'breakfast', 'lunch', 'cakes', 'drinks' ) as $key ) {
+		if ( ! empty( $pages[ $key ] ) ) {
+			$children[ (int) $pages[ $key ] ] = true;
+		}
+	}
+
+	foreach ( $items as $item ) {
+		if ( 'post_type' !== $item->type || empty( $children[ (int) $item->object_id ] ) ) {
+			continue;
+		}
+
+		// Already nested somewhere — leave it be.
+		if ( (int) $item->menu_item_parent ) {
+			continue;
+		}
+
+		wp_update_nav_menu_item(
+			$menu_id,
+			(int) $item->ID,
+			array(
+				'menu-item-object-id' => (int) $item->object_id,
+				'menu-item-object'    => $item->object,
+				'menu-item-type'      => 'post_type',
+				'menu-item-title'     => $item->title,
+				'menu-item-parent-id' => $parent_item,
+				// Position is deliberately left alone. Numbering the children
+				// 1, 2, 3 sets their order across the whole menu, not within
+				// the parent, which moved Breakfast & Brunch above the very
+				// item it was being nested under and left it hanging off Home.
+				'menu-item-status'    => 'publish',
+			)
+		);
+	}
 }
 
 /**

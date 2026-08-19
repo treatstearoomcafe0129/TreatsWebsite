@@ -813,6 +813,42 @@ function treats_customize_register( $wp_customize ) {
 
 	treats_add_control(
 		$wp_customize,
+		'treats_home_show_shop',
+		array(
+			'label'       => __( 'Show the shop on the home page', 'treats' ),
+			'description' => __( 'A strip of three products with their photographs. Hides itself when there is nothing published to sell.', 'treats' ),
+			'section'     => 'treats_shop',
+			'type'        => 'checkbox',
+			'default'     => true,
+			'sanitize'    => 'treats_sanitize_checkbox',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_home_shop_title',
+		array(
+			'label'    => __( 'Home page shop heading', 'treats' ),
+			'section'  => 'treats_shop',
+			'default'  => __( 'From our shop', 'treats' ),
+			'sanitize' => 'sanitize_text_field',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
+		'treats_home_shop_text',
+		array(
+			'label'    => __( 'Home page shop intro', 'treats' ),
+			'section'  => 'treats_shop',
+			'type'     => 'textarea',
+			'default'  => __( 'Cast iron teapots, trivets and gift vouchers — posted out to you, or waiting behind the counter.', 'treats' ),
+			'sanitize' => 'sanitize_textarea_field',
+		)
+	);
+
+	treats_add_control(
+		$wp_customize,
 		'treats_shop_enabled',
 		array(
 			'label'       => __( 'Open the shop', 'treats' ),

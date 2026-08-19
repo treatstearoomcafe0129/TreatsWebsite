@@ -1190,3 +1190,19 @@ html:not(.no-js) .basket-line__apply {
 		transition: none;
 	}
 }
+
+/* --- The shop on the home page ---------------------------------------- */
+
+.home-shop__grid {
+	margin-top: var(--sp-6);
+	/* Three products, and no wider than a comfortable reading measure —
+	   auto-fill would stretch them across the whole page on a big screen. */
+	grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+	max-width: 60rem;
+	margin-inline: auto;
+}
+
+.home-shop__more {
+	margin: var(--sp-6) 0 0;
+	text-align: center;
+}

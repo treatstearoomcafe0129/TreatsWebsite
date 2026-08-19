@@ -63,6 +63,11 @@ function treats_needs_shop_assets() {
 		return false;
 	}
 
+	// The home page carries a strip of products.
+	if ( is_front_page() && get_theme_mod( 'treats_home_show_shop', true ) ) {
+		return true;
+	}
+
 	return treats_shop_enabled()
 		|| is_post_type_archive( 'treats_product' )
 		|| is_tax( 'treats_product_cat' )

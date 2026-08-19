@@ -24,6 +24,7 @@ $treats_sections = apply_filters(
 		'hero',
 		'values',
 		'actions',
+		'shop',
 		'contact-bar',
 	)
 );
