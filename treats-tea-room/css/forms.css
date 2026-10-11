@@ -1,0 +1,441 @@
+/**
+ * Forms: booking, contact, vouchers, newsletter.
+ */
+
+.form {
+	display: grid;
+	gap: var(--sp-5);
+}
+
+.form__grid {
+	display: grid;
+	gap: var(--sp-4);
+}
+
+@media (min-width: 640px) {
+	.form__grid--2 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.form__grid--3 {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+.field {
+	display: grid;
+	gap: 0.45rem;
+}
+
+.field--full {
+	grid-column: 1 / -1;
+}
+
+.field__label {
+	font-size: var(--fs-sm);
+	font-weight: 500;
+	color: var(--c-ink);
+}
+
+.field__label .required {
+	color: var(--c-accent-strong);
+	margin-left: 0.15em;
+}
+
+.field__hint {
+	font-size: var(--fs-xs);
+	color: var(--c-ink-mute);
+}
+
+.field__error {
+	font-size: var(--fs-xs);
+	color: #b4472f;
+	display: none;
+}
+
+:root[data-theme="dark"] .field__error {
+	color: #f0a08c;
+}
+
+.field.has-error .field__error {
+	display: block;
+}
+
+.field.has-error .input,
+.field.has-error select,
+.field.has-error textarea {
+	border-color: #b4472f;
+}
+
+.input,
+.form select,
+.form textarea,
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="tel"],
+.form input[type="date"],
+.form input[type="time"],
+.form input[type="number"],
+.form input[type="search"] {
+	width: 100%;
+	padding: 0.85rem 1rem;
+	border: 1px solid var(--c-line-strong);
+	border-radius: var(--r-md);
+	background: var(--c-surface);
+	color: var(--c-ink);
+	font-size: var(--fs-sm);
+	line-height: 1.4;
+	transition:
+		border-color var(--dur-fast) var(--ease-out),
+		box-shadow var(--dur-fast) var(--ease-out),
+		background-color var(--dur-fast) var(--ease-out);
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+.form textarea {
+	min-height: 140px;
+	resize: vertical;
+	line-height: 1.6;
+}
+
+.form select {
+	background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+	background-position: calc(100% - 20px) calc(50% + 2px), calc(100% - 15px) calc(50% + 2px);
+	background-size: 5px 5px, 5px 5px;
+	background-repeat: no-repeat;
+	padding-right: 2.75rem;
+	cursor: pointer;
+}
+
+.input:focus,
+.form select:focus,
+.form textarea:focus,
+.form input:focus {
+	outline: none;
+	border-color: var(--c-accent);
+	box-shadow: 0 0 0 3px var(--c-accent-soft);
+}
+
+.input::placeholder,
+.form textarea::placeholder {
+	color: var(--c-ink-mute);
+	opacity: 0.75;
+}
+
+/* Date and time inputs pick up the theme's colour scheme automatically via
+   `color-scheme`, so the native pickers match in dark mode. */
+
+/* Choice chips — party size, voucher amounts, time slots */
+
+.choice-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+	gap: var(--sp-2);
+}
+
+.choice-grid--wide {
+	grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+}
+
+.choice {
+	position: relative;
+}
+
+.choice input {
+	position: absolute;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	cursor: pointer;
+}
+
+.choice__label {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 48px;
+	padding: 0.5rem;
+	border: 1px solid var(--c-line-strong);
+	border-radius: var(--r-md);
+	background: var(--c-surface);
+	font-size: var(--fs-sm);
+	text-align: center;
+	cursor: pointer;
+	transition:
+		background-color var(--dur-fast) var(--ease-out),
+		border-color var(--dur-fast) var(--ease-out),
+		color var(--dur-fast) var(--ease-out),
+		transform var(--dur-fast) var(--ease-out);
+}
+
+.choice input:hover + .choice__label {
+	border-color: var(--c-accent);
+}
+
+.choice input:focus-visible + .choice__label {
+	outline: 2px solid var(--c-accent-strong);
+	outline-offset: 2px;
+}
+
+.choice input:checked + .choice__label {
+	background: var(--c-accent-strong);
+	border-color: transparent;
+	color: var(--c-on-accent);
+	font-weight: 500;
+}
+
+.choice input:disabled + .choice__label {
+	opacity: 0.4;
+	cursor: not-allowed;
+	text-decoration: line-through;
+}
+
+/* Checkbox & radio rows */
+
+.check {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.7rem;
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+	cursor: pointer;
+	line-height: 1.5;
+}
+
+.check input[type="checkbox"],
+.check input[type="radio"] {
+	appearance: none;
+	-webkit-appearance: none;
+	flex-shrink: 0;
+	width: 20px;
+	height: 20px;
+	margin-top: 0.15rem;
+	border: 1px solid var(--c-line-strong);
+	border-radius: var(--r-sm);
+	background: var(--c-surface);
+	cursor: pointer;
+	display: grid;
+	place-content: center;
+	transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.check input[type="radio"] {
+	border-radius: 50%;
+}
+
+.check input[type="checkbox"]::before {
+	content: "";
+	width: 11px;
+	height: 6px;
+	border-left: 2px solid var(--c-on-accent);
+	border-bottom: 2px solid var(--c-on-accent);
+	transform: rotate(-45deg) scale(0);
+	transition: transform var(--dur-fast) var(--ease-out);
+	margin-top: -2px;
+}
+
+.check input[type="radio"]::before {
+	content: "";
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--c-on-accent);
+	transform: scale(0);
+	transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.check input:checked {
+	background: var(--c-accent-strong);
+	border-color: var(--c-accent-strong);
+}
+
+.check input:checked::before {
+	transform: rotate(-45deg) scale(1);
+}
+
+.check input[type="radio"]:checked::before {
+	transform: scale(1);
+}
+
+/* Honeypot — visually and programmatically out of the way */
+
+.form-trap {
+	position: absolute !important;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+/* Submission feedback */
+
+.form-response {
+	padding: var(--sp-4) var(--sp-5);
+	border-radius: var(--r-md);
+	font-size: var(--fs-sm);
+	border: 1px solid transparent;
+	scroll-margin-top: calc(var(--t-header-h) + 2rem);
+}
+
+.form-response[hidden] {
+	display: none;
+}
+
+.form-response--success {
+	background: var(--c-accent-soft);
+	border-color: color-mix(in srgb, var(--c-accent) 40%, transparent);
+	color: var(--c-accent-ink);
+}
+
+.form-response--error {
+	background: color-mix(in srgb, #b4472f 10%, transparent);
+	border-color: color-mix(in srgb, #b4472f 35%, transparent);
+	color: #8d3624;
+}
+
+:root[data-theme="dark"] .form-response--error {
+	color: #f3b6a5;
+}
+
+.form__footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--sp-4);
+	justify-content: space-between;
+}
+
+.form__note {
+	font-size: var(--fs-xs);
+	color: var(--c-ink-mute);
+	max-width: 46ch;
+}
+
+/* Form card — the panel a form sits inside */
+
+.form-card {
+	border-radius: var(--r-lg);
+	padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.form-card__header {
+	margin-bottom: var(--sp-6);
+}
+
+.form-card__title {
+	font-size: var(--fs-xl);
+	margin-bottom: var(--sp-3);
+}
+
+/* Booking summary rail */
+
+.booking-aside {
+	display: grid;
+	gap: var(--sp-6);
+	align-content: start;
+}
+
+.info-card {
+	padding: clamp(1.25rem, 3vw, 2rem);
+	border-radius: var(--r-lg);
+}
+
+.info-card__title {
+	font-family: var(--font-sans);
+	font-size: var(--fs-2xs);
+	font-weight: 600;
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+	color: var(--c-ink-mute);
+	margin-bottom: var(--sp-4);
+}
+
+/* Newsletter */
+
+.newsletter {
+	display: grid;
+	gap: var(--sp-3);
+}
+
+.newsletter__row {
+	display: flex;
+	gap: var(--sp-2);
+	flex-wrap: wrap;
+}
+
+.newsletter__row .input {
+	flex: 1;
+	min-width: 200px;
+	border-radius: var(--r-pill);
+	padding-inline: 1.25rem;
+}
+
+.newsletter__row .btn {
+	flex-shrink: 0;
+}
+
+.newsletter__small {
+	font-size: var(--fs-xs);
+	color: var(--c-ink-mute);
+}
+
+/* The footer sits on glass like every other panel, so its form inherits the
+   ordinary field styling — no inverted overrides needed. */
+
+/* Voucher cards */
+
+.voucher-grid {
+	display: grid;
+	gap: clamp(1.25rem, 3vw, 2rem);
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+}
+
+.voucher-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: var(--sp-4);
+	padding: clamp(1.5rem, 3vw, 2.25rem);
+	border-radius: var(--r-lg);
+	background: var(--c-surface);
+	border: 1px solid var(--c-line);
+	overflow: hidden;
+	transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+
+.voucher-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-lg);
+}
+
+.voucher-card--featured {
+	border-color: color-mix(in srgb, var(--c-brass) 45%, transparent);
+	background:
+		linear-gradient(160deg, color-mix(in srgb, var(--c-brass) 7%, transparent), transparent 60%),
+		var(--c-surface);
+}
+
+.voucher-card__amount {
+	font-family: var(--font-display);
+	font-size: clamp(2.25rem, 4vw, 3rem);
+	line-height: 1;
+	color: var(--c-accent-strong);
+}
+
+.voucher-card__title {
+	font-size: var(--fs-lg);
+}
+
+.voucher-card__text {
+	font-size: var(--fs-sm);
+	color: var(--c-ink-soft);
+	flex: 1;
+}
+
+.voucher-card__ribbon {
+	position: absolute;
+	top: var(--sp-4);
+	right: var(--sp-4);
+}

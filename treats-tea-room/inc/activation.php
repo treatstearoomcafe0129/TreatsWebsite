@@ -1,0 +1,1504 @@
+<?php
+/**
+ * First-run scaffolding.
+ *
+ * On activation the theme builds the page structure, navigation menus and
+ * starter content described in the design, so the site is complete the moment
+ * it is switched on. Everything created here is ordinary WordPress content and
+ * can be edited or deleted freely; the routine never runs twice.
+ *
+ * @package Treats
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Run the scaffolding once, after the theme is activated.
+ *
+ * @return void
+ */
+function treats_after_switch_theme() {
+	if ( get_option( 'treats_scaffolded' ) ) {
+		treats_sync_new_pages();
+		flush_rewrite_rules();
+
+		return;
+	}
+
+	treats_register_post_types();
+	treats_register_taxonomies();
+	treats_seed_dietary_terms();
+
+	$pages = treats_create_pages();
+
+	treats_seed_menu_content();
+	treats_seed_reviews();
+	treats_seed_faqs();
+	treats_create_menus( $pages );
+	treats_configure_reading( $pages );
+
+	update_option( 'treats_scaffolded', TREATS_VERSION, false );
+
+	flush_rewrite_rules();
+}
+add_action( 'after_switch_theme', 'treats_after_switch_theme' );
+
+/**
+ * The site's page structure.
+ *
+ * @return array<string,array<string,mixed>>
+ */
+function treats_page_blueprint() {
+	return array(
+		'home'      => array(
+			'title'    => __( 'Home', 'treats' ),
+			'template' => 'front-page.php',
+			'content'  => '',
+		),
+		'menus'     => array(
+			'title'    => __( 'Menus', 'treats' ),
+			'template' => 'page-templates/template-menu-index.php',
+			'eyebrow'  => __( 'What we serve', 'treats' ),
+			'intro'    => __( 'Breakfast and brunch all day, lunch, afternoon tea, cakes and drinks. Everything is cooked to order and baked here.', 'treats' ),
+		),
+		'breakfast' => array(
+			'title'    => __( 'Breakfast & Brunch', 'treats' ),
+			'template' => 'page-templates/template-menu.php',
+			'category' => 'breakfast-brunch',
+			'eyebrow'  => __( 'Served from opening', 'treats' ),
+			'intro'    => __( 'Proper breakfasts cooked to order, from a full English to eggs on sourdough — served all day, every day.', 'treats' ),
+		),
+		'lunch'     => array(
+			'title'    => __( 'Lunch', 'treats' ),
+			'template' => 'page-templates/template-menu.php',
+			'category' => 'lunch',
+			'eyebrow'  => __( 'From 11.30am', 'treats' ),
+			'intro'    => __( 'Homemade pies, quiches, soups, salads and sandwiches, made fresh in our kitchen each morning.', 'treats' ),
+		),
+		'afternoon' => array(
+			'title'    => __( 'Afternoon Tea', 'treats' ),
+			'template' => 'page-templates/template-menu.php',
+			'category' => 'afternoon-tea',
+			'eyebrow'  => __( 'Booking recommended', 'treats' ),
+			'intro'    => __( 'Finger sandwiches, warm scones with jam and clotted cream, and a tier of our own cakes. The Durham afternoon, done properly.', 'treats' ),
+		),
+		'cakes'     => array(
+			'title'    => __( 'Cakes & Desserts', 'treats' ),
+			'template' => 'page-templates/template-menu.php',
+			'category' => 'cakes-desserts',
+			'eyebrow'  => __( 'Baked every morning', 'treats' ),
+			'intro'    => __( 'The counter that Durham knows us for. Traybakes, layer cakes, scones and puddings, all made in-house.', 'treats' ),
+		),
+		'drinks'    => array(
+			'title'    => __( 'Drinks', 'treats' ),
+			'template' => 'page-templates/template-menu.php',
+			'category' => 'drinks',
+			'eyebrow'  => __( 'Loose leaf & speciality coffee', 'treats' ),
+			'intro'    => __( 'Loose leaf teas by the pot, speciality coffee, hot chocolate worth the walk, and cold drinks for the summer.', 'treats' ),
+		),
+		'booking'   => array(
+			'title'    => __( 'Book a Table', 'treats' ),
+			'template' => 'page-templates/template-booking.php',
+			'eyebrow'  => __( 'Reservations', 'treats' ),
+			'intro'    => __( 'Tell us when you would like to come and we will confirm your table by email or phone.', 'treats' ),
+		),
+		'events'    => array(
+			'title'    => __( 'Evening Venue Hire', 'treats' ),
+			'template' => 'page-templates/template-events.php',
+			'eyebrow'  => __( 'Private bookings', 'treats' ),
+			'intro'    => __( 'Host your special occasion in our beautiful tea room setting.', 'treats' ),
+			'content'  => __(
+				"<p>Once the tea room closes for the day, it can be yours. Exclusive use of the whole place, every evening of the week, with two of our staff looking after you and your guests.</p>
+
+<p>It suits the occasions that don't fit anywhere else — a birthday that has outgrown a table for eight, a christening tea, a retirement do, a wake, a committee that needs somewhere quiet and a pot of tea. We have hosted all of them.</p>
+
+<h2>What is included</h2>
+
+<ul><li>The entire tea room, to yourselves</li><li>Two members of staff for the evening</li><li>Tables set however you would like them</li><li>Tea, coffee and soft drinks served throughout</li></ul>
+
+<h2>Food</h2>
+
+<p>Add one of the packages below, priced per guest, or tell us what you had in mind and we will put a bespoke menu together. We cater for vegetarian, vegan and gluten free guests as a matter of course — just let us know the numbers when you book.</p>",
+				'treats'
+			),
+		),
+		'checkout'  => array(
+			'title'    => __( 'Checkout', 'treats' ),
+			'template' => 'page-templates/template-checkout.php',
+			'content'  => '',
+		),
+		'order'     => array(
+			'title'    => __( 'Order Confirmation', 'treats' ),
+			'template' => 'page-templates/template-order.php',
+			'content'  => '',
+		),
+		'vouchers'  => array(
+			'title'    => __( 'Gift Vouchers', 'treats' ),
+			'template' => 'page-templates/template-vouchers.php',
+			'eyebrow'  => __( 'Gifts', 'treats' ),
+			'intro'    => __( 'A Treats voucher is the easiest way to send someone a proper afternoon in Durham.', 'treats' ),
+		),
+		'about'     => array(
+			'title'    => __( 'About Us', 'treats' ),
+			'template' => 'page-templates/template-about.php',
+			'eyebrow'  => __( 'Our story', 'treats' ),
+			'intro'    => __( 'A family tea room on Silver Street, serving Durham since 1984.', 'treats' ),
+		),
+		'contact'   => array(
+			'title'    => __( 'Contact', 'treats' ),
+			'template' => 'page-templates/template-contact.php',
+			'eyebrow'  => __( 'Find us', 'treats' ),
+			'intro'    => __( 'At the foot of Silver Street, a minute from Durham Market Place.', 'treats' ),
+		),
+		'faq'       => array(
+			'title'    => __( 'FAQ', 'treats' ),
+			'template' => 'page-templates/template-faq.php',
+			'eyebrow'  => __( 'Good to know', 'treats' ),
+			'intro'    => __( 'Everything visitors usually ask us before they arrive.', 'treats' ),
+		),
+		'gallery'   => array(
+			'title'    => __( 'Gallery', 'treats' ),
+			'template' => 'page-templates/template-gallery.php',
+			'eyebrow'  => __( 'The tea room', 'treats' ),
+			'intro'    => __( 'A look inside Treats, and what comes out of our kitchen.', 'treats' ),
+		),
+		'journal'   => array(
+			'title'    => __( 'Journal', 'treats' ),
+			'template' => '',
+			'content'  => '',
+		),
+		'privacy'   => array(
+			'title'    => __( 'Privacy Policy', 'treats' ),
+			'template' => '',
+			'content'  => treats_privacy_content(),
+		),
+		'accessibility' => array(
+			'title'    => __( 'Accessibility', 'treats' ),
+			'template' => '',
+			'content'  => treats_accessibility_content(),
+		),
+	);
+}
+
+/**
+ * Add pages introduced by a later version of the theme.
+ *
+ * The scaffold only runs once, on first activation, which means a site set up
+ * before a page existed would never get it. This runs on every activation
+ * after the first — `treats_create_pages()` skips anything already there, so
+ * it only ever fills gaps. It never touches content.
+ *
+ * @return void
+ */
+function treats_sync_new_pages() {
+	if ( get_option( 'treats_pages_version' ) === TREATS_VERSION ) {
+		return false;
+	}
+
+	$pages = treats_create_pages();
+
+	treats_add_page_to_primary_menu( $pages, 'events' );
+	treats_add_shop_to_primary_menu();
+	treats_point_menu_parent_at_overview( $pages );
+	treats_nest_menu_pages( $pages );
+	treats_restore_itemised_menu( $pages );
+	treats_remove_sample_content();
+
+	update_option( 'treats_pages_version', TREATS_VERSION, false );
+
+	return true;
+}
+
+/**
+ * Catch up after the theme is updated in place.
+ *
+ * Uploading a new version over the active theme does not fire
+ * `after_switch_theme` — nothing is being switched to — so a page, a
+ * navigation fix or a cleanup added in a later version would never arrive on
+ * a site that simply replaced the files. That is the normal way to update
+ * this theme, so it has to be handled here instead.
+ *
+ * Costs one option read on admin requests and short-circuits as soon as the
+ * versions match.
+ *
+ * @return void
+ */
+function treats_maybe_upgrade() {
+	if ( wp_doing_ajax() || wp_doing_cron() ) {
+		return;
+	}
+
+	if ( get_option( 'treats_pages_version' ) === TREATS_VERSION ) {
+		return;
+	}
+
+	// Only ever act for somebody who could have done it by hand anyway.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( treats_sync_new_pages() ) {
+		flush_rewrite_rules();
+	}
+}
+add_action( 'admin_init', 'treats_maybe_upgrade' );
+
+/**
+ * Repoint the navigation's "Menu" parent at the overview page.
+ *
+ * The scaffold made it a custom link to Breakfast & Brunch, because there was
+ * nowhere better to send it. Clicking a parent called "Menu" and landing on
+ * one particular menu is the kind of thing nobody notices they are annoyed by.
+ *
+ * Only touches an item still pointing where the scaffold left it, so a link
+ * somebody has since edited is left alone.
+ *
+ * @param array<string,int> $pages Blueprint key to page ID.
+ * @return void
+ */
+function treats_point_menu_parent_at_overview( $pages ) {
+	if ( empty( $pages['menus'] ) || empty( $pages['breakfast'] ) ) {
+		return;
+	}
+
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['primary'] ) ) {
+		return;
+	}
+
+	$items = wp_get_nav_menu_items( (int) $locations['primary'] );
+
+	if ( ! is_array( $items ) ) {
+		return;
+	}
+
+	$breakfast_url = untrailingslashit( (string) get_permalink( $pages['breakfast'] ) );
+
+	foreach ( $items as $item ) {
+		if ( 'custom' !== $item->type || untrailingslashit( $item->url ) !== $breakfast_url ) {
+			continue;
+		}
+
+		// The item this is meant to fix is the parent *called* Menu that
+		// happened to point at Breakfast & Brunch. Without this check it also
+		// swallowed a genuine "Breakfast & Brunch" link, turning it into a
+		// second item pointing at the overview — a duplicate parent, with the
+		// submenu split across the two of them.
+		if ( ! in_array( strtolower( trim( $item->title ) ), array( 'menu', 'menus' ), true ) ) {
+			continue;
+		}
+
+		wp_update_nav_menu_item(
+			(int) $locations['primary'],
+			(int) $item->ID,
+			array(
+				'menu-item-object-id' => (int) $pages['menus'],
+				'menu-item-object'    => 'page',
+				'menu-item-type'      => 'post_type',
+				'menu-item-title'     => $item->title,
+				'menu-item-parent-id' => (int) $item->menu_item_parent,
+				'menu-item-position'  => (int) $item->menu_order,
+				'menu-item-status'    => 'publish',
+			)
+		);
+
+		break;
+	}
+}
+
+/**
+ * Publish the menu as browsable pages again.
+ *
+ * An earlier version published the printed booklet instead and set these to
+ * draft. Everything survived that — dishes, prices, dietary labels — so this
+ * is a matter of turning them back on and putting them back in the two menus
+ * they were listed in.
+ *
+ * Safe on a site that never saw the booklet: it only touches pages that are
+ * actually drafts, and only adds navigation entries that are missing.
+ *
+ * @param array<string,int> $pages Blueprint key to page ID.
+ * @return void
+ */
+function treats_restore_itemised_menu( $pages ) {
+	if ( empty( $pages['menus'] ) ) {
+		return;
+	}
+
+	if ( 'page-templates/template-menu-index.php' !== get_page_template_slug( $pages['menus'] ) ) {
+		update_post_meta( $pages['menus'], '_wp_page_template', 'page-templates/template-menu-index.php' );
+	}
+
+	// Afternoon tea is a page in its own right, not just another menu list.
+	if ( ! empty( $pages['afternoon'] ) ) {
+		update_post_meta( $pages['afternoon'], '_wp_page_template', 'page-templates/template-afternoon-tea.php' );
+	}
+
+	$restored = array();
+
+	foreach ( array( 'breakfast', 'lunch', 'afternoon', 'cakes', 'drinks' ) as $key ) {
+		if ( empty( $pages[ $key ] ) ) {
+			continue;
+		}
+
+		$page = get_post( $pages[ $key ] );
+
+		if ( $page instanceof WP_Post && 'draft' === $page->post_status ) {
+			wp_update_post( array( 'ID' => $page->ID, 'post_status' => 'publish' ) );
+		}
+
+		$restored[ $key ] = (int) $pages[ $key ];
+	}
+
+	treats_restore_menu_navigation( $pages, $restored );
+}
+
+/**
+ * Put the five menus back under the navigation's "Menu" item, and in the
+ * footer's list.
+ *
+ * @param array<string,int> $pages    Blueprint key to page ID.
+ * @param array<string,int> $restored Menu key to page ID.
+ * @return void
+ */
+function treats_restore_menu_navigation( $pages, $restored ) {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( ! empty( $locations['primary'] ) && $restored ) {
+		$menu_id = (int) $locations['primary'];
+		$items   = wp_get_nav_menu_items( $menu_id );
+		$items   = is_array( $items ) ? $items : array();
+
+		$listed = array();
+		$urls   = array();
+		$parent = 0;
+
+		foreach ( $items as $item ) {
+			// A page can be in the navigation as a plain link rather than a
+			// page item — a menu carried over from the old site is full of
+			// them. Counting only page items meant this added a second copy
+			// of every menu page alongside the links already there.
+			$urls[ untrailingslashit( (string) $item->url ) ] = true;
+
+			if ( 'post_type' === $item->type ) {
+				$listed[] = (int) $item->object_id;
+
+				if ( (int) $item->object_id === (int) $pages['menus'] ) {
+					$parent = (int) $item->ID;
+				}
+			}
+		}
+
+		foreach ( $restored as $page_id ) {
+			if ( in_array( (int) $page_id, $listed, true ) ) {
+				continue;
+			}
+
+			if ( ! empty( $urls[ untrailingslashit( (string) get_permalink( (int) $page_id ) ) ] ) ) {
+				continue;
+			}
+
+			wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-object-id' => (int) $page_id,
+					'menu-item-object'    => 'page',
+					'menu-item-type'      => 'post_type',
+					'menu-item-parent-id' => $parent,
+					'menu-item-status'    => 'publish',
+				)
+			);
+		}
+	}
+
+	foreach ( $restored as $page_id ) {
+		treats_add_page_to_footer_menu( (int) $page_id, get_the_title( $page_id ) );
+	}
+}
+
+/**
+ * Add a page to the footer menu if it is not already listed.
+ *
+ * @param int    $page_id Page ID.
+ * @param string $title   Label to use.
+ * @return void
+ */
+function treats_add_page_to_footer_menu( $page_id, $title ) {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['footer'] ) || ! $page_id ) {
+		return;
+	}
+
+	$menu_id = (int) $locations['footer'];
+	$items   = wp_get_nav_menu_items( $menu_id );
+
+	if ( is_array( $items ) ) {
+		foreach ( $items as $item ) {
+			if ( 'post_type' === $item->type && (int) $item->object_id === (int) $page_id ) {
+				return;
+			}
+		}
+	}
+
+	wp_update_nav_menu_item(
+		$menu_id,
+		0,
+		array(
+			'menu-item-object-id' => (int) $page_id,
+			'menu-item-object'    => 'page',
+			'menu-item-type'      => 'post_type',
+			'menu-item-title'     => $title,
+			'menu-item-position'  => 1,
+			'menu-item-status'    => 'publish',
+		)
+	);
+}
+
+/**
+ * Bin the sample post and page WordPress installs itself with.
+ *
+ * "Hello world!" is the only thing in the Journal on a new site, so every
+ * "latest news" link leads to a Lorem-ipsum post about blogging, and it drags
+ * an Uncategorized archive along with it. Only removed if untouched — an
+ * edited post is somebody's content, whatever its slug.
+ *
+ * @return void
+ */
+function treats_remove_sample_content() {
+	foreach ( array( 'hello-world' => 'post', 'sample-page' => 'page' ) as $slug => $type ) {
+		$existing = get_page_by_path( $slug, OBJECT, $type );
+
+		if ( ! $existing instanceof WP_Post ) {
+			continue;
+		}
+
+		// Untouched since install: modified time still equals creation time.
+		if ( $existing->post_modified_gmt !== $existing->post_date_gmt ) {
+			continue;
+		}
+
+		// Never bin something the site is actually using.
+		if ( in_array( (int) $existing->ID, array( (int) get_option( 'page_on_front' ), (int) get_option( 'page_for_posts' ) ), true ) ) {
+			continue;
+		}
+
+		wp_trash_post( $existing->ID );
+	}
+}
+
+/**
+ * Put a newly created page into the primary menu, if it is not there already.
+ *
+ * A page nobody can navigate to is not much use, but somebody's menu is their
+ * own — so this only ever appends, only when the item is genuinely missing,
+ * and never reorders or removes anything.
+ *
+ * @param array<string,int> $pages Blueprint key to page ID.
+ * @param string            $key   Which page to add.
+ * @return void
+ */
+function treats_add_page_to_primary_menu( $pages, $key ) {
+	if ( empty( $pages[ $key ] ) ) {
+		return;
+	}
+
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['primary'] ) ) {
+		return;
+	}
+
+	$menu_id = (int) $locations['primary'];
+	$items   = wp_get_nav_menu_items( $menu_id );
+
+	if ( is_array( $items ) ) {
+		foreach ( $items as $item ) {
+			if ( (int) $item->object_id === (int) $pages[ $key ] && 'post_type' === $item->type ) {
+				return;
+			}
+		}
+	}
+
+	wp_update_nav_menu_item(
+		$menu_id,
+		0,
+		array(
+			'menu-item-object-id' => (int) $pages[ $key ],
+			'menu-item-object'    => 'page',
+			'menu-item-type'      => 'post_type',
+			'menu-item-title'     => __( 'Events', 'treats' ),
+			'menu-item-status'    => 'publish',
+		)
+	);
+}
+
+/**
+ * Tuck the individual menu pages under the "Menu" item.
+ *
+ * Breakfast, Lunch, Cakes and Drinks were sitting alongside Menu rather than
+ * inside it, which pushed the rest of the navigation — Shop included — off
+ * the right-hand edge of the bar. They belong under the parent that names
+ * them.
+ *
+ * Only moves an item that is still top level, so a menu somebody has already
+ * arranged by hand is left exactly as they arranged it.
+ *
+ * @param array<string,int> $pages Blueprint key to page ID.
+ * @return void
+ */
+function treats_nest_menu_pages( $pages ) {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['primary'] ) || empty( $pages['menus'] ) ) {
+		return;
+	}
+
+	$menu_id = (int) $locations['primary'];
+	$items   = wp_get_nav_menu_items( $menu_id );
+
+	if ( ! is_array( $items ) ) {
+		return;
+	}
+
+	// Find the item that stands for the menus overview. Matching only on a
+	// page link was too strict: the same item may equally be a custom link
+	// left over from the old site, in which case nothing matched and the
+	// whole tidy-up did nothing at all, silently.
+	$parent_item = 0;
+	$menus_url   = untrailingslashit( (string) get_permalink( (int) $pages['menus'] ) );
+
+	foreach ( $items as $item ) {
+		if ( 'post_type' === $item->type && (int) $item->object_id === (int) $pages['menus'] ) {
+			$parent_item = (int) $item->ID;
+			break;
+		}
+
+		if ( untrailingslashit( (string) $item->url ) === $menus_url ) {
+			$parent_item = (int) $item->ID;
+			break;
+		}
+	}
+
+	// Last resort: the item actually called Menu. A café's navigation has
+	// exactly one, and it is unambiguous to a human looking at the bar.
+	if ( ! $parent_item ) {
+		foreach ( $items as $item ) {
+			if ( in_array( strtolower( trim( $item->title ) ), array( 'menu', 'menus' ), true ) ) {
+				$parent_item = (int) $item->ID;
+				break;
+			}
+		}
+	}
+
+	if ( ! $parent_item ) {
+		return;
+	}
+
+	$children = array();
+	$child_urls = array();
+
+	foreach ( array( 'breakfast', 'lunch', 'cakes', 'drinks' ) as $key ) {
+		if ( empty( $pages[ $key ] ) ) {
+			continue;
+		}
+
+		$children[ (int) $pages[ $key ] ] = true;
+		$child_urls[ untrailingslashit( (string) get_permalink( (int) $pages[ $key ] ) ) ] = true;
+	}
+
+	foreach ( $items as $item ) {
+		// Matched by page or by URL, for the same reason as the parent: a
+		// menu carried over from the old site is full of custom links.
+		$is_child = ( 'post_type' === $item->type && ! empty( $children[ (int) $item->object_id ] ) )
+			|| ! empty( $child_urls[ untrailingslashit( (string) $item->url ) ] );
+
+		if ( ! $is_child || (int) $item->ID === $parent_item ) {
+			continue;
+		}
+
+		// Already nested somewhere — leave it be.
+		if ( (int) $item->menu_item_parent ) {
+			continue;
+		}
+
+		// Everything is passed straight back except the parent. Rewriting the
+		// type would turn a working custom link into a page link pointing at
+		// the menu item's own ID, which is not a page at all.
+		wp_update_nav_menu_item(
+			$menu_id,
+			(int) $item->ID,
+			array(
+				'menu-item-object-id' => (int) $item->object_id,
+				'menu-item-object'    => $item->object,
+				'menu-item-type'      => $item->type,
+				'menu-item-url'       => $item->url,
+				'menu-item-title'     => $item->title,
+				'menu-item-parent-id' => $parent_item,
+				// Position is deliberately left alone. Numbering the children
+				// 1, 2, 3 sets their order across the whole menu, not within
+				// the parent, which moved Breakfast & Brunch above the very
+				// item it was being nested under and left it hanging off Home.
+				'menu-item-status'    => 'publish',
+			)
+		);
+	}
+}
+
+/**
+ * Put the shop in the primary navigation.
+ *
+ * The shop is a post type archive rather than a page, so it goes in as a
+ * custom link. Matched on URL so it is only ever added once, and left alone
+ * afterwards however it gets renamed or moved.
+ *
+ * @return void
+ */
+function treats_add_shop_to_primary_menu() {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	if ( empty( $locations['primary'] ) ) {
+		return;
+	}
+
+	$menu_id = (int) $locations['primary'];
+	$url     = treats_shop_url();
+	$items   = wp_get_nav_menu_items( $menu_id );
+
+	if ( is_array( $items ) ) {
+		foreach ( $items as $item ) {
+			if ( untrailingslashit( $item->url ) === untrailingslashit( $url ) ) {
+				return;
+			}
+		}
+	}
+
+	wp_update_nav_menu_item(
+		$menu_id,
+		0,
+		array(
+			'menu-item-url'    => $url,
+			'menu-item-type'   => 'custom',
+			'menu-item-title'  => __( 'Shop', 'treats' ),
+			'menu-item-status' => 'publish',
+		)
+	);
+}
+
+/**
+ * Create the pages, skipping any that already exist by title.
+ *
+ * @return array<string,int> Map of blueprint key to page ID.
+ */
+function treats_create_pages() {
+	$created = array();
+	$order   = 0;
+
+	foreach ( treats_page_blueprint() as $key => $page ) {
+		$order += 10;
+
+		$existing = get_page_by_path( sanitize_title( $page['title'] ), OBJECT, 'page' );
+
+		if ( $existing instanceof WP_Post ) {
+			// WordPress creates the Privacy Policy page as a draft during
+			// install; publish it so the footer link is not a dead end.
+			if ( 'publish' !== $existing->post_status ) {
+				wp_update_post(
+					array(
+						'ID'          => $existing->ID,
+						'post_status' => 'publish',
+					)
+				);
+			}
+
+			$created[ $key ] = (int) $existing->ID;
+			continue;
+		}
+
+		$post_id = wp_insert_post(
+			array(
+				'post_type'    => 'page',
+				'post_status'  => 'publish',
+				'post_title'   => $page['title'],
+				'post_name'    => sanitize_title( $page['title'] ),
+				'post_content' => $page['content'] ?? '',
+				'menu_order'   => $order,
+			)
+		);
+
+		if ( is_wp_error( $post_id ) || ! $post_id ) {
+			continue;
+		}
+
+		if ( ! empty( $page['template'] ) && 'front-page.php' !== $page['template'] ) {
+			update_post_meta( $post_id, '_wp_page_template', $page['template'] );
+		}
+
+		foreach ( array( 'eyebrow', 'intro', 'category' ) as $meta_key ) {
+			if ( ! empty( $page[ $meta_key ] ) ) {
+				$stored = 'category' === $meta_key ? '_treats_menu_category' : '_treats_' . $meta_key;
+				update_post_meta( $post_id, $stored, $page[ $meta_key ] );
+			}
+		}
+
+		$created[ $key ] = (int) $post_id;
+	}
+
+	return $created;
+}
+
+/**
+ * Point WordPress at the new home and journal pages.
+ *
+ * @param array<string,int> $pages Created page IDs.
+ * @return void
+ */
+function treats_configure_reading( $pages ) {
+	if ( empty( $pages['home'] ) ) {
+		return;
+	}
+
+	update_option( 'show_on_front', 'page' );
+	update_option( 'page_on_front', $pages['home'] );
+
+	if ( ! empty( $pages['journal'] ) ) {
+		update_option( 'page_for_posts', $pages['journal'] );
+	}
+
+	if ( ! empty( $pages['privacy'] ) ) {
+		update_option( 'wp_page_for_privacy_policy', $pages['privacy'] );
+	}
+
+	// Pretty permalinks, which the menu and dietary archives depend on.
+	if ( '' === get_option( 'permalink_structure' ) ) {
+		update_option( 'permalink_structure', '/%postname%/' );
+	}
+}
+
+/**
+ * Build the navigation menus.
+ *
+ * @param array<string,int> $pages Created page IDs.
+ * @return void
+ */
+function treats_create_menus( $pages ) {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+
+	// --- Primary, with a Menus dropdown ---------------------------------- //
+	if ( empty( $locations['primary'] ) ) {
+		$menu_id = wp_create_nav_menu( __( 'Primary', 'treats' ) );
+
+		if ( ! is_wp_error( $menu_id ) ) {
+			if ( ! empty( $pages['home'] ) ) {
+				wp_update_nav_menu_item(
+					$menu_id,
+					0,
+					array(
+						'menu-item-object-id' => $pages['home'],
+						'menu-item-object'    => 'page',
+						'menu-item-type'      => 'post_type',
+						'menu-item-title'     => __( 'Home', 'treats' ),
+						'menu-item-status'    => 'publish',
+					)
+				);
+			}
+
+			// "Menu" holds the five menu pages beneath it.
+			$parent = wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-title'  => __( 'Menu', 'treats' ),
+					'menu-item-url'    => empty( $pages['breakfast'] ) ? home_url( '/' ) : get_permalink( $pages['breakfast'] ),
+					'menu-item-status' => 'publish',
+					'menu-item-type'   => 'custom',
+				)
+			);
+
+			foreach ( array( 'breakfast', 'lunch', 'afternoon', 'cakes', 'drinks' ) as $child ) {
+				if ( empty( $pages[ $child ] ) ) {
+					continue;
+				}
+
+				wp_update_nav_menu_item(
+					$menu_id,
+					0,
+					array(
+						'menu-item-object-id' => $pages[ $child ],
+						'menu-item-object'    => 'page',
+						'menu-item-type'      => 'post_type',
+						'menu-item-status'    => 'publish',
+						'menu-item-parent-id' => is_wp_error( $parent ) ? 0 : $parent,
+					)
+				);
+			}
+
+			$top = array(
+				'afternoon' => __( 'Afternoon Tea', 'treats' ),
+				'about'     => __( 'About', 'treats' ),
+				'booking'   => __( 'Bookings', 'treats' ),
+				'contact'   => __( 'Contact', 'treats' ),
+			);
+
+			foreach ( $top as $key => $label ) {
+				if ( empty( $pages[ $key ] ) ) {
+					continue;
+				}
+
+				wp_update_nav_menu_item(
+					$menu_id,
+					0,
+					array(
+						'menu-item-object-id' => $pages[ $key ],
+						'menu-item-object'    => 'page',
+						'menu-item-type'      => 'post_type',
+						'menu-item-title'     => $label,
+						'menu-item-status'    => 'publish',
+					)
+				);
+			}
+
+			$locations['primary'] = $menu_id;
+		}
+	}
+
+	// --- Footer ---------------------------------------------------------- //
+	if ( empty( $locations['footer'] ) ) {
+		$footer_id = wp_create_nav_menu( __( 'Footer', 'treats' ) );
+
+		if ( ! is_wp_error( $footer_id ) ) {
+			foreach ( array( 'breakfast', 'lunch', 'afternoon', 'cakes', 'drinks', 'gallery', 'journal' ) as $key ) {
+				if ( empty( $pages[ $key ] ) ) {
+					continue;
+				}
+
+				wp_update_nav_menu_item(
+					$footer_id,
+					0,
+					array(
+						'menu-item-object-id' => $pages[ $key ],
+						'menu-item-object'    => 'page',
+						'menu-item-type'      => 'post_type',
+						'menu-item-status'    => 'publish',
+					)
+				);
+			}
+
+			$locations['footer'] = $footer_id;
+		}
+	}
+
+	// --- Legal ----------------------------------------------------------- //
+	if ( empty( $locations['legal'] ) ) {
+		$legal_id = wp_create_nav_menu( __( 'Legal', 'treats' ) );
+
+		if ( ! is_wp_error( $legal_id ) ) {
+			foreach ( array( 'privacy', 'accessibility' ) as $key ) {
+				if ( empty( $pages[ $key ] ) ) {
+					continue;
+				}
+
+				wp_update_nav_menu_item(
+					$legal_id,
+					0,
+					array(
+						'menu-item-object-id' => $pages[ $key ],
+						'menu-item-object'    => 'page',
+						'menu-item-type'      => 'post_type',
+						'menu-item-status'    => 'publish',
+					)
+				);
+			}
+
+			$locations['legal'] = $legal_id;
+		}
+	}
+
+	set_theme_mod( 'nav_menu_locations', $locations );
+}
+
+/**
+ * Seed menu categories and a representative set of items.
+ *
+ * @return void
+ */
+function treats_seed_menu_content() {
+	$categories = array(
+		'breakfast-brunch' => __( 'Breakfast & Brunch', 'treats' ),
+		'lunch'            => __( 'Lunch', 'treats' ),
+		'afternoon-tea'    => __( 'Afternoon Tea', 'treats' ),
+		'cakes-desserts'   => __( 'Cakes & Desserts', 'treats' ),
+		'drinks'           => __( 'Drinks', 'treats' ),
+	);
+
+	$term_ids = array();
+
+	foreach ( $categories as $slug => $name ) {
+		$existing = get_term_by( 'slug', $slug, 'treats_menu_category' );
+
+		if ( $existing instanceof WP_Term ) {
+			$term_ids[ $slug ] = (int) $existing->term_id;
+			continue;
+		}
+
+		$term = wp_insert_term( $name, 'treats_menu_category', array( 'slug' => $slug ) );
+
+		if ( ! is_wp_error( $term ) ) {
+			$term_ids[ $slug ] = (int) $term['term_id'];
+		}
+	}
+
+	// Sub-sections give each menu page its structure.
+	$subsections = array(
+		'breakfast-brunch' => array(
+			'the-full-works'   => __( 'The Full Works', 'treats' ),
+			'lighter-mornings' => __( 'Lighter Mornings', 'treats' ),
+			'on-toast'         => __( 'On Toast', 'treats' ),
+		),
+		'lunch'            => array(
+			'from-the-kitchen' => __( 'From the Kitchen', 'treats' ),
+			'sandwiches'       => __( 'Sandwiches & Toasties', 'treats' ),
+			'salads-soups'     => __( 'Salads & Soups', 'treats' ),
+		),
+		'afternoon-tea'    => array(
+			'afternoon-teas'   => __( 'Afternoon Teas', 'treats' ),
+			'scones'           => __( 'Cream Teas & Scones', 'treats' ),
+		),
+		'cakes-desserts'   => array(
+			'the-cake-counter' => __( 'The Cake Counter', 'treats' ),
+			'traybakes'        => __( 'Traybakes & Slices', 'treats' ),
+			'puddings'         => __( 'Warm Puddings', 'treats' ),
+		),
+		'drinks'           => array(
+			'loose-leaf-tea'   => __( 'Loose Leaf Tea', 'treats' ),
+			'coffee'           => __( 'Coffee', 'treats' ),
+			'cold-drinks'      => __( 'Cold Drinks', 'treats' ),
+		),
+	);
+
+	foreach ( $subsections as $parent_slug => $children ) {
+		if ( empty( $term_ids[ $parent_slug ] ) ) {
+			continue;
+		}
+
+		foreach ( $children as $slug => $name ) {
+			if ( get_term_by( 'slug', $slug, 'treats_menu_category' ) ) {
+				continue;
+			}
+
+			wp_insert_term(
+				$name,
+				'treats_menu_category',
+				array(
+					'slug'   => $slug,
+					'parent' => $term_ids[ $parent_slug ],
+				)
+			);
+		}
+	}
+
+	if ( get_option( 'treats_menu_seeded' ) ) {
+		return;
+	}
+
+	foreach ( treats_starter_menu_items() as $order => $item ) {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'    => 'treats_menu_item',
+				'post_status'  => 'publish',
+				'post_title'   => $item['title'],
+				'post_content' => $item['description'],
+				'menu_order'   => ( $order + 1 ) * 10,
+			)
+		);
+
+		if ( is_wp_error( $post_id ) || ! $post_id ) {
+			continue;
+		}
+
+		wp_set_object_terms( $post_id, $item['categories'], 'treats_menu_category' );
+
+		if ( ! empty( $item['dietary'] ) ) {
+			wp_set_object_terms( $post_id, $item['dietary'], 'treats_dietary' );
+		}
+
+		update_post_meta( $post_id, '_treats_price', $item['price'] );
+		update_post_meta( $post_id, '_treats_collectable', '1' );
+
+		if ( ! empty( $item['badge'] ) ) {
+			update_post_meta( $post_id, '_treats_badge', $item['badge'] );
+		}
+
+		if ( ! empty( $item['featured'] ) ) {
+			update_post_meta( $post_id, '_treats_featured', '1' );
+		}
+
+		if ( ! empty( $item['note'] ) ) {
+			update_post_meta( $post_id, '_treats_price_note', $item['note'] );
+		}
+	}
+
+	update_option( 'treats_menu_seeded', 1, false );
+}
+
+/**
+ * Starter menu items.
+ *
+ * Representative of what the café serves; prices and wording are meant to be
+ * reviewed and adjusted by the owner before launch.
+ *
+ * @return array<int,array<string,mixed>>
+ */
+function treats_starter_menu_items() {
+	return array(
+		array(
+			'title'       => __( 'The Full Treats Breakfast', 'treats' ),
+			'description' => __( 'Two rashers of dry-cured bacon, Cumberland sausage, free-range egg, black pudding, grilled tomato, mushrooms, baked beans and toast.', 'treats' ),
+			'price'       => '11.95',
+			'categories'  => array( 'breakfast-brunch', 'the-full-works' ),
+			'badge'       => __( 'Signature', 'treats' ),
+			'featured'    => true,
+		),
+		array(
+			'title'       => __( 'The Vegan Full Works', 'treats' ),
+			'description' => __( 'Plant-based sausages, smoked tofu, sautéed mushrooms, grilled tomato, avocado, baked beans and sourdough toast.', 'treats' ),
+			'price'       => '11.50',
+			'categories'  => array( 'breakfast-brunch', 'the-full-works' ),
+			'dietary'     => array( 've', 'v' ),
+			'featured'    => true,
+		),
+		array(
+			'title'       => __( 'Eggs Royale', 'treats' ),
+			'description' => __( 'Scottish smoked salmon, poached free-range eggs and hollandaise on a toasted muffin.', 'treats' ),
+			'price'       => '10.50',
+			'categories'  => array( 'breakfast-brunch', 'lighter-mornings' ),
+		),
+		array(
+			'title'       => __( 'Smashed Avocado & Poached Eggs', 'treats' ),
+			'description' => __( 'On toasted sourdough with chilli, lemon and toasted seeds.', 'treats' ),
+			'price'       => '9.25',
+			'categories'  => array( 'breakfast-brunch', 'lighter-mornings' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Buttermilk Pancakes', 'treats' ),
+			'description' => __( 'A tall stack with maple syrup, seasonal berries and crème fraîche. Add streaky bacon for £2.', 'treats' ),
+			'price'       => '8.95',
+			'categories'  => array( 'breakfast-brunch', 'lighter-mornings' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Warm Cinnamon Toast', 'treats' ),
+			'description' => __( 'Thick-cut white bloomer, cinnamon butter, a pot of tea alongside.', 'treats' ),
+			'price'       => '4.50',
+			'categories'  => array( 'breakfast-brunch', 'on-toast' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Homemade Steak & Ale Pie', 'treats' ),
+			'description' => __( 'Slow-cooked in a local ale gravy, shortcrust pastry, buttered mash and garden peas.', 'treats' ),
+			'price'       => '13.50',
+			'categories'  => array( 'lunch', 'from-the-kitchen' ),
+			'badge'       => __( 'House favourite', 'treats' ),
+			'featured'    => true,
+		),
+		array(
+			'title'       => __( 'Quiche of the Day', 'treats' ),
+			'description' => __( 'Baked each morning, served warm with dressed leaves and our house slaw.', 'treats' ),
+			'price'       => '10.95',
+			'categories'  => array( 'lunch', 'from-the-kitchen' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Croque Monsieur', 'treats' ),
+			'description' => __( 'Wiltshire ham, mature cheddar and béchamel on toasted sourdough. Add a fried egg to make it a Madame.', 'treats' ),
+			'price'       => '9.50',
+			'categories'  => array( 'lunch', 'sandwiches' ),
+		),
+		array(
+			'title'       => __( 'Coronation Chickpea Sandwich', 'treats' ),
+			'description' => __( 'Lightly spiced, with sultanas, coriander and little gem on granary bread.', 'treats' ),
+			'price'       => '8.25',
+			'categories'  => array( 'lunch', 'sandwiches' ),
+			'dietary'     => array( 've', 'v' ),
+		),
+		array(
+			'title'       => __( 'Soup of the Day', 'treats' ),
+			'description' => __( 'Made in our kitchen every morning, with warm bread and butter.', 'treats' ),
+			'price'       => '6.95',
+			'categories'  => array( 'lunch', 'salads-soups' ),
+			'dietary'     => array( 'v', 'gfa' ),
+		),
+		array(
+			'title'       => __( 'Roast Beetroot & Whipped Feta Salad', 'treats' ),
+			'description' => __( 'With candied walnuts, orange and a honey dressing.', 'treats' ),
+			'price'       => '10.25',
+			'categories'  => array( 'lunch', 'salads-soups' ),
+			'dietary'     => array( 'v', 'gf', 'n' ),
+		),
+		array(
+			'title'       => __( 'The Treats Afternoon Tea', 'treats' ),
+			'description' => __( 'Finger sandwiches, a warm fruit scone with Yorkshire jam and clotted cream, a tier of our own cakes, and a pot of loose leaf tea.', 'treats' ),
+			'price'       => '24.95',
+			'note'        => __( 'per person', 'treats' ),
+			'categories'  => array( 'afternoon-tea', 'afternoon-teas' ),
+			'badge'       => __( 'Most booked', 'treats' ),
+			'featured'    => true,
+		),
+		array(
+			'title'       => __( 'Sparkling Afternoon Tea', 'treats' ),
+			'description' => __( 'Our full afternoon tea with a glass of English sparkling wine.', 'treats' ),
+			'price'       => '32.95',
+			'note'        => __( 'per person', 'treats' ),
+			'categories'  => array( 'afternoon-tea', 'afternoon-teas' ),
+		),
+		array(
+			'title'       => __( 'Vegan Afternoon Tea', 'treats' ),
+			'description' => __( 'Every tier made plant-based, including our vegan scones and coconut cream. Please order 24 hours ahead.', 'treats' ),
+			'price'       => '24.95',
+			'note'        => __( 'per person', 'treats' ),
+			'categories'  => array( 'afternoon-tea', 'afternoon-teas' ),
+			'dietary'     => array( 've', 'v' ),
+		),
+		array(
+			'title'       => __( 'Traditional Cream Tea', 'treats' ),
+			'description' => __( 'Two warm scones, strawberry jam, clotted cream and a pot of tea.', 'treats' ),
+			'price'       => '9.95',
+			'categories'  => array( 'afternoon-tea', 'scones' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Victoria Sponge', 'treats' ),
+			'description' => __( 'The one we are known for. Raspberry jam, vanilla buttercream, a dusting of icing sugar.', 'treats' ),
+			'price'       => '4.75',
+			'categories'  => array( 'cakes-desserts', 'the-cake-counter' ),
+			'dietary'     => array( 'v' ),
+			'featured'    => true,
+		),
+		array(
+			'title'       => __( 'Salted Caramel Chocolate Cake', 'treats' ),
+			'description' => __( 'Four layers, dark chocolate ganache, sea salt caramel.', 'treats' ),
+			'price'       => '5.25',
+			'categories'  => array( 'cakes-desserts', 'the-cake-counter' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Lemon & Elderflower Drizzle', 'treats' ),
+			'description' => __( 'Soaked while still warm, finished with a crunchy sugar crust.', 'treats' ),
+			'price'       => '4.50',
+			'categories'  => array( 'cakes-desserts', 'the-cake-counter' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Millionaire’s Shortbread', 'treats' ),
+			'description' => __( 'Proper caramel, thick chocolate, buttery shortbread base.', 'treats' ),
+			'price'       => '3.95',
+			'categories'  => array( 'cakes-desserts', 'traybakes' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Vegan Chocolate & Orange Brownie', 'treats' ),
+			'description' => __( 'Fudgy in the middle, with candied orange.', 'treats' ),
+			'price'       => '4.25',
+			'categories'  => array( 'cakes-desserts', 'traybakes' ),
+			'dietary'     => array( 've', 'v', 'gf' ),
+		),
+		array(
+			'title'       => __( 'Sticky Toffee Pudding', 'treats' ),
+			'description' => __( 'Warm, with toffee sauce and a jug of cream or a scoop of vanilla ice cream.', 'treats' ),
+			'price'       => '7.25',
+			'categories'  => array( 'cakes-desserts', 'puddings' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Treats House Blend', 'treats' ),
+			'description' => __( 'Our own malty breakfast blend, served by the pot.', 'treats' ),
+			'price'       => '3.50',
+			'categories'  => array( 'drinks', 'loose-leaf-tea' ),
+			'dietary'     => array( 've', 'v', 'gf' ),
+		),
+		array(
+			'title'       => __( 'Earl Grey Blue Flower', 'treats' ),
+			'description' => __( 'Bergamot and cornflower, delicate and floral.', 'treats' ),
+			'price'       => '3.75',
+			'categories'  => array( 'drinks', 'loose-leaf-tea' ),
+			'dietary'     => array( 've', 'v', 'gf' ),
+		),
+		array(
+			'title'       => __( 'Flat White', 'treats' ),
+			'description' => __( 'Double ristretto, silky milk. Oat, soya and almond available at no extra charge.', 'treats' ),
+			'price'       => '3.60',
+			'categories'  => array( 'drinks', 'coffee' ),
+			'dietary'     => array( 'v' ),
+		),
+		array(
+			'title'       => __( 'Real Hot Chocolate', 'treats' ),
+			'description' => __( 'Melted Belgian chocolate, steamed milk, cream and marshmallows if you like.', 'treats' ),
+			'price'       => '4.25',
+			'categories'  => array( 'drinks', 'coffee' ),
+			'dietary'     => array( 'v' ),
+			'featured'    => true,
+		),
+		array(
+			'title'       => __( 'Homemade Lemonade', 'treats' ),
+			'description' => __( 'Pressed in-house, over ice with mint.', 'treats' ),
+			'price'       => '3.75',
+			'categories'  => array( 'drinks', 'cold-drinks' ),
+			'dietary'     => array( 've', 'v', 'gf' ),
+		),
+	);
+}
+
+/**
+ * Seed a few reviews so the testimonial section is populated.
+ *
+ * @return void
+ */
+function treats_seed_reviews() {
+	if ( get_option( 'treats_reviews_seeded' ) ) {
+		return;
+	}
+
+	$reviews = array(
+		array(
+			'title'  => __( 'Worth the queue', 'treats' ),
+			'body'   => __( 'The cake counter is a sight in itself and the afternoon tea was beautifully presented. Staff could not have been more welcoming on a busy Saturday.', 'treats' ),
+			'author' => __( 'Helen M.', 'treats' ),
+			'source' => 'Tripadvisor',
+			'rating' => '5',
+		),
+		array(
+			'title'  => __( 'Best breakfast in Durham', 'treats' ),
+			'body'   => __( 'Generous portions, everything cooked properly and a genuinely good vegan option. We come back every time we visit our daughter at the university.', 'treats' ),
+			'author' => __( 'Andrew P.', 'treats' ),
+			'source' => 'Google',
+			'rating' => '5',
+		),
+		array(
+			'title'  => __( 'A proper tea room', 'treats' ),
+			'body'   => __( 'Bright, spotless and full of locals — always a good sign. The scones were still warm and the loose leaf tea came in a proper pot.', 'treats' ),
+			'author' => __( 'Rachel D.', 'treats' ),
+			'source' => 'Tripadvisor',
+			'rating' => '5',
+		),
+		array(
+			'title'  => __( 'Kind to coeliacs', 'treats' ),
+			'body'   => __( 'They took my gluten intolerance seriously and talked me through the whole menu. So rare, and so appreciated.', 'treats' ),
+			'author' => __( 'Sofia L.', 'treats' ),
+			'source' => 'Google',
+			'rating' => '5',
+		),
+		array(
+			'title'  => __( 'Our family tradition', 'treats' ),
+			'body'   => __( 'Three generations of us have had birthday afternoon teas here. Prices are honest and the welcome never changes.', 'treats' ),
+			'author' => __( 'John & Margaret W.', 'treats' ),
+			'source' => 'Facebook',
+			'rating' => '5',
+		),
+		array(
+			'title'  => __( 'Somewhere to sit and think', 'treats' ),
+			'body'   => __( 'I revised for finals in the corner by the window for a fortnight. Nobody rushed me, the pot kept being refilled, and the cake got me through it.', 'treats' ),
+			'author' => __( 'Priya S.', 'treats' ),
+			'source' => 'Google',
+			'rating' => '5',
+		),
+	);
+
+	foreach ( $reviews as $order => $review ) {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'    => 'treats_review',
+				'post_status'  => 'publish',
+				'post_title'   => $review['title'],
+				'post_content' => $review['body'],
+				'menu_order'   => ( $order + 1 ) * 10,
+			)
+		);
+
+		if ( is_wp_error( $post_id ) || ! $post_id ) {
+			continue;
+		}
+
+		update_post_meta( $post_id, '_treats_author', $review['author'] );
+		update_post_meta( $post_id, '_treats_source', $review['source'] );
+		update_post_meta( $post_id, '_treats_rating', $review['rating'] );
+	}
+
+	update_option( 'treats_reviews_seeded', 1, false );
+}
+
+/**
+ * Seed the FAQ content.
+ *
+ * @return void
+ */
+function treats_seed_faqs() {
+	if ( get_option( 'treats_faqs_seeded' ) ) {
+		return;
+	}
+
+	$topics = array(
+		'visiting' => __( 'Visiting', 'treats' ),
+		'food'     => __( 'Food & Dietary', 'treats' ),
+		'booking'  => __( 'Bookings & Groups', 'treats' ),
+	);
+
+	foreach ( $topics as $slug => $name ) {
+		if ( ! get_term_by( 'slug', $slug, 'treats_faq_topic' ) ) {
+			wp_insert_term( $name, 'treats_faq_topic', array( 'slug' => $slug ) );
+		}
+	}
+
+	$faqs = array(
+		array(
+			'q'     => __( 'Do I need to book a table?', 'treats' ),
+			'a'     => __( 'Walk-ins are always welcome and most of the time you will not wait long. We do recommend booking for afternoon tea, for groups of six or more, and for weekend brunch.', 'treats' ),
+			'topic' => 'booking',
+		),
+		array(
+			'q'     => __( 'Where exactly are you, and where can I park?', 'treats' ),
+			'a'     => __( 'We are at 10–11 Silver Street, at the foot of the hill between Durham Market Place and Framwellgate Bridge. Silver Street is pedestrianised, so the nearest car parks are Prince Bishops and Walkergate, both around a five-minute walk.', 'treats' ),
+			'topic' => 'visiting',
+		),
+		array(
+			'q'     => __( 'Is the tea room accessible?', 'treats' ),
+			'a'     => __( 'The ground floor is step-free from Silver Street with accessible seating and an accessible toilet. Assistance dogs are welcome throughout. If you would like us to hold a particular table, please call ahead and we will do our best.', 'treats' ),
+			'topic' => 'visiting',
+		),
+		array(
+			'q'     => __( 'Do you cater for vegans, vegetarians and gluten-free diets?', 'treats' ),
+			'a'     => __( 'Yes — there is a full vegan menu, plenty of vegetarian dishes and gluten-free options across breakfast, lunch and the cake counter. Our vegan afternoon tea needs 24 hours notice so we can bake for you.', 'treats' ),
+			'topic' => 'food',
+		),
+		array(
+			'q'     => __( 'Can you handle allergies?', 'treats' ),
+			'a'     => __( 'Please tell us when you order and we will talk you through the options. We prepare food in a busy kitchen that handles all fourteen major allergens, so we cannot guarantee a dish is entirely free from traces.', 'treats' ),
+			'topic' => 'food',
+		),
+		array(
+			'q'     => __( 'Is breakfast served all day?', 'treats' ),
+			'a'     => __( 'It is. The full breakfast menu runs from the moment we open until last orders.', 'treats' ),
+			'topic' => 'food',
+		),
+		array(
+			'q'     => __( 'Can I take cakes away, or order a whole one?', 'treats' ),
+			'a'     => __( 'Everything on the counter is available to take away, and we bake whole celebration cakes to order with about a week’s notice. Use Click & Collect on any menu page, or give us a ring.', 'treats' ),
+			'topic' => 'food',
+		),
+		array(
+			'q'     => __( 'Do you take large groups?', 'treats' ),
+			'a'     => __( 'We can usually seat groups of up to twelve online. For anything larger, including private hire of the upstairs room, please call us and we will arrange it properly.', 'treats' ),
+			'topic' => 'booking',
+		),
+		array(
+			'q'     => __( 'Are dogs allowed?', 'treats' ),
+			'a'     => __( 'Assistance dogs are welcome everywhere in the tea room. Well-behaved dogs are welcome at our outside tables.', 'treats' ),
+			'topic' => 'visiting',
+		),
+		array(
+			'q'     => __( 'Do you sell gift vouchers?', 'treats' ),
+			'a'     => __( 'Yes. Choose any amount or one of our afternoon tea experiences, and we will post a card to you or email a printable voucher the same day.', 'treats' ),
+			'topic' => 'booking',
+		),
+	);
+
+	foreach ( $faqs as $order => $faq ) {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'    => 'treats_faq',
+				'post_status'  => 'publish',
+				'post_title'   => $faq['q'],
+				'post_content' => $faq['a'],
+				'menu_order'   => ( $order + 1 ) * 10,
+			)
+		);
+
+		if ( is_wp_error( $post_id ) || ! $post_id ) {
+			continue;
+		}
+
+		wp_set_object_terms( $post_id, $faq['topic'], 'treats_faq_topic' );
+	}
+
+	update_option( 'treats_faqs_seeded', 1, false );
+}
+
+/**
+ * Starter privacy copy.
+ *
+ * @return string
+ */
+function treats_privacy_content() {
+	return implode(
+		"\n\n",
+		array(
+			'<!-- wp:paragraph --><p>' . esc_html__( 'This page explains what we do with the information you give us through this website. It is a starting point written for a small café — please have it reviewed before launch so it reflects exactly how you operate.', 'treats' ) . '</p><!-- /wp:paragraph -->',
+			'<!-- wp:heading --><h2>' . esc_html__( 'What we collect', 'treats' ) . '</h2><!-- /wp:heading -->',
+			'<!-- wp:paragraph --><p>' . esc_html__( 'When you book a table, place a Click & Collect order, buy a gift voucher, contact us or join our newsletter, we collect the details you type into that form — typically your name, email address and phone number, plus the details of your request.', 'treats' ) . '</p><!-- /wp:paragraph -->',
+			'<!-- wp:heading --><h2>' . esc_html__( 'Why we hold it', 'treats' ) . '</h2><!-- /wp:heading -->',
+			'<!-- wp:paragraph --><p>' . esc_html__( 'We use it to answer you, to hold your table or order, and — only if you have ticked the box — to send you occasional news about the tea room. We never sell your details.', 'treats' ) . '</p><!-- /wp:paragraph -->',
+			'<!-- wp:heading --><h2>' . esc_html__( 'How long we keep it', 'treats' ) . '</h2><!-- /wp:heading -->',
+			'<!-- wp:paragraph --><p>' . esc_html__( 'Booking and order records are kept for up to 24 months so we can look back on a reservation. Newsletter subscriptions are kept until you unsubscribe, which you can do from any email we send.', 'treats' ) . '</p><!-- /wp:paragraph -->',
+			'<!-- wp:heading --><h2>' . esc_html__( 'Your rights', 'treats' ) . '</h2><!-- /wp:heading -->',
+			'<!-- wp:paragraph --><p>' . esc_html__( 'You can ask us for a copy of what we hold about you, ask us to correct it, or ask us to delete it. Write to us at the tea room or email us and we will respond within one month.', 'treats' ) . '</p><!-- /wp:paragraph -->',
+		)
+	);
+}
+
+/**
+ * Starter accessibility statement.
+ *
+ * @return string
+ */
+function treats_accessibility_content() {
+	return implode(
+		"\n\n",
+		array(
+			'<!-- wp:paragraph --><p>' . esc_html__( 'We want everyone to be able to use this website and to enjoy the tea room itself.', 'treats' ) . '</p><!-- /wp:paragraph -->',
+			'<!-- wp:heading --><h2>' . esc_html__( 'This website', 'treats' ) . '</h2><!-- /wp:heading -->',
+			'<!-- wp:paragraph --><p>' . esc_html__( 'The site is built to meet WCAG 2.2 AA: it can be used with a keyboard alone, works with screen readers, respects your device’s reduced-motion and dark-mode settings, and keeps text contrast well above the minimum. If you find something that does not work for you, please tell us and we will fix it.', 'treats' ) . '</p><!-- /wp:paragraph -->',
+			'<!-- wp:heading --><h2>' . esc_html__( 'The tea room', 'treats' ) . '</h2><!-- /wp:heading -->',
+			'<!-- wp:paragraph --><p>' . esc_html__( 'Our ground floor is step-free from Silver Street, with accessible seating and an accessible toilet. Assistance dogs are welcome. Large-print menus are available — just ask. Call us before you visit and we will hold a table that suits you.', 'treats' ) . '</p><!-- /wp:paragraph -->',
+		)
+	);
+}
+
+/**
+ * A dismissible pointer to the Customizer after activation.
+ *
+ * @return void
+ */
+function treats_admin_welcome_notice() {
+	if ( ! current_user_can( 'edit_theme_options' ) ) {
+		return;
+	}
+
+	if ( get_option( 'treats_welcome_dismissed' ) ) {
+		return;
+	}
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Simple dismissal link.
+	if ( isset( $_GET['treats_dismiss'] ) && check_admin_referer( 'treats_dismiss_welcome' ) ) {
+		update_option( 'treats_welcome_dismissed', 1, false );
+
+		return;
+	}
+
+	$dismiss_url = wp_nonce_url( add_query_arg( 'treats_dismiss', '1' ), 'treats_dismiss_welcome' );
+	?>
+	<div class="notice notice-info">
+		<p><strong><?php esc_html_e( 'Treats Tea Room is ready.', 'treats' ); ?></strong></p>
+		<p>
+			<?php esc_html_e( 'Your pages, menus and starter content have been created. Next: add your opening hours, phone number and social links, then replace the starter menu items and photography with your own.', 'treats' ); ?>
+		</p>
+		<p>
+			<a class="button button-primary" href="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"><?php esc_html_e( 'Open the Customizer', 'treats' ); ?></a>
+			<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=treats_menu_item' ) ); ?>"><?php esc_html_e( 'Edit the menu', 'treats' ); ?></a>
+			<a class="button-link" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'treats' ); ?></a>
+		</p>
+	</div>
+	<?php
+}
+add_action( 'admin_notices', 'treats_admin_welcome_notice' );

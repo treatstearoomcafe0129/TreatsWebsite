@@ -1,0 +1,369 @@
+# Treats Tea Room — WordPress theme
+
+A bespoke, production-ready theme for **Treats Tea Room Café**, 10/11 Silver
+Street, Durham. Built from scratch: no page builder, no framework, no parent
+theme, and no dependency on the previous Enfold installation.
+
+- Clear glass panels floating over a textured sage ground: no fill, no
+  outline, a feathered frosted edge, gold line detailing, script wordmark and
+  small-caps serif headings
+- Mobile-first, WCAG 2.2 AA oriented. Light by default and light for
+  everyone — dark mode exists but ships switched off
+- Self-hosted variable fonts, conditional CSS/JS, no jQuery on the front end
+- Online booking, Click & Collect, gift voucher orders, contact and newsletter
+  forms — all built in, all working without JavaScript
+- JSON-LD structured data for the business, menus, FAQs, reviews and breadcrumbs
+
+---
+
+## Installing
+
+1. Copy the `treats-tea-room` folder into `wp-content/themes/`.
+2. In the dashboard, go to **Appearance → Themes** and activate **Treats Tea
+   Room**.
+3. On activation the theme builds the whole site once:
+   - every page in the structure below, with its template already assigned;
+   - the primary, footer and legal navigation menus;
+   - menu categories, a starter menu, FAQs and reviews;
+   - Reading settings pointed at the new Home and Journal pages;
+   - pretty permalinks, if they were not already on.
+
+   None of this runs twice, and everything it creates is ordinary content you
+   can edit or delete.
+4. **The logo is already in.** The real logotype ships at
+   `images/logo.svg` — a true vector, ~16KB gzipped — and is used in the
+   header and the footer. Nothing to do. `images/logo.png` is the same mark as
+   a raster, kept as the faithful master and used automatically if the SVG is
+   ever removed. To replace it, either upload a new one at *Appearance → Customize →
+   Site Identity → Logo*, which takes priority, or drop a file into the theme
+   at `images/logo.svg`, `images/logo.png` or `images/logo.webp` (that is the
+   order of preference). The built-in script wordmark is the fallback when
+   none of those exist.
+5. Open **Appearance → Customize → Treats Tea Room** and fill in the real phone
+   number, opening hours, social links and photography.
+
+### Updating an installed copy
+
+Upload the new zip over the top (*Appearance → Themes → Add New → Upload
+Theme → Replace current with uploaded*). Content and Customizer settings live
+in the database and are untouched.
+
+Anything a new version needs to *add* — a page, a navigation fix, a cleanup —
+runs on the next admin page load, not on upload: replacing the files does not
+fire `after_switch_theme`, because nothing is being switched to. See
+`treats_maybe_upgrade()`.
+
+To zip it for a host that only accepts uploads:
+
+```bash
+cd wp-content/themes
+zip -r treats-tea-room.zip treats-tea-room -x "*.DS_Store"
+```
+
+## Pages the theme creates
+
+| Page | Template |
+| --- | --- |
+| Home | `front-page.php` |
+| Menus | Menus Overview |
+| Afternoon Tea | Afternoon Tea |
+| Evening Venue Hire | Evening Venue Hire |
+| Breakfast & Brunch | Menu |
+| Lunch | Menu |
+| Afternoon Tea | Menu |
+| Cakes & Desserts | Menu |
+| Drinks | Menu |
+| Book a Table | Book a Table |
+| Gift Vouchers | Gift Vouchers |
+| About Us | About |
+| Contact | Contact |
+| FAQ | FAQ |
+| Gallery | Gallery |
+| Journal | default (blog index) |
+| Privacy Policy, Accessibility | default |
+
+The home page is assembled from `template-parts/home/` in the order set by the
+`treats_home_sections` filter — by default `hero`, `values`, `actions`,
+`contact-bar`, matching the approved design. The menu-preview, reviews and
+gallery sections are still in the folder and are one line away if you want
+them back:
+
+```php
+add_filter( 'treats_home_sections', function ( $s ) {
+	array_splice( $s, 3, 0, array( 'menus', 'reviews' ) );
+	return $s;
+} );
+```
+
+Each **Menu** page is bound to a menu category in the *Treats details* panel on
+its edit screen. Change that dropdown and the page shows a different menu — no
+code involved.
+
+## Where the content lives
+
+| What | Where in the dashboard |
+| --- | --- |
+| Dishes, prices, dietary labels | **Menu** (custom post type) |
+| Menu sections and sub-sections | **Menu → Categories** |
+| Vegan / GF / nut labels | **Menu → Dietary** |
+| Customer reviews | **Reviews** |
+| FAQ questions and topics | **FAQs** |
+| Bookings received | **Bookings** |
+| Click & Collect orders | **Collection Orders** |
+| Gift voucher orders | **Voucher Orders** |
+| Contact form messages | **Enquiries** |
+| Venue hire enquiries | **Event Enquiries** |
+| Newsletter sign-ups | **Subscribers** |
+
+Booking, order, voucher, enquiry and subscriber records are private: they never
+appear on the front end, are excluded from search, and cannot be created from
+the dashboard — only the front-end forms write to them.
+
+## Customizer settings
+
+Everything business-specific is under **Customize → Treats Tea Room**:
+
+- **Brand & Appearance** — business name, wordmark script word and caps line,
+  accent colour, colour scheme (light by default), dark-mode toggle, scroll
+  animations
+- **Contact & Location** — address, phone, public email, notification email,
+  Google Maps embed, travel note
+- **Opening Hours** — per-day open/close/closed, plus a note
+- **Social Profiles** — Facebook, Instagram, Tripadvisor, X
+- **Home Page** — hero copy, hero image, buttons, story section
+- **Table Booking** — external booking URL or embed, party size, lead time,
+  how far ahead, bookable times, form note
+- **Click & Collect** — on/off and the collection notice
+- **Gift Vouchers** — intro, amounts, terms, optional payment link
+- **Afternoon Tea** — price, what is on the stand, sandwich choices, the
+  upgrade line, booking note, photograph, printed menu PDF
+- **Evening Venue Hire** — availability, hire price, both food packages and
+  what they include, photograph
+- **Instagram Feed** — handle, access token, post count
+- **Newsletter** — heading, text, optional Mailchimp/Brevo form action
+- **SEO & Sharing** — meta description, sharing image, price range, year
+  established
+
+## Integrations
+
+| Feature | Default behaviour | Optional upgrade |
+| --- | --- | --- |
+| Booking | Built-in request form → stored + emailed | Set an external URL or paste an OpenTable/ResDiary embed |
+| Gift vouchers | Order form → stored + emailed | Add a Stripe/SumUp/Square payment link; buyers are redirected after submitting |
+| Newsletter | Subscribers stored in WordPress | Point the form at a Mailchimp or Brevo action URL |
+| Instagram | Curated gallery images | Add a Basic Display access token for the live feed (cached hourly) |
+| Maps | Click-to-load Google embed | Paste your own embed URL |
+
+## The design system
+
+The visual language lives in one place: the token block at the top of
+`css/main.css`, and the "Glass surface system" section at the bottom of it.
+
+| Token group | What it controls |
+| --- | --- |
+| `--c-bg` + `images/texture-suede.png` | The sage ground: a seamless suede nap blended with `soft-light`, plus a viewport-fixed lighting layer on `body::before` |
+| `--glass-*` | The glass. `--glass-bg` is `transparent` on purpose: a panel is exactly the colour of the ground behind it. There is no border either — panels draw no outline at all. What is left is the shadow, which does two jobs: three drops to lift the panel off the ground, and a pale bloom below it, because a slab of glass gathers light as well as blocking it. `--glass-recess` is the opposite move, for controls sunk *into* the pane |
+| `--frost-*` | The feathered edge that replaces the outline. `--frost-depth` is how far the milk carries in from a lit edge, `--frost-depth-dim` from an unlit one, `--frost-fade` where the band has faded to nothing. `--frost-top` / `--frost-side` / `--frost-dim` set how bright each edge is — they are deliberately unequal, because a uniformly bright edge reads as a border and an unevenly bright one reads as an object |
+| `--gold` | Gold used for **text**. Tuned to clear 4.5:1 on the glass |
+| `--gold-mid`, `--gold-bright` | Gold used for **decoration** — icons, rules, borders — where contrast minimums don't apply |
+| `--font-script` | The face used by the fallback wordmark (Pinyon Script) |
+
+Both golds flip with the colour scheme, so components never hard-code one.
+If you change the ground colour, re-check the gold: `--gold` has to stay
+readable against the darkest part of the mottling, not just against glass.
+
+Reusable pieces: `.glass` (panel), `.glass--pad`, `.icon-badge` (round gold
+icon), `.glass-title` (small-caps serif), `.gold-rule` (the short gold line),
+`.ornament` (the leaf-between-rules divider).
+
+## Performance
+
+- Fonts are self-hosted (`Cormorant Garamond` + `Inter`, variable, and
+  `Pinyon Script` for the wordmark; latin + latin-ext subsets only) and
+  preloaded; `@font-face` is inlined.
+- Critical CSS for the first paint is inlined; the rest loads normally.
+- `css/menu.css` and `css/forms.css` load only where they are needed.
+- All scripts are deferred; there is no jQuery on the front end.
+- Core block CSS, emoji scripts, oEmbed discovery and jQuery Migrate are
+  removed (each is filterable if a plugin needs them).
+- The Google Maps iframe is not requested until the visitor clicks the map.
+- The Instagram API response is cached for an hour; failures are cached for ten
+  minutes so a bad token can never slow the site.
+
+## Accessibility
+
+- Skip link, landmark regions, and a visible focus ring on every interactive
+  element.
+- The mobile drawer traps focus, closes on <kbd>Esc</kbd>, and is `inert` when
+  shut. So is the lightbox.
+- Submenus are real `aria-expanded` disclosure buttons, so they work by
+  keyboard, not just hover.
+- `prefers-reduced-motion` disables every animation, the hero pan and smooth
+  scrolling.
+- The colour scheme ships locked to light: `prefers-color-scheme` is ignored,
+  a stored choice from an earlier visit is ignored, and it holds with
+  JavaScript off, because the attribute is stamped on `<html>` on the server.
+  Set **Customize → Brand & Appearance → Default colour scheme** to *Follow
+  the visitor's device* to offer dark mode; the toggle appears with it, and
+  the scheme is then applied before first paint so there is no flash.
+- Form errors are announced, tied to their field, and never colour-only.
+
+## Security
+
+- Every form: nonce → honeypot → time trap → per-IP rate limit → typed
+  validation → sanitised storage.
+- IP addresses are stored only as a salted one-way hash.
+- Security headers (`X-Content-Type-Options`, `X-Frame-Options`,
+  `Referrer-Policy`, `Permissions-Policy`, HSTS on TLS) — disable with the
+  `treats_send_security_headers` filter if your server sets them already.
+- XML-RPC off, author enumeration blocked, REST user endpoint closed to
+  anonymous requests, login errors made generic, dashboard file editing off.
+
+## Filters
+
+| Filter | Purpose |
+| --- | --- |
+| `treats_home_sections` | Reorder or remove home page sections |
+| `treats_schema_graph` | Modify the JSON-LD graph before output |
+| `treats_send_security_headers` | Turn off theme-sent security headers |
+| `treats_remove_core_block_css` | Keep core block styles |
+| `treats_needs_form_assets` | Skip form CSS/JS on views without a form |
+| `treats_ip_headers` | Trust a proxy header behind a load balancer |
+| `treats_force_reduced_motion` | Disable animations site-wide |
+| `treats_form_submitted` | Action fired after a submission is stored and emailed |
+| `treats_bundled_logo_files` | Which file names in `images/` count as the theme's logo |
+| `treats_strip_builder_markup` | Stop hiding leftover Enfold/Avia shortcodes in old content |
+
+## How it was tested
+
+The theme was built against a real WordPress 6.7 install and driven with a
+headless browser rather than eyeballed:
+
+- **44 interaction tests** — mobile drawer (open, focus trap, <kbd>Esc</kbd>,
+  submenus), colour-scheme toggle and persistence, sticky/hiding header,
+  scroll reveals under slow, fast and jump-to-bottom scrolling, menu search
+  and filters including toggling a filter back off, Click & Collect basket
+  including persistence across reloads,
+  FAQ accordion and topic filter, click-to-load map, gallery lightbox.
+- **15 form tests** — client validation, honeypot, time trap, rate limiting,
+  every form's success path, and the no-JavaScript fallback with JS disabled.
+- **axe-core** on nine pages × light/dark × desktop/mobile: no violations.
+- **Layout** — no horizontal overflow at 390px on any page.
+- **Admin** — every custom post type screen, the Customizer and the menu
+  editor load without a warning; submission records show their stored fields.
+- **Performance** — 14–16 requests, ~390–420KB uncompressed, CLS 0, first
+  paint 440–530ms in headless software rendering. The glass was tuned against
+  those numbers, not by eye: an earlier version put SVG turbulence inside
+  `backdrop-filter` and added ~200ms of first paint plus roughly 3× the scroll
+  paint cost, for a difference invisible side by side. It was removed.
+
+## File map
+
+```
+treats-tea-room/
+├── style.css              Theme header (styles live in /css)
+├── functions.php          Bootstrap — loads /inc modules
+├── header.php footer.php
+├── front-page.php index.php page.php single.php
+├── archive.php search.php 404.php searchform.php comments.php
+├── screenshot.png
+├── css/     main · menu · forms · print · editor
+├── js/      main · menu · forms · customizer
+├── fonts/   Cormorant Garamond, Inter, Pinyon Script (woff2)
+├── images/  favicon, app icons, social card
+├── inc/     setup, enqueue, template-tags, post-types, meta-boxes,
+│            customizer, nav-walker, seo, schema, performance,
+│            security, forms, activation, compat-enfold,
+│            menu-data, menu-import
+├── page-templates/  menu, booking, vouchers, events, about, contact,
+│                    faq, gallery, full-width
+├── template-parts/  components/ content/ home/ menu/
+└── languages/       treats.pot
+```
+
+## Migrating off Enfold
+
+Enfold stores page content as Avia shortcodes, and those only render while
+Enfold is active. Switch themes and WordPress prints them verbatim —
+screenfuls of `[av_slide_full slide_type='image' …]` where the page used to
+be, plus Enfold's `###lt###` / `###gt###` escapes.
+
+`inc/compat-enfold.php` strips both on output. The database is untouched, so
+re-activating Enfold restores every page exactly as it was — which matters,
+because that is the rollback path during a switch. It only matches the `av_`
+and `avia_` prefixes: stripping every unregistered shortcode would eat
+shortcodes belonging to plugins that register late.
+
+A page that was *only* builder markup comes back empty, so the section that
+would have held it does not render at all.
+
+Once the old content has been rewritten, retire the filter:
+
+```php
+add_filter( 'treats_strip_builder_markup', '__return_false' );
+```
+
+## How the menu is published
+
+Five browsable pages — Breakfast & Brunch, Lunch, Afternoon Tea, Cakes &
+Desserts, Drinks — under a **Menus** overview, with search, dietary filters
+and Click & Collect. The printed menu is offered alongside them as a PDF
+download (`images/menu/treats-menu.pdf`, or set your own under *Customize →
+Afternoon Tea → Printed menu PDF*).
+
+**Afternoon tea has its own page**, not just a menu category:
+`page-templates/template-afternoon-tea.php` sells it first — what arrives on
+the stand, the sandwich choices, the price, and a booking button — then lists
+the afternoon tea dishes underneath. Every figure is in *Customize → Treats
+Tea Room → Afternoon Tea*, so the price and contents change without touching
+a template.
+
+## Loading the itemised menu## Loading the itemised menu
+
+The theme seeds a small starter menu on activation so the site is never empty.
+The real menu — 171 dishes across five pages — lives in `inc/menu-data.php`
+and is loaded from **Tools → Import Treats Menu**.
+
+That screen tells you what it is about to do, moves the existing items to the
+**trash** rather than deleting them, and can be run again safely. To change
+the menu later, edit `inc/menu-data.php`, bump `TREATS_MENU_EDITION`, and the
+dashboard will offer the import again.
+
+Everything it creates is ordinary content — edit any dish in **Menu** as
+normal afterwards.
+
+## How the pages link together
+
+Worth knowing, because it is deliberate:
+
+- **Menus** is the landing page the navigation's "Menu" item points at. The
+  five menu pages hang off it, and each one lists the other four at the foot
+  so nobody has to go back to the navigation to move between them.
+- **Every menu page** ends with *Book a table* and *Find us*. Gift vouchers
+  are promoted from the home page and the footer, not from the food.
+- **The home page** offers exactly four things a customer comes for —
+  afternoon tea, a table, a voucher, the venue — plus menus and directions.
+- `treats_menu_pages()` returns the menu pages in `menu_order`, and
+  `treats_menus_url()` resolves the overview. Use those rather than
+  `treats_get_template_page_url()` for anything menu-related: that helper
+  returns whichever page carrying a template is *newest*, which is right when
+  one page uses a template and wrong when five do.
+
+## Before launch
+
+1. Replace the starter menu items with real dishes and prices.
+2. Confirm the opening hours, phone and email in the Customizer. Defaults are
+   taken from the approved design: 10/11 Silver Street, DH1 3RD,
+   0191 386 0925, info@treatstearoom.co.uk, Mon–Sun 8:30–17:00, est. 1984.
+3. Upload photography (see `images/README.md` for the crops the layout wants).
+4. Set the notification email so bookings reach a monitored inbox, and send a
+   test booking to confirm `wp_mail()` is delivering. On most hosts you want an
+   SMTP plugin here.
+5. Have the Privacy and Accessibility pages reviewed — both ship as drafts of
+   sensible copy, not legal advice.
+6. Set up 301 redirects from the old Enfold URLs to the new ones.
+
+## Licence
+
+GPL-2.0-or-later, matching WordPress. Cormorant Garamond, Inter and Pinyon
+Script are all licensed under the SIL Open Font License 1.1.
