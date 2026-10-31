@@ -349,6 +349,41 @@ Worth knowing, because it is deliberate:
   returns whichever page carrying a template is *newest*, which is right when
   one page uses a template and wrong when five do.
 
+## Loyalty card
+
+The paper 18-stamp card, on a phone. Every hot drink paid for earns a stamp:
+5 stamps earn a free hot drink, 10 a free scone, 15 a free cake, and then the
+card starts again (boxes 6, 12 and 18 of the paper card are the rewards).
+
+- **Customers** join at `/loyalty-card/` with their name and email. Their card
+  opens straight away, shows a QR code, and updates live while it is on screen
+  when staff stamp it. The welcome email carries a link that always reopens the
+  card; "Email me my card" sends a fresh link to a new phone. Newsletter
+  consent is a separate, unticked box.
+- **Staff** use `/loyalty-till/` on a phone or tablet at the counter: unlock
+  with their own code, tap *Scan card* (or type the code or the customer's
+  email), choose how many hot drinks were paid for, *Add stamp*. Rewards appear
+  as buttons — *Give free scone* and so on. A stamp can be undone for 15
+  minutes if nothing has happened on the card since. The till locks itself
+  after 12 hours, or with the *Lock* button.
+- **Managers** see everything under **Loyalty** in the dashboard: members,
+  rewards waiting, a full activity log with the staff name against every
+  stamp, stamp corrections, deleting a card, a CSV of newsletter sign-ups,
+  and the **Staff codes** tab, where each person is given a 4–8 digit code.
+  Add at least one staff code before using the till.
+
+Customers can never add stamps themselves: only an unlocked till can, and
+staff codes are rate-limited (five tries per connection every 15 minutes,
+30 wrong codes site-wide locks the till for an hour). Card links are stored
+only as hashes. Data lives in three tables, `{prefix}treats_loyalty_members`,
+`_rewards` and `_log`, created automatically on first load.
+
+The till page needs HTTPS for the camera. QR codes are drawn with
+[qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) (MIT)
+and read with the browser's own barcode reader, falling back to
+[jsQR](https://github.com/cozmo/jsQR) (Apache 2.0) on iPhone; both are in
+`js/vendor/`.
+
 ## Before launch
 
 1. Replace the starter menu items with real dishes and prices.

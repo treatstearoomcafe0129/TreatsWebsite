@@ -138,6 +138,17 @@ function treats_page_blueprint() {
 			'eyebrow'  => __( 'Gifts', 'treats' ),
 			'intro'    => __( 'A Treats voucher is the easiest way to send someone a proper afternoon in Durham.', 'treats' ),
 		),
+		'loyalty'   => array(
+			'title'    => __( 'Loyalty Card', 'treats' ),
+			'template' => 'page-templates/template-loyalty.php',
+			'eyebrow'  => __( 'Loyalty card', 'treats' ),
+			'intro'    => __( 'Your 6th hot drink is on us, then a free scone, then a free cake.', 'treats' ),
+		),
+		'loyalty-till' => array(
+			'title'    => __( 'Loyalty Till', 'treats' ),
+			'template' => 'page-templates/template-loyalty-till.php',
+			'content'  => '',
+		),
 		'about'     => array(
 			'title'    => __( 'About Us', 'treats' ),
 			'template' => 'page-templates/template-about.php',
