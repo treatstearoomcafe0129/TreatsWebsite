@@ -1,0 +1,693 @@
+/* ==========================================================================
+   Treats loyalty card — customer card and staff till
+   Light green and gold, like the printed card and the café's emails.
+   ========================================================================== */
+
+.loyalty-section {
+	/* No page hero above the card, so clear the fixed header ourselves. */
+	padding-block: calc(var(--t-header-h, 5rem) + clamp(1rem, 3vw, 2rem)) clamp(2.5rem, 6vw, 4rem);
+}
+
+/* --- The card ------------------------------------------------------------ */
+
+.loyalty-card {
+	--lc-green: #eaf2e3;
+	--lc-cream: #fffdf7;
+	--lc-gold: #b48a3c;
+	--lc-gold-soft: #d4b06a;
+	--lc-ink: #2f3a2b;
+
+	position: relative;
+	max-width: 440px;
+	margin-inline: auto;
+	padding: 0 clamp(1.1rem, 4vw, 1.75rem) 1.5rem;
+	background: var(--lc-cream);
+	border: 2px solid var(--lc-gold-soft);
+	border-radius: 20px;
+	box-shadow: var(--shadow-lg);
+	color: var(--lc-ink);
+	overflow: hidden;
+	text-align: center;
+}
+
+.loyalty-card__bar {
+	height: 8px;
+	margin-inline: calc(-1 * clamp(1.1rem, 4vw, 1.75rem));
+	background: linear-gradient(90deg, var(--lc-gold), var(--lc-gold-soft), var(--lc-gold));
+}
+
+.loyalty-card__head {
+	padding-top: 1.25rem;
+}
+
+.loyalty-card__logo {
+	display: inline-block;
+	max-width: 200px;
+}
+
+.loyalty-card__logo img {
+	width: 100%;
+	height: auto;
+}
+
+.loyalty-card__eyebrow {
+	margin: 0.75rem 0 0;
+	font-size: var(--fs-2xs);
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--lc-gold);
+	font-weight: 600;
+}
+
+.loyalty-card__name {
+	margin: 0.15rem 0 1rem;
+	font-family: var(--font-display);
+	font-size: clamp(1.6rem, 6vw, 2rem);
+	line-height: 1.15;
+}
+
+.loyalty-card__next {
+	min-height: 1.5em;
+	margin: 0.9rem 0 0;
+	font-size: var(--fs-sm);
+	color: #4f5a49;
+}
+
+.loyalty-card__divider {
+	height: 1px;
+	margin: 1.25rem 0;
+	background: linear-gradient(90deg, transparent, var(--lc-gold), transparent);
+}
+
+.loyalty-card.is-bumped {
+	animation: loyalty-bump 0.6s ease;
+}
+
+@keyframes loyalty-bump {
+	40% { transform: scale(1.02); box-shadow: 0 0 0 6px rgba(212, 176, 106, 0.35), var(--shadow-lg); }
+}
+
+/* --- The 18 boxes -------------------------------------------------------- */
+
+.loyalty-grid {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: clamp(0.35rem, 1.6vw, 0.6rem);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.loyalty-box {
+	position: relative;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	border: 1.5px dashed #c9b27c;
+	background: #fff;
+	display: grid;
+	place-items: center;
+	font-size: 0.62rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #9a7a35;
+	transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.loyalty-box--stamp.is-filled {
+	border: 2px solid #b48a3c;
+	background: radial-gradient(circle at 35% 30%, #e6cd92, #b48a3c 70%);
+	transform: rotate(-8deg);
+}
+
+/* A small cup pressed into each filled stamp. */
+.loyalty-box--stamp.is-filled::after {
+	content: "";
+	width: 52%;
+	height: 52%;
+	background: #fffdf7;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 8h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Zm12 1h1.5a2.5 2.5 0 0 1 0 5H16v-1.6h1.5a.9.9 0 0 0 0-1.8H16V9ZM3 20h14v1.5H3V20ZM8 2.5c1 1 1 2 0 3M11.5 2.5c1 1 1 2 0 3' fill='black' stroke='black' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 8h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Zm12 1h1.5a2.5 2.5 0 0 1 0 5H16v-1.6h1.5a.9.9 0 0 0 0-1.8H16V9ZM3 20h14v1.5H3V20ZM8 2.5c1 1 1 2 0 3M11.5 2.5c1 1 1 2 0 3' fill='black' stroke='black' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.loyalty-box--reward {
+	border: 2px solid #d4b06a;
+	background: #f7efdc;
+	border-radius: 14px;
+}
+
+.loyalty-box--drink::before { content: "Drink"; }
+.loyalty-box--scone::before { content: "Scone"; }
+.loyalty-box--cake::before  { content: "Cake"; }
+
+.loyalty-box--reward::before {
+	line-height: 1.1;
+}
+
+.loyalty-box--reward.is-filled {
+	background: linear-gradient(140deg, #c9a25a, #b48a3c);
+	border-color: #9a7530;
+	color: #fff;
+	box-shadow: 0 0 0 3px rgba(212, 176, 106, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.loyalty-box,
+	.loyalty-card.is-bumped {
+		transition: none;
+		animation: none;
+	}
+}
+
+/* --- Rewards waiting ----------------------------------------------------- */
+
+.loyalty-rewards {
+	margin: 0 0 1.1rem;
+	padding: 0.9rem 1rem;
+	border-radius: 14px;
+	background: linear-gradient(140deg, #c9a25a, #b48a3c);
+	color: #fff;
+}
+
+.loyalty-rewards[hidden] {
+	display: none;
+}
+
+.loyalty-rewards__title {
+	margin: 0;
+	font-size: var(--fs-2xs);
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	opacity: 0.9;
+}
+
+.loyalty-rewards__list {
+	margin: 0.25rem 0;
+	padding: 0;
+	list-style: none;
+	font-family: var(--font-display);
+	font-size: 1.5rem;
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+.loyalty-rewards__hint {
+	margin: 0;
+	font-size: var(--fs-xs);
+	opacity: 0.95;
+}
+
+/* --- QR ------------------------------------------------------------------ */
+
+.loyalty-qr__code {
+	width: min(220px, 70%);
+	margin-inline: auto;
+	padding: 10px;
+	background: #fff;
+	border: 1px solid #e3d6b4;
+	border-radius: 14px;
+}
+
+.loyalty-qr__code svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.loyalty-qr__label {
+	margin: 0.75rem 0 0.1rem;
+	font-size: var(--fs-sm);
+}
+
+.loyalty-qr__text {
+	margin: 0;
+	font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+	font-size: 1.05rem;
+	letter-spacing: 0.12em;
+	color: #6b5321;
+}
+
+/* --- Help under the card ------------------------------------------------- */
+
+.loyalty-help {
+	max-width: 440px;
+	margin: 1.25rem auto 0;
+}
+
+.loyalty-help__item {
+	margin-bottom: 0.6rem;
+	padding: 0.8rem 1rem;
+	border-radius: 12px;
+	background: rgba(255, 255, 255, 0.55);
+	border: 1px solid rgba(255, 255, 255, 0.8);
+	font-size: var(--fs-sm);
+}
+
+.loyalty-help__item summary {
+	cursor: pointer;
+	font-weight: 600;
+}
+
+.loyalty-help__item p {
+	margin: 0.6rem 0 0;
+}
+
+.loyalty-help__forget {
+	margin-top: 1rem;
+	text-align: center;
+	font-size: var(--fs-xs);
+}
+
+/* --- Join page ----------------------------------------------------------- */
+
+.loyalty-check {
+	display: flex;
+	gap: 0.65rem;
+	align-items: flex-start;
+	font-size: var(--fs-sm);
+	line-height: 1.5;
+	cursor: pointer;
+}
+
+.loyalty-check input {
+	flex: none;
+	width: 1.2rem;
+	height: 1.2rem;
+	margin-top: 0.15rem;
+	accent-color: #8a6a2c;
+}
+
+.loyalty-ladder__list {
+	margin: 0;
+	padding-left: 1.2rem;
+	display: grid;
+	gap: 0.5rem;
+	font-size: var(--fs-sm);
+}
+
+.booking-aside > .info-card + .info-card {
+	margin-top: var(--sp-5, 1.25rem);
+}
+
+/* ==========================================================================
+   Staff till
+   ========================================================================== */
+
+.till-body {
+	margin: 0;
+	min-height: 100vh;
+	min-height: 100dvh;
+	background: #eaf2e3;
+	background-image: none;
+	color: #2f3a2b;
+	font-family: var(--font-sans);
+}
+
+.till {
+	max-width: 520px;
+	margin: 0 auto;
+	padding: env(safe-area-inset-top) 1rem calc(1.5rem + env(safe-area-inset-bottom));
+}
+
+.till [hidden] {
+	display: none !important;
+}
+
+.till__top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.9rem 0;
+	border-bottom: 2px solid #d4b06a;
+	margin-bottom: 1.25rem;
+}
+
+.till__brand {
+	font-family: var(--font-display);
+	font-size: 1.5rem;
+	font-style: italic;
+	color: #8a6a2c;
+}
+
+.till__brand span {
+	font-family: var(--font-sans);
+	font-style: normal;
+	font-size: 0.75rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: #4f5a49;
+	margin-left: 0.4rem;
+}
+
+.till__who {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	font-weight: 600;
+}
+
+.till__lock {
+	border: 1.5px solid #b48a3c;
+	background: #fff;
+	color: #6b5321;
+	border-radius: 999px;
+	padding: 0.35rem 0.9rem;
+	font: inherit;
+	font-size: 0.85rem;
+	cursor: pointer;
+}
+
+/* Buttons */
+
+.till-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-height: 48px;
+	padding: 0.7rem 1.2rem;
+	border-radius: 12px;
+	border: 2px solid #b48a3c;
+	background: #fff;
+	color: #4a3a17;
+	font: 600 1rem var(--font-sans);
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.till-btn:active {
+	transform: translateY(1px);
+}
+
+.till-btn[disabled] {
+	opacity: 0.55;
+	cursor: wait;
+}
+
+.till-btn--gold {
+	background: linear-gradient(140deg, #c9a25a, #a8803a);
+	border-color: #9a7530;
+	color: #fff;
+}
+
+.till-btn--xl {
+	width: 100%;
+	min-height: 64px;
+	font-size: 1.25rem;
+	border-radius: 16px;
+}
+
+.till-btn--ghost {
+	border-color: #c8d6bd;
+	color: #4f5a49;
+}
+
+.till-btn--block {
+	width: 100%;
+	margin-top: 1rem;
+}
+
+.till-btn--reward {
+	width: 100%;
+	min-height: 58px;
+	font-size: 1.1rem;
+	background: #fff7e6;
+}
+
+.till-round {
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	border: 2px solid #d4b06a;
+	background: #fff;
+	color: #8a6a2c;
+	font-size: 1.75rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+/* Messages */
+
+.till-msg {
+	margin: 0.75rem 0;
+	padding: 0.7rem 0.9rem;
+	border-radius: 10px;
+	font-size: 0.95rem;
+}
+
+.till-msg--error {
+	background: #f8e3dc;
+	color: #8d3624;
+}
+
+/* PIN */
+
+.till-pin {
+	text-align: center;
+}
+
+.till-pin__title {
+	margin: 1rem 0 0.75rem;
+	font-family: var(--font-display);
+	font-size: 1.8rem;
+}
+
+.till-pin__dots {
+	display: flex;
+	justify-content: center;
+	gap: 0.6rem;
+	min-height: 18px;
+	margin-bottom: 1rem;
+}
+
+.till-pin__dots span {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: #b48a3c;
+}
+
+.till-pin__pad {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.75rem;
+	max-width: 320px;
+	margin: 0 auto;
+}
+
+.till-pin__pad button {
+	height: 72px;
+	border-radius: 16px;
+	border: 2px solid #d4b06a;
+	background: #fff;
+	font: 600 1.6rem var(--font-sans);
+	color: #2f3a2b;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.till-pin__pad button:active {
+	background: #f7efdc;
+}
+
+.till-pin__pad .till-pin__go {
+	background: linear-gradient(140deg, #c9a25a, #a8803a);
+	color: #fff;
+	font-size: 1.2rem;
+}
+
+/* Scan */
+
+.till-scan {
+	position: relative;
+	display: grid;
+	gap: 0.75rem;
+}
+
+.till-scan__video {
+	width: 100%;
+	aspect-ratio: 1;
+	object-fit: cover;
+	border-radius: 18px;
+	background: #1f241e;
+}
+
+.till-scan__frame {
+	display: none;
+}
+
+.till.is-scanning .till-scan__frame {
+	display: block;
+	position: absolute;
+	inset: 18% 18% auto;
+	aspect-ratio: 1;
+	border: 3px solid rgba(212, 176, 106, 0.95);
+	border-radius: 18px;
+	box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.25);
+	pointer-events: none;
+}
+
+.till-search {
+	margin-top: 1.5rem;
+}
+
+.till-search label {
+	display: block;
+	margin-bottom: 0.4rem;
+	font-size: 0.9rem;
+	color: #4f5a49;
+}
+
+.till-search__row {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.till-search input {
+	flex: 1;
+	min-width: 0;
+	min-height: 48px;
+	padding: 0 0.9rem;
+	border: 1.5px solid #c8d6bd;
+	border-radius: 12px;
+	background: #fff;
+	font: 1.05rem ui-monospace, "SF Mono", Menlo, monospace;
+	letter-spacing: 0.06em;
+}
+
+/* Open card */
+
+.till-card {
+	padding: 1.1rem;
+	background: #fffdf7;
+	border: 2px solid #d4b06a;
+	border-radius: 18px;
+}
+
+.till-card__head {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 1rem;
+	margin-bottom: 0.9rem;
+}
+
+.till-card__name {
+	margin: 0;
+	font-family: var(--font-display);
+	font-size: 1.7rem;
+	line-height: 1.1;
+}
+
+.till-card__code {
+	margin: 0.2rem 0 0;
+	font-family: ui-monospace, "SF Mono", Menlo, monospace;
+	color: #6b5321;
+	letter-spacing: 0.08em;
+}
+
+.till-card__count {
+	margin: 0;
+	font-family: var(--font-sans);
+	font-variant-numeric: lining-nums tabular-nums;
+	font-size: 2.4rem;
+	font-weight: 600;
+	line-height: 1;
+	color: #8a6a2c;
+}
+
+.till-card__count small {
+	font-size: 1.1rem;
+	color: #8b8f82;
+}
+
+.loyalty-grid--till {
+	gap: 0.4rem;
+}
+
+.till-card__next {
+	margin: 0.6rem 0 0;
+	text-align: center;
+	color: #4f5a49;
+	font-size: 0.95rem;
+}
+
+.till-toast {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin-top: 1rem;
+	padding: 0.85rem 1rem;
+	border-radius: 12px;
+	font-weight: 600;
+	background: #dfeedd;
+	color: #234020;
+}
+
+.till-toast--reward {
+	background: linear-gradient(140deg, #c9a25a, #b48a3c);
+	color: #fff;
+}
+
+.till-toast--error {
+	background: #f8e3dc;
+	color: #8d3624;
+}
+
+.till-toast__undo {
+	flex: none;
+	border: 1.5px solid currentColor;
+	background: transparent;
+	color: inherit;
+	border-radius: 999px;
+	padding: 0.35rem 0.9rem;
+	font: 600 0.9rem var(--font-sans);
+	cursor: pointer;
+}
+
+.till-rewards {
+	margin-top: 1rem;
+}
+
+.till-rewards h3 {
+	margin: 0 0 0.5rem;
+	font-size: 0.8rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: #8a6a2c;
+}
+
+.till-rewards__list {
+	display: grid;
+	gap: 0.5rem;
+}
+
+.till-stamp {
+	margin-top: 1.25rem;
+	padding-top: 1.1rem;
+	border-top: 1px solid #ecdfbf;
+	text-align: center;
+}
+
+.till-stamp__label {
+	margin: 0 0 0.6rem;
+	color: #4f5a49;
+}
+
+.till-stamp__qty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1.5rem;
+	margin-bottom: 1rem;
+}
+
+.till-stamp__qty output {
+	min-width: 2ch;
+	font-family: var(--font-sans);
+	font-variant-numeric: lining-nums tabular-nums;
+	font-size: 2.6rem;
+	font-weight: 600;
+}
