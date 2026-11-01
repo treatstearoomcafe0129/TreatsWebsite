@@ -236,6 +236,23 @@
 				submit(form, event);
 			});
 
+			// Bot check: confirm a person is using the form the moment they
+			// type, tap or click in it. Scripts that post the form directly
+			// never fire these events, so their submissions are set aside.
+			var human = $('[data-treats-human]', form);
+
+			if (human) {
+				var markHuman = function () {
+					var token = human.getAttribute('data-treats-human') || '';
+					human.value = token;
+					human.setAttribute('value', token);
+				};
+
+				['keydown', 'pointerdown', 'touchstart', 'input'].forEach(function (type) {
+					on(form, type, markHuman);
+				});
+			}
+
 			$$('input, select, textarea', form).forEach(function (input) {
 				on(input, 'blur', function () {
 					if ((input.value || '').trim() !== '' || input.hasAttribute('required')) {

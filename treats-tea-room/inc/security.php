@@ -170,6 +170,30 @@ function treats_rate_limit( $action, $limit = 5, $window = 600 ) {
 }
 
 /**
+ * Site-wide rate limit, shared by every visitor.
+ *
+ * Per-connection limits do nothing against a spam wave spread across many
+ * addresses; this caps the total instead.
+ *
+ * @param string $action Action key.
+ * @param int    $limit  Allowed events per window.
+ * @param int    $window Window length in seconds.
+ * @return bool True if the event is allowed.
+ */
+function treats_rate_limit_global( $action, $limit = 15, $window = 3600 ) {
+	$key   = 'treats_rlg_' . md5( $action );
+	$count = (int) get_transient( $key );
+
+	if ( $count >= $limit ) {
+		return false;
+	}
+
+	set_transient( $key, $count + 1, $window );
+
+	return true;
+}
+
+/**
  * A salted, one-way hash of the visitor's IP.
  *
  * The raw address is never stored, which keeps the submission records
