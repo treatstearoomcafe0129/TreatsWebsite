@@ -83,11 +83,21 @@ function treats_handle_form() {
 	}
 
 	// 3. Time trap — humans take more than three seconds to fill a form in.
-	$rendered = isset( $_POST['treats_ts'] ) ? (int) $_POST['treats_ts'] : 0;
+	// The timestamp is signed when the form is drawn, so a bot posting
+	// straight at the endpoint cannot leave it out or make one up.
+	$raw_ts   = isset( $_POST['treats_ts'] ) ? sanitize_text_field( wp_unslash( $_POST['treats_ts'] ) ) : '';
+	$rendered = treats_verify_form_ts( $raw_ts );
 
 	if ( $rendered && ( time() - $rendered ) < 3 ) {
 		treats_form_respond( false, __( 'That was a little too quick — please try again.', 'treats' ), $is_ajax, 429 );
 	}
+
+	// 3b. Bot check. A real visitor's browser fills in `treats_human` the
+	// moment they type, tap or click inside the form. Scripts that post the
+	// form without a person behind it never do. Suspect submissions are kept
+	// (marked as suspected spam) so nothing genuine is lost, but nobody is
+	// emailed and no follow-up hooks run.
+	$suspect = treats_form_suspect_reason( $raw_ts, $rendered );
 
 	// 4. Rate limit.
 	if ( ! treats_rate_limit( 'form_' . $raw_action, $config['limit'], HOUR_IN_SECONDS ) ) {
@@ -149,10 +159,15 @@ function treats_handle_form() {
 	unset( $data['treats_amount_custom'] );
 
 	// 6. Store.
-	$post_id = treats_store_submission( $raw_action, $config, $data );
+	$post_id = treats_store_submission( $raw_action, $config, $data, $suspect );
 
 	if ( is_wp_error( $post_id ) ) {
 		treats_form_respond( false, __( 'We could not save your request. Please call us.', 'treats' ), $is_ajax, 500 );
+	}
+
+	if ( '' !== $suspect ) {
+		// Report success so bots do not learn they were caught.
+		treats_form_respond( true, $config['success'], $is_ajax );
 	}
 
 	// 7. Notify.
@@ -508,14 +523,16 @@ function treats_validate_field( $value, $rules ) {
  *
  * @param string $action Action key.
  * @param array  $config Form config.
- * @param array  $data   Sanitized data.
+ * @param array  $data    Sanitized data.
+ * @param string $suspect Why the submission looks like spam, or '' if it does not.
  * @return int|WP_Error
  */
-function treats_store_submission( $action, $config, $data ) {
+function treats_store_submission( $action, $config, $data, $suspect = '' ) {
 	$reference = strtoupper( substr( $action, 0, 3 ) ) . '-' . gmdate( 'ymd' ) . '-' . wp_generate_password( 4, false, false );
 
 	$title_parts = array_filter(
 		array(
+			'' !== $suspect ? __( 'Suspected spam', 'treats' ) : '',
 			$reference,
 			$data['treats_name'] ?? ( $data['treats_email'] ?? '' ),
 		)
@@ -524,7 +541,9 @@ function treats_store_submission( $action, $config, $data ) {
 	$post_id = wp_insert_post(
 		array(
 			'post_type'   => $config['post_type'],
-			'post_status' => 'publish',
+			// Suspected spam is filed as Pending so it sits apart from real
+			// submissions in the admin list and can be checked or binned.
+			'post_status' => '' !== $suspect ? 'pending' : 'publish',
 			'post_title'  => implode( ' · ', $title_parts ),
 		),
 		true
@@ -545,6 +564,10 @@ function treats_store_submission( $action, $config, $data ) {
 
 	update_post_meta( $post_id, '_treats_reference', $reference );
 	update_post_meta( $post_id, '_treats_ip_hash', treats_client_ip_hash() );
+
+	if ( '' !== $suspect ) {
+		update_post_meta( $post_id, '_treats_spam', $suspect );
+	}
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce already verified.
 	$source = isset( $_POST['treats_source'] ) ? esc_url_raw( wp_unslash( $_POST['treats_source'] ) ) : '';
@@ -618,6 +641,13 @@ function treats_notify_submission( $action, $config, $data, $post_id ) {
 
 	// Customer acknowledgement.
 	if ( empty( $data['treats_email'] ) || ! is_email( $data['treats_email'] ) || 'subscribe' === $action ) {
+		return;
+	}
+
+	// Site-wide cap on acknowledgements. A spam wave arriving from many
+	// connections would otherwise turn the café's mail into a way of sending
+	// strangers unwanted email, which damages the sending reputation.
+	if ( ! treats_rate_limit_global( 'form_ack', 15, HOUR_IN_SECONDS ) ) {
 		return;
 	}
 
@@ -703,11 +733,24 @@ function treats_form_action() {
  * @return void
  */
 function treats_form_fields( $action ) {
+	$ts = treats_sign_form_ts( time() );
 	?>
 	<input type="hidden" name="action" value="treats_<?php echo esc_attr( $action ); ?>">
 	<input type="hidden" name="treats_action" value="<?php echo esc_attr( $action ); ?>">
 	<input type="hidden" name="treats_nonce" value="<?php echo esc_attr( wp_create_nonce( 'treats_public' ) ); ?>">
-	<input type="hidden" name="treats_ts" value="<?php echo esc_attr( (string) time() ); ?>">
+	<input type="hidden" name="treats_ts" value="<?php echo esc_attr( $ts ); ?>">
+	<input type="hidden" name="treats_human" value="" data-treats-human="<?php echo esc_attr( treats_form_human_token( $ts ) ); ?>">
+	<noscript>
+		<p class="form-note">
+			<?php
+			printf(
+				/* translators: %s: café phone number. */
+				esc_html__( 'This form needs JavaScript switched on to reach us. If you cannot turn it on, please ring us on %s.', 'treats' ),
+				esc_html( treats_get_phone() )
+			);
+			?>
+		</p>
+	</noscript>
 	<input type="hidden" name="treats_source" value="<?php echo esc_url( treats_get_canonical() ); ?>">
 	<div class="form-trap" aria-hidden="true">
 		<label for="treats-website-<?php echo esc_attr( $action ); ?>"><?php esc_html_e( 'Leave this field empty', 'treats' ); ?></label>
@@ -748,4 +791,75 @@ function treats_form_notice() {
 		esc_attr( $status ),
 		esc_html( $message )
 	);
+}
+
+/**
+ * Sign a form timestamp so it cannot be forged or left out.
+ *
+ * @param int $time Unix time the form was drawn.
+ * @return string `time.signature`
+ */
+function treats_sign_form_ts( $time ) {
+	$time = (int) $time;
+
+	return $time . '.' . substr( wp_hash( 'treats_ts|' . $time, 'nonce' ), 0, 16 );
+}
+
+/**
+ * Check a signed form timestamp.
+ *
+ * @param string $raw Posted `treats_ts` value.
+ * @return int The time the form was drawn, or 0 if the value is missing or forged.
+ */
+function treats_verify_form_ts( $raw ) {
+	$parts = explode( '.', (string) $raw );
+
+	if ( 2 !== count( $parts ) || ! ctype_digit( $parts[0] ) ) {
+		return 0;
+	}
+
+	$time = (int) $parts[0];
+
+	if ( ! hash_equals( treats_sign_form_ts( $time ), (string) $raw ) ) {
+		return 0;
+	}
+
+	return $time;
+}
+
+/**
+ * The value the browser copies into `treats_human` once a person interacts.
+ *
+ * @param string $signed_ts Signed timestamp the form was drawn with.
+ * @return string
+ */
+function treats_form_human_token( $signed_ts ) {
+	return substr( wp_hash( 'treats_human|' . $signed_ts, 'nonce' ), 0, 20 );
+}
+
+/**
+ * Decide whether a submission looks automated.
+ *
+ * @param string $raw_ts   Posted `treats_ts` value.
+ * @param int    $rendered Verified render time, or 0.
+ * @return string Short reason, or '' if the submission looks genuine.
+ */
+function treats_form_suspect_reason( $raw_ts, $rendered ) {
+	if ( ! $rendered ) {
+		return 'bad-timestamp';
+	}
+
+	// Pages can be cached, so allow a generous age, but not forever.
+	if ( ( time() - $rendered ) > 2 * DAY_IN_SECONDS ) {
+		return 'stale-form';
+	}
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified upstream.
+	$human = isset( $_POST['treats_human'] ) ? sanitize_text_field( wp_unslash( $_POST['treats_human'] ) ) : '';
+
+	if ( ! hash_equals( treats_form_human_token( $raw_ts ), $human ) ) {
+		return 'no-interaction';
+	}
+
+	return '';
 }
