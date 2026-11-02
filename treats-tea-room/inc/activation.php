@@ -248,9 +248,21 @@ function treats_maybe_upgrade() {
 		return;
 	}
 
+	// If the catch-up ever fails part-way (a host's memory limit, say), it must
+	// not run again on every admin page and lock the owner out of wp-admin.
+	// Try at most once every ten minutes.
+	if ( get_transient( 'treats_upgrade_running' ) ) {
+		return;
+	}
+
+	set_transient( 'treats_upgrade_running', 1, 10 * MINUTE_IN_SECONDS );
+	wp_raise_memory_limit( 'admin' );
+
 	if ( treats_sync_new_pages() ) {
 		flush_rewrite_rules();
 	}
+
+	delete_transient( 'treats_upgrade_running' );
 }
 add_action( 'admin_init', 'treats_maybe_upgrade' );
 
