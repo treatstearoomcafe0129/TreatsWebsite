@@ -6,8 +6,8 @@ def hz(m): return 440 * 2 ** ((m - 69) / 12)
 L = np.zeros(N); R = np.zeros(N)
 
 # Pad: chords D maj9 -> B m7(add11) -> G maj9 -> A sus -> D maj9
-chords = [(0, [50, 57, 62, 66, 69, 76]), (6.5, [47, 54, 59, 62, 66, 73]), (13, [43, 50, 59, 62, 66, 69]),
-          (21, [45, 52, 57, 62, 64, 71]), (25.6, [38, 50, 57, 62, 66, 69, 76])]
+chords = [(0, [50, 57, 62, 66, 69]), (4.2, [50, 57, 62, 66, 69, 76]), (11, [47, 54, 59, 62, 66, 73]), (15.4, [43, 50, 59, 62, 66, 69]),
+          (19.8, [40, 52, 55, 59, 62, 67]), (24.2, [45, 52, 57, 61, 64, 71]), (28.6, [38, 50, 57, 62, 66, 69, 76])]
 for i, (st, notes) in enumerate(chords):
     en = chords[i + 1][0] + 1.5 if i + 1 < len(chords) else D
     seg = (t >= st) & (t < en); tt = t[seg] - st; dur = en - st
@@ -28,21 +28,10 @@ def bell(at, m, vel=1., pan=.5):
          + .1*np.sin(2*np.pi*f*5.4*tt)*np.exp(-tt*12)) * env * .09 * vel
     s = int(at * SR); e = min(N, s + n)
     L[s:e] += x[:e-s] * (1 - pan); R[s:e] += x[:e-s] * pan
-motif = [(1.6, 74), (2.1, 78), (2.6, 81), (3.4, 86), (4.4, 85)]
-for a, m in motif: bell(a, m, .9, .35 + .3 * rng.random())
-for a, m in [(8.4, 81), (8.75, 78), (9.1, 76), (9.8, 74), (11.2, 73)]: bell(a, m, .8, .4 + .2 * rng.random())
-for a, m in [(15.4, 71), (16.5, 74), (17.6, 78), (18.6, 76)]: bell(a, m, .8, .3 + .4 * rng.random())
-for a, m in [(21.2, 81), (23.35, 79), (24.0, 76)]: bell(a, m, .75, .5)
-for a, m in [(27.0, 86), (27.15, 90), (27.3, 93), (27.45, 98), (29.4, 81), (30.2, 78), (30.6, 74), (31.4, 69)]: bell(a, m, .7, .35 + .3 * rng.random())
-
-# Shimmer swell into the logo: filtered noise riser + soft low impact
-seg = (t > 25.2) & (t < 30); tt = t[seg] - 25.2
-noise = rng.standard_normal(seg.sum()); noise = np.convolve(noise, np.ones(6) / 6, 'same')
-sw = np.clip(tt / 1.6, 0, 1) ** 2 * np.exp(-np.clip(tt - 1.6, 0, None) * 1.4) * .05
-L[seg] += noise * sw; R[seg] += np.roll(noise, 37) * sw
-s = int(27.0 * SR); n = int(SR * 3); tt = np.arange(n) / SR
-boom = np.sin(2 * np.pi * 55 * tt + 4 * np.exp(-tt * 8)) * np.exp(-tt * 1.6) * .22 * np.minimum(1, tt / .01)
-L[s:s+n] += boom; R[s:s+n] += boom
+for a, m, v in [(1.0, 74, .7), (1.6, 78, .6), (2.4, 81, .6), (4.2, 86, .55), (4.25, 74, .5), (7.4, 85, .45), (11.0, 83, .55), (11.05, 71, .45),
+                (13.2, 81, .45), (15.4, 79, .55), (15.45, 67, .45), (17.6, 78, .45), (19.8, 76, .55), (19.85, 64, .45), (22.0, 79, .45),
+                (24.2, 81, .55), (24.25, 69, .45), (26.4, 85, .45), (28.6, 86, .6), (28.65, 74, .5), (29.0, 81, .45), (30.6, 78, .5), (31.2, 74, .45), (32.4, 69, .4)]:
+    bell(a, m, v, .35 + .3 * rng.random())
 
 # Reverb: FFT-convolve with a decaying stereo noise tail
 def reverb(x, seed):

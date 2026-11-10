@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Treats Afternoon Tea</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<style>
+  :root {
+    --sage: #a3b09e; --sage-50: #f4f7f4; --sage-100: #e8efe8; --sage-700: #6f7c6b; --sage-800: #4c554a; --sage-900: #2b302a;
+    --ink: #1e221e; --gold: #443410; --gold-mid: #a8873c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--sage); }
+  #gl { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+  .grade { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 75% 70% at 50% 48%, transparent 55%, rgba(30,36,29,.38) 100%); }
+  .panel { position: absolute; inset: 0; background: var(--sage); overflow: hidden; }
+  .panel::before { content: ""; position: absolute; inset: 0; background: url("../treats-tea-room/images/texture-suede.png"); background-size: 320px; mix-blend-mode: soft-light; opacity: .9; }
+  .panel::after { content: ""; position: absolute; inset: 0; background: url("../treats-tea-room/images/texture-suede-cloud.png"); background-size: 1024px; mix-blend-mode: soft-light; opacity: .7; }
+  .panel > * { position: relative; z-index: 1; }
+
+  .label { font-family: "Inter Tight"; font-weight: 500; font-size: 17px; letter-spacing: .28em; text-transform: uppercase; color: var(--ink); }
+  .display { font-family: "Instrument Serif"; font-weight: 400; color: var(--ink); letter-spacing: -.01em; }
+  .display em { font-style: italic; color: var(--gold); }
+  .mask { overflow: hidden; display: block; padding-bottom: .06em; }
+  .mask > span { display: block; will-change: transform; }
+
+  /* title */
+  #title .label { position: absolute; left: 160px; top: 150px; }
+  #title .meta { position: absolute; right: 160px; top: 150px; text-align: right; }
+  #title .display { position: absolute; left: 150px; bottom: 170px; font-size: 220px; line-height: .92; }
+  #title .hr { position: absolute; left: 160px; right: 160px; top: 200px; height: 1px; background: rgba(30,34,30,.35); transform-origin: left; }
+
+  /* captions */
+  .cap { position: absolute; left: 120px; bottom: 110px; padding: 34px 44px 38px; min-width: 560px; max-width: 900px;
+    background: rgba(244,247,244,.62); backdrop-filter: blur(18px) saturate(1.1); -webkit-backdrop-filter: blur(18px) saturate(1.1);
+    border: 1px solid rgba(255,255,255,.7); border-radius: 4px; box-shadow: 0 30px 60px -30px rgba(30,36,29,.35); }
+  .cap .label { font-size: 14px; color: var(--sage-800); margin-bottom: 16px; display: flex; gap: 18px; align-items: center; }
+  .cap .label i { font-style: normal; color: var(--gold-mid); }
+  .cap .display { font-size: 64px; line-height: 1.02; }
+  .corner { position: absolute; right: 120px; top: 96px; font-family: "Inter Tight"; font-weight: 500; font-size: 14px; letter-spacing: .28em; text-transform: uppercase; color: rgba(244,247,244,.9); text-shadow: 0 1px 12px rgba(30,36,29,.4); }
+
+  /* end */
+  #end { display: grid; place-items: center; }
+  #end .stack { text-align: center; }
+  #end img { width: 720px; display: block; margin: 0 auto; filter: drop-shadow(0 18px 40px rgba(43,48,42,.28)); }
+  #end .addr { margin-top: 54px; }
+  #end .hr { width: 120px; height: 1px; background: var(--gold); margin: 26px auto; transform-origin: center; }
+  #end .cta { font-size: 58px; }
+  #fade { position: absolute; inset: 0; background: var(--sage-900); pointer-events: none; }
+</style>
+</head>
+<body>
+<canvas id="gl" width="1920" height="1080"></canvas>
+<div class="grade"></div>
+<div class="corner" id="corner">Treats Tea Room &nbsp;·&nbsp; Durham</div>
+
+<div class="cap" id="cap">
+  <div class="label"><i id="capNum">01</i><span id="capLabel"></span></div>
+  <div class="display"><span class="mask"><span id="capText"></span></span></div>
+</div>
+
+<div class="panel" id="title">
+  <div class="label">Treats Tea Room</div>
+  <div class="label meta">Silver Street, Durham</div>
+  <div class="hr"></div>
+  <div class="display">
+    <span class="mask"><span>Afternoon tea,</span></span>
+    <span class="mask"><span><em>done properly.</em></span></span>
+  </div>
+</div>
+
+<div class="panel" id="end">
+  <div class="stack">
+    <img id="logo" src="../treats-tea-room/images/logo.svg" alt="Treats">
+    <div class="label addr">10–11 Silver Street &nbsp;·&nbsp; Durham</div>
+    <div class="hr"></div>
+    <div class="display cta"><span class="mask"><span><em>Book your table</em></span></span></div>
+  </div>
+</div>
+<div id="fade"></div>
+
+<script type="module">
+import { buildScene } from './tea3d.js';
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, t) => a + (b - a) * t;
+const L3 = (a, b, t) => a.map((v, i) => lerp(v, b[i], t));
+const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const out = x => 1 - Math.pow(1 - x, 4);
+const sine = x => -(Math.cos(Math.PI * x) - 1) / 2;
+const $ = s => document.querySelector(s);
+
+const S = buildScene($('#gl'), 1920, 1080);
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+
+// [start, end, shot(u), caption]
+const SHOTS = [
+  [4.2, 11, u => ({ pos: L3([-3.4, 3.9, 11.6], [-.6, 3.2, 8.8], u), target: L3([-1.75, 1.6, 0], [-1.55, 1.75, 0], u), fov: 30, aperture: .0028, maxblur: .007 }),
+    ['The Treats Afternoon Tea', 'Three tiers, a proper pot of tea<br>and <em>no rush.</em>']],
+  [11, 15.4, u => { const p = L3([3.1, .78, 2.5], [1.55, .72, 3.25], u), tg = L3([.1, .22, .55], [-.35, .22, .6], u); return { pos: p, target: tg, fov: 30, aperture: .009, maxblur: .012 }; },
+    ['The first tier', 'Finger sandwiches,<br><em>cut fresh to order.</em>']],
+  [15.4, 19.8, u => { const p = L3([3.0, 2.05, 2.7], [2.15, 1.88, 2.05], u), tg = [.35, 1.58, .3]; return { pos: p, target: tg, fov: 30, aperture: .008, maxblur: .012 }; },
+    ['The second tier', 'Warm scones, Yorkshire jam<br>&amp; <em>clotted cream.</em>']],
+  [19.8, 24.2, u => { const a = lerp(2.2, 1.35, u), r = 2.6; return { pos: [Math.cos(a) * r, lerp(3.95, 3.75, u), Math.sin(a) * r], target: [0, 2.72, 0], fov: 30, aperture: .007, maxblur: .012 }; },
+    ['The third tier', 'Cakes from<br><em>our own counter.</em>']],
+  [24.2, 28.6, u => { const a = lerp(-.35, -.1, u), h = lerp(14.2, 12.6, u); return { pos: [Math.sin(a) * .02, h, Math.cos(a) * .02], target: [-.9, 0, .55], fov: 30, aperture: .0012, maxblur: .006 }; },
+    ['Every day from midday', 'Booking recommended,<br><em>especially at weekends.</em>']],
+];
+
+const titleLines = [...document.querySelectorAll('#title .mask > span')];
+const cap = $('#cap'), capText = $('#capText'), capLabel = $('#capLabel'), capNum = $('#capNum');
+let lastShot = -1;
+
+window.render = function (t) {
+  // ---------- 3D
+  const si = SHOTS.findIndex(([a, b]) => t >= a && t < b);
+  if (si >= 0) {
+    const [a, b, fn, [lab, txt]] = SHOTS[si];
+    S.shot(fn(sine(prog(t, a, b))));
+    if (si !== lastShot) { capLabel.textContent = lab; capText.innerHTML = txt; capNum.textContent = String(si + 1).padStart(2, '0'); lastShot = si; }
+    const ci = out(prog(t, a + .35, a + 1.25)), co = 1 - ease(prog(t, b - .55, b - .1));
+    cap.style.opacity = Math.min(ci, co);
+    cap.style.transform = `translateY(${(1 - ci) * 24}px)`;
+    capText.style.transform = `translateY(${(1 - out(prog(t, a + .45, a + 1.45))) * 105}%)`;
+  } else cap.style.opacity = 0;
+  $('#corner').style.opacity = si >= 0 ? out(prog(t, 4.6, 5.6)) * (1 - prog(t, 28, 28.5)) : 0;
+
+  // ---------- title panel (0 – 4.6), wipes up to reveal the table
+  const title = $('#title');
+  const wipe = ease(prog(t, 3.7, 4.6));
+  title.style.clipPath = `inset(0 0 ${wipe * 100}% 0)`;
+  title.style.display = wipe >= 1 ? 'none' : 'block';
+  $('#title .hr').style.transform = `scaleX(${ease(prog(t, .5, 2.0))})`;
+  document.querySelectorAll('#title .label').forEach(l => l.style.opacity = ease(prog(t, .6, 1.6)));
+  titleLines.forEach((s, i) => s.style.transform = `translateY(${(1 - out(prog(t, .9 + i * .28, 2.3 + i * .28))) * 110}%)`);
+  title.querySelector('.display').style.transform = `translateY(${-wipe * 80}px)`;
+
+  // ---------- end panel (28.6 – 34), wipes up from the bottom
+  const end = $('#end');
+  const ew = ease(prog(t, 28.2, 29.1));
+  end.style.clipPath = `inset(${(1 - ew) * 100}% 0 0 0)`;
+  end.style.display = ew <= 0 ? 'none' : 'grid';
+  const lp = out(prog(t, 28.9, 30.6));
+  $('#logo').style.opacity = lp; $('#logo').style.transform = `translateY(${(1 - lp) * 30}px) scale(${lerp(.97, 1, lp) + prog(t, 29, 34) * .015})`;
+  $('#end .addr').style.opacity = ease(prog(t, 30.0, 31.0));
+  $('#end .hr').style.transform = `scaleX(${ease(prog(t, 30.3, 31.3))})`;
+  $('#end .cta .mask > span').style.transform = `translateY(${(1 - out(prog(t, 30.6, 32))) * 110}%)`;
+
+  $('#fade').style.opacity = 1 - ease(prog(t, 0, .7)) + ease(prog(t, 33.2, 34));
+};
+await document.fonts.ready; await $('#logo').decode();
+window.render(0); window.ready = true;
+</script>
+</body>
+</html>

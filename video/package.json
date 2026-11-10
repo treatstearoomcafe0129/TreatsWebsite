@@ -1,0 +1,15 @@
+{
+  "name": "video",
+  "version": "1.0.0",
+  "description": "`treats-brand-film.mp4`: 34 s, 1920×1080, 30 fps, H.264 + AAC stereo.",
+  "main": "render.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.170.0"
+  }
+}
