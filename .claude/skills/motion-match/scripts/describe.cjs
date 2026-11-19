@@ -26,11 +26,13 @@ Writes <in>/sheets/sheet-NN.png and <in>/describe.md, and prints the summary.
   try {
     const page = await A.blankPage(browser);
     const motion = [];
-    for (const f of files) motion.push((await A.frameStats(page, 'a', f, { threshold })).motion);
+    let size = null;
+    for (const f of files) { const st = await A.frameStats(page, 'a', f, { threshold }); size = size || st; motion.push(st.motion); }
+    const lay = A.sheetLayout(size.w, size.h);
     const win = A.motionWindow(motion, frameMs, noise);
-    const plan = A.sheetPlan(files.length, every);
+    const plan = A.sheetPlan(files.length, every, lay.perSheet);
     for (let s = 0; s < plan.length; s++) {
-      await A.sheet(page, [{ name: 'frame', files: plan[s].map((i) => files[i]) }], plan[s].map((i) => `#${i + 1} · ${Math.round(i * frameMs)} ms`), outPath(a.in, 'sheets', `sheet-${String(s + 1).padStart(2, '0')}.png`), `${path.basename(path.resolve(a.in))} — sheet ${s + 1} of ${plan.length}`);
+      await A.sheet(page, [{ name: 'frame', files: plan[s].map((i) => files[i]) }], plan[s].map((i) => `#${i + 1} · ${Math.round(i * frameMs)} ms`), outPath(a.in, 'sheets', `sheet-${String(s + 1).padStart(2, '0')}.png`), `${path.basename(path.resolve(a.in))} — sheet ${s + 1} of ${plan.length}`, lay.thumb);
     }
     const lines = [`# ${path.basename(path.resolve(a.in))}`, '', `${files.length} frames at ${fps} fps (${Math.round((files.length - 1) * frameMs)} ms).`,
       win ? `The picture changes from about ${win.startMs} ms to ${win.endMs} ms.` : 'The picture never changes: nothing was animated in this capture (check the trigger, selector and duration).', ''];
@@ -39,11 +41,12 @@ Writes <in>/sheets/sheet-NN.png and <in>/describe.md, and prints the summary.
       if (rows.length) {
         lines.push('| element | property | start | end | from → to | overshoot | shape (25/50/75 %) |', '|---|---|---|---|---|---|---|');
         for (const r of rows) lines.push(`| ${r.label} | ${r.prop} | ${r.startMs} ms | ${r.endMs} ms | ${r.from} → ${r.to}${A.UNIT[r.prop] ? ' ' + A.UNIT[r.prop] : ''} | ${r.overshoot ? 'yes' : 'no'} | ${r.shape} |`);
+        lines.push('', 'x and y are the centre of the element\'s box. For the exact curve of a row, read the per-frame values in track.json.');
       } else lines.push('No tracked element moved.');
       const insp = readJson(path.join(a.in, 'inspect.json'));
       if (insp && insp.animations.length) lines.push('', `${insp.animations.length} declared CSS / Web Animations are listed in inspect.json with exact durations, delays and easings.`);
     } else lines.push('No track.json here (frames from a video or gif): read the timing from the sheets.');
-    lines.push('', `Sheets: ${plan.length} in ${path.join(a.in, 'sheets')}`);
+    lines.push('', `Sheets: ${plan.length} in ${path.join(a.in, 'sheets')}. Thumbnails are small; open a file in frames/ when you need detail.`);
     fs.writeFileSync(outPath(a.in, 'describe.md'), lines.join('\n') + '\n');
     console.log(lines.join('\n'));
   } finally { await browser.close(); }

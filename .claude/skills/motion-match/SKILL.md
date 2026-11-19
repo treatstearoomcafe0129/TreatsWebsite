@@ -42,7 +42,14 @@ Ask only when two readings would lead to different work. A page behind a login, 
 
 ### 2. Record the reference
 
-**A website or HTML page:**
+**A website or HTML page.** First find out what moves, with a pass that tracks nothing:
+
+```bash
+node <skill>/scripts/capture.cjs --url https://example.com --out .motion-match/hero/probe \
+  --trigger load --duration 3000 --discover
+```
+
+`--discover` watches every element and prints the ones that moved, each with a selector and what changed about it. Open a frame or two from `probe/frames/` to see the page, choose the section to crop to and the elements to follow, then record properly:
 
 ```bash
 node <skill>/scripts/capture.cjs --url https://example.com --out .motion-match/hero/ref \
@@ -51,8 +58,9 @@ node <skill>/scripts/capture.cjs --url https://example.com --out .motion-match/h
 ```
 
 - `--selector` crops the frames to one element. `--trigger` is `load`, `hover`, `click`, `scroll` (with `--scroll-to <px>`) or `none`; `--target` is the element to hover or click.
-- `--track label=selector` records an element's position, size, opacity, scale and rotation on every frame. Track every element that moves. The labels are yours: the clone will use the same labels with its own selectors, which is how the two get compared even when the markup differs.
-- Capture runs on a virtual clock, so the same page gives byte-identical frames every time and a slow machine cannot distort timing.
+- `--track label=selector` records an element's centre position, size, opacity, scale and rotation on every frame. Track every element that moves; a label left out of the clone later counts as a failure, so track what matters and no more. The labels are yours: the clone will use the same labels with its own selectors, which is how the two get compared even when the markup differs.
+- Capture runs on a virtual clock, so the same page gives byte-identical frames every time and a slow machine cannot distort timing. `load` is the default trigger and records from the moment the page has loaded.
+- If a `--track` selector matches nothing the script says so and exits with an error; fix the selector before going on.
 - Start with a duration comfortably longer than the motion, then shorten it once you know when it ends.
 
 **A video or gif:** `node <skill>/scripts/frames.cjs --in clip.mp4 --probe`, then `--out .motion-match/x/ref --fps 30 --start 1.2 --end 3.0 --crop w:h:x:y` to cut out just the part being cloned, without the recorder's cursor or browser frame. This uses the ffmpeg already installed; if there is none, tell the user.
@@ -65,15 +73,27 @@ node <skill>/scripts/capture.cjs --url https://example.com --out .motion-match/h
 node <skill>/scripts/describe.cjs --in .motion-match/hero/ref
 ```
 
-This prints when the picture moves and one row per tracked element and property (start, end, from → to, overshoot, and a "shape": the percentage of the distance covered at 25/50/75 % of the time, so `25/50/75` is linear and `80/95/99` is a strong ease-out). It also writes contact sheets to `ref/sheets/`. Open every sheet with the Read tool; they show things the numbers miss, like a blur, a colour change or an element you forgot to track.
+This prints when the picture moves and one row per tracked element and property (start, end, from → to, overshoot, and a "shape": the percentage of the distance covered at 25/50/75 % of the time, so `25/50/75` is linear and `80/95/99` is a strong ease-out). It also writes contact sheets to `ref/sheets/`. Open the sheets that cover the period when the picture is moving (the first line of the output says when) with the Read tool; they show things the numbers miss, like a blur, a colour change or an element you forgot to track. Thumbnails are small, so open individual files in `ref/frames/` when you need detail.
 
-Then open `ref/inspect.json`. For CSS and Web Animations API motion it lists the declared duration, delay, easing and keyframes of each animation. Those are exact, so prefer them to anything estimated from frames. JavaScript-driven motion does not appear there; take it from the describe table.
+Then open `ref/inspect.json`. For CSS and Web Animations API motion it lists the declared duration, delay, easing and keyframes of each animation. Those are exact, so prefer them to anything estimated from frames. JavaScript-driven motion does not appear there. Take its start, end and distance from the describe table, and its curve from the per-frame values in `ref/track.json`, matched against the table below.
+
+| Shape (25/50/75 %) | Easing |
+|---|---|
+| 25/50/75 | `linear` |
+| 41/80/96 | `ease` |
+| 9/32/62 | `ease-in` |
+| 38/68/91 | `ease-out` |
+| 13/50/87 | `ease-in-out` |
+| 60/88/98 | cubic ease-out, `cubic-bezier(0.215, 0.61, 0.355, 1)` |
+| a number above 100 | overshoot: a spring, or a `cubic-bezier` whose second or fourth value is outside 0–1 |
+
+When no named curve fits, sample the reference's values into a CSS `linear()` easing, which reproduces any curve exactly.
 
 If the report says nothing moved, the capture is wrong (trigger, selector or duration). Fix that before building anything.
 
 ### 4. Build
 
-Write the animation in the destination using the project's own approach. Carry the numbers over literally: durations, delays, stagger gaps, easing curves, distances. Honour `prefers-reduced-motion` unless the project already handles it. Make sure the clone can be recorded the same way: a page or route that shows the component at the same viewport, reachable as a local file or a dev server URL.
+Write the animation in the destination using the project's own approach. Carry the numbers over literally: durations, delays, stagger gaps, easing curves, distances. Honour `prefers-reduced-motion` unless the project already handles it. Make sure the clone can be recorded the same way: a page or route that shows the component at the same viewport, reachable as a local file or a dev server URL. For a `pixel` comparison the cropped element must also be the same size as the reference's crop (the size is in the capture's output line); at `motion` level a different size is fine.
 
 ### 5. Record the clone and compare
 
@@ -106,13 +126,15 @@ Tell the user, in plain words: what was cloned and at which level; which files c
 | reference overshoots, clone does not | the reference uses a spring or a `cubic-bezier` with a value above 1; plain ease-out cannot overshoot |
 | distance differs | wrong travel distance or scale amount. At `motion` level a different distance in pixels is only noted when the layout is a different size |
 | frame sizes differ | the two captures used a different viewport or crop. Fix the capture, not the code |
-| element missing in the clone | the clone's `--track` selector matched nothing, or a label is spelled differently |
+| element missing in the clone, or "tracked in the reference but not in the clone" | the clone's `--track` selector matched nothing, a label is spelled differently, or a label was left out |
+| reference moves, clone does not move | the clone animates a different property than the one measured (for example `margin` or `top` where the reference scales), or its animation never starts in the capture |
 | pixel mismatch high but every element row passes | fonts, colours or images differ, which is expected at `motion` level |
 
 ## Limits worth knowing
 
 - **Video and gif references are checked more loosely.** There are no elements to track, so the comparison covers when the picture starts and stops changing and how the movement is spread over time. That catches wrong delays and durations but not a subtly different easing. Judge those from the sheets, and say so in the report. Raise `--noise` to about `0.01` for compressed video.
 - **Canvas, WebGL and `<video>` content is recorded as pictures only.** The virtual clock drives CSS, Web Animations and timer/`requestAnimationFrame` code; it cannot see inside a canvas scene. Use `--real-clock` for content it cannot drive and treat the timing as approximate. Rebuilding a complex 3D scene is outside what this skill verifies.
-- **A change that JavaScript starts between two frames is seen at the next frame**, so its start can read up to one frame late on both sides alike. This is why the default tolerance is two frames.
+- **JavaScript-driven motion is sampled a little coarsely.** A change that script starts between two frames is seen at the next frame, and `requestAnimationFrame` code advances in 16 ms steps of virtual time, so its values can read up to a frame behind a CSS animation of the same design. This is why the default tolerance is two frames, and why a CSS clone of a scripted reference may need its curve nudged.
+- **x and y are the centre of an element's box**, so scaling or rotating about the centre does not register as movement. An element with a different `transform-origin` will show its centre moving, which is correct.
 - **Scroll-driven effects** are a function of scroll position, not time. Record both sides with the same `--trigger scroll --scroll-to` and duration.
 - **Hover and click** are fired at the centre of the target after the page has settled (`--settle`, default 1500 ms of virtual time). If the entrance takes longer than that, raise it.

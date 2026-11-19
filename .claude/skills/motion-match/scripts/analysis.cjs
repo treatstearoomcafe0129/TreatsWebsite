@@ -112,11 +112,11 @@ function trackTable(track) {
 }
 
 // A contact sheet: rows of thumbnails with a caption under each column.
-async function sheet(page, rows, captions, file, title) {
+async function sheet(page, rows, captions, file, title, thumb = 230) {
   const cols = captions.length;
   const html = `<!doctype html><style>body{margin:0;padding:12px;background:#fff;font:12px/1.3 sans-serif;color:#111;width:max-content}
 h1{font-size:13px;margin:0 0 8px}table{border-collapse:collapse}td{padding:3px;text-align:center;vertical-align:top}
-th{padding:3px 8px 3px 0;text-align:right;font-weight:600}img{display:block;max-width:230px;max-height:230px;border:1px solid #ccc}</style>
+th{padding:3px 8px 3px 0;text-align:right;font-weight:600}img{display:block;max-width:${thumb}px;max-height:${thumb}px;border:1px solid #ccc}</style>
 <h1></h1><table>${rows.map((r, ri) => `<tr><th data-r="${ri}"></th>${r.files.map((_, ci) => `<td><img data-r="${ri}" data-c="${ci}"></td>`).join('')}</tr>`).join('')}
 <tr><th></th>${Array.from({ length: cols }, (_, ci) => `<td data-cap="${ci}"></td>`).join('')}</tr></table>`;
   await page.setContent(html);
@@ -129,8 +129,12 @@ th{padding:3px 8px 3px 0;text-align:right;font-weight:600}img{display:block;max-
   await page.locator('body').screenshot({ path: file });
 }
 
+// Wide frames get fewer, larger thumbnails so that detail stays readable.
+function sheetLayout(w, h) { return w / h > 1.8 ? { perSheet: 4, thumb: 470 } : { perSheet: 8, thumb: 230 }; }
+
 // Pick which frames go on the sheets: every Nth, at most `perSheet` per sheet and 6 sheets.
 function sheetPlan(count, every, perSheet = 8) {
+  perSheet = Math.max(2, perSheet);
   const stepN = every || Math.max(1, Math.ceil(count / (perSheet * 4)));
   const idx = []; for (let i = 0; i < count; i += stepN) idx.push(i);
   if (idx[idx.length - 1] !== count - 1) idx.push(count - 1);
@@ -138,4 +142,4 @@ function sheetPlan(count, every, perSheet = 8) {
   return sheets;
 }
 
-module.exports = { PROPS, EPS, UNIT, r2, blankPage, frameStats, motionWindow, cumulative, lagFrames, summarise, trackTable, sheet, sheetPlan, outPath, frameName, path };
+module.exports = { PROPS, EPS, UNIT, r2, blankPage, frameStats, motionWindow, cumulative, lagFrames, summarise, trackTable, sheet, sheetPlan, sheetLayout, outPath, frameName, path };

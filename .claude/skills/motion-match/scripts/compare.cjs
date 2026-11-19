@@ -54,6 +54,7 @@ Writes <out>/report.md, <out>/report.json, <out>/diff/ and <out>/sheets/.`;
       const c = await A.frameStats(page, 'clone', cloneFiles[i], { threshold, otherKey: 'ref', wantDiff: true });
       fs.writeFileSync(outPath(a.out, 'diff', frameName(i + 1)), Buffer.from(c.diff, 'base64'));
       resized = resized || c.resized;
+      if (i === 0) { per.w = r.w; per.h = r.h; }
       if (i === 0 && c.resized) notes.push(`Frame sizes differ (reference ${r.w}x${r.h}, clone ${c.w}x${c.h}); the clone was scaled to fit, which inflates the pixel mismatch. Use the same --viewport and crop.`);
       per.push({ i, refMotion: r.motion, cloneMotion: c.motion, mismatch: c.mismatch });
     }
@@ -80,10 +81,13 @@ Writes <out>/report.md, <out>/report.json, <out>/diff/ and <out>/sheets/.`;
     if (tracked) {
       const cloneLabels = new Set(cloneTrack.labels.map((l) => l.label));
       for (const { label } of refTrack.labels) {
-        if (!cloneLabels.has(label)) { notes.push(`"${label}" is tracked in the reference but not in the clone; pass the same --track labels to both.`); continue; }
+        if (!cloneLabels.has(label)) { check(`${label}`, false, 'tracked in the reference but not in the clone; capture the clone with the same --track labels'); continue; }
+        const spins = ['rotate', 'scale'].some((k) => { const q = A.summarise(refTrack.frames, label, k); return q && q.moving; });
         for (const prop of A.PROPS) {
           const r = A.summarise(refTrack.frames, label, prop); const c = A.summarise(cloneTrack.frames, label, prop);
           if (!r || !c) { if (r && r.moving) check(`${label} ${prop}`, false, 'element missing in the clone capture'); continue; }
+          // The box of a scaling or rotating element changes size as a side effect; scale and rotate are the real check.
+          if (spins && (prop === 'w' || prop === 'h') && level === 'motion') continue;
           const m = Math.min(r.values.length, c.values.length);
           let maxAbs = 0; for (let i = 0; i < m; i++) maxAbs = Math.max(maxAbs, Math.abs(r.values[i] - c.values[i]));
           const unit = A.UNIT[prop];
@@ -103,15 +107,15 @@ Writes <out>/report.md, <out>/report.json, <out>/diff/ and <out>/sheets/.`;
           const problems = [];
           if (!startOk) problems.push(`starts at ${c.startMs} ms, reference ${r.startMs} ms`);
           if (!endOk) problems.push(`ends at ${c.endMs} ms, reference ${r.endMs} ms`);
-          if (!sameDir) problems.push(`direction differs (${c.from} → ${c.to} vs ${r.from} → ${r.to})`);
-          if (curve > 0.1) problems.push(`curve differs by up to ${Math.round(curve * 100)} % of the distance (shape ${c.shape} vs ${r.shape})`);
+          if (!sameDir) problems.push(`direction differs (clone ${c.from} → ${c.to}, reference ${r.from} → ${r.to})`);
+          if (curve > 0.1) problems.push(`curve differs by up to ${Math.round(curve * 100)} % of the distance (clone shape ${c.shape}, reference shape ${r.shape})`);
           if (r.overshoot !== c.overshoot) problems.push(c.overshoot ? 'clone overshoots, reference does not' : 'reference overshoots, clone does not');
           if (ratio < 0.8 || ratio > 1.25) {
-            const msg = `distance ${A.r2(cRange)}${unit} vs ${A.r2(rRange)}${unit}`;
+            const msg = `clone travels ${A.r2(cRange)}${unit}, reference ${A.r2(rRange)}${unit}`;
             if (level === 'pixel' || !['x', 'y', 'w', 'h'].includes(prop)) problems.push(msg); else notes.push(`${label} ${prop}: ${msg} (allowed at motion level when the clone's layout is a different size).`);
           }
           if (level === 'pixel' && maxAbs > A.EPS[prop] * 2) problems.push(`value off by up to ${A.r2(maxAbs)}${unit}`);
-          check(`${label} ${prop}`, !problems.length, problems.length ? problems.join('; ') : `${r.startMs}–${r.endMs} ms, shape ${r.shape}, within ${A.r2(maxAbs)}${unit}`);
+          check(`${label} ${prop}`, !problems.length, problems.length ? problems.join('; ') : `reference ${r.startMs}–${r.endMs} ms, clone ${c.startMs}–${c.endMs} ms, shape ${c.shape}${level === 'pixel' ? `, largest difference ${A.r2(maxAbs)}${unit}` : ''}`);
         }
       }
       for (const l of cloneLabels) if (!refTrack.labels.some((x) => x.label === l)) notes.push(`"${l}" is tracked in the clone but not in the reference.`);
@@ -126,13 +130,14 @@ Writes <out>/report.md, <out>/report.json, <out>/diff/ and <out>/sheets/.`;
     }
     if (!checks.length) check('something to compare', false, 'nothing moved and nothing was tracked');
 
-    const plan = A.sheetPlan(n, every);
+    const lay = A.sheetLayout(per.w, per.h);
+    const plan = A.sheetPlan(n, every, lay.perSheet);
     for (let s = 0; s < plan.length; s++) {
       await A.sheet(page, [
         { name: 'reference', files: plan[s].map((i) => refFiles[i]) },
         { name: 'clone', files: plan[s].map((i) => cloneFiles[i]) },
         { name: 'difference', files: plan[s].map((i) => path.join(diffDir, frameName(i + 1))) },
-      ], plan[s].map((i) => `#${i + 1} · ${Math.round(i * frameMs)} ms · ${pct(per[i].mismatch)}`), outPath(a.out, 'sheets', `sheet-${String(s + 1).padStart(2, '0')}.png`), `reference vs clone — sheet ${s + 1} of ${plan.length}`);
+      ], plan[s].map((i) => `#${i + 1} · ${Math.round(i * frameMs)} ms · ${pct(per[i].mismatch)}`), outPath(a.out, 'sheets', `sheet-${String(s + 1).padStart(2, '0')}.png`), `reference vs clone — sheet ${s + 1} of ${plan.length}`, lay.thumb);
     }
 
     const failed = checks.filter((c) => !c.pass);
@@ -141,7 +146,7 @@ Writes <out>/report.md, <out>/report.json, <out>/diff/ and <out>/sheets/.`;
       `Pixels: mean mismatch ${pct(mean)}, worst ${pct(worst.mismatch)} at frame ${worst.i + 1}${level === 'motion' ? ' (informational at motion level)' : ''}.`, '',
       '| check | result | detail |', '|---|---|---|', ...checks.map((c) => `| ${c.name} | ${c.pass ? 'pass' : '**FAIL**'} | ${c.detail} |`)];
     if (notes.length) md.push('', '## Notes', ...notes.map((x) => `- ${x}`));
-    md.push('', `Sheets: ${plan.length} in ${path.join(a.out, 'sheets')} — look at them; the numbers say that something is off, the sheets show what.`);
+    md.push('', `Sheets: ${plan.length} in ${path.join(a.out, 'sheets')} — look at them; the numbers say that something is off, the sheets show what. Thumbnails are small: open files in diff/ or frames/ for detail.`);
     fs.writeFileSync(outPath(a.out, 'report.md'), md.join('\n') + '\n');
     fs.writeFileSync(outPath(a.out, 'report.json'), JSON.stringify({ verdict, level, fps, toleranceMs: tol, frames: n, meanMismatch: mean, worstMismatch: worst.mismatch, worstFrame: worst.i + 1, pictureMotion: { reference: rw, clone: cw, lagMs: lag }, checks, notes, elements: rows.map((r) => ({ label: r.label, prop: r.prop, maxAbs: r.maxAbs, curve: r.curve, reference: { startMs: r.ref.startMs, endMs: r.ref.endMs, from: r.ref.from, to: r.ref.to, shape: r.ref.shape }, clone: { startMs: r.clone.startMs, endMs: r.clone.endMs, from: r.clone.from, to: r.clone.to, shape: r.clone.shape } })), perFrameMismatch: per.map((p) => +p.mismatch.toFixed(5)) }, null, 1));
     console.log(md.join('\n'));
